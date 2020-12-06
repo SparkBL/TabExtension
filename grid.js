@@ -44,11 +44,22 @@ export class Grid {
     });
   }
 
-  getItemById(id, action) {
+  clear() {
+    this.#grid.remove(this.#grid.getItems(), { removeElements: true });
+  }
+
+  getItemById(id) {
     var items = this.#grid.getItems();
     for (var i = 0; i < items.length; i++) {
-      if (items[i].getElement().id == id) return action(items[i].getElement());
+      if (items[i].getElement().id == id) return items[i].getElement();
     }
+  }
+
+  getElement(item) {
+    return this.#grid.getElement(item);
+  }
+  getItem(element) {
+    return this.#grid.getItem(element);
   }
 }
 

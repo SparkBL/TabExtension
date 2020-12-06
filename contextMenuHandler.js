@@ -47,14 +47,14 @@ export class ContextMenuHandler {
     var items = [].concat(items || []);
     var t = this;
     items.forEach(function (elem) {
-      t._allowedOptions[elem.getElement.id] = allowedOptions;
+      t._allowedOptions[elem.getElement().id] = allowedOptions;
       elem.getElement().addEventListener("contextmenu", function (e) {
         e.preventDefault();
         t._nowSelected = e.currentTarget;
         t._menu.style.top = `${e.clientY}px`;
         t._menu.style.left = `${e.clientX}px`;
         t._menu.classList.add("show");
-        var allowedOptions = t._allowedOptions[elem.getElement.id];
+        var allowedOptions = t._allowedOptions[elem.getElement().id];
         t._options.forEach(function (elem) {
           if (allowedOptions.includes(elem.id)) elem.style.display = "block";
         });

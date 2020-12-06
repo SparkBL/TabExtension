@@ -28,13 +28,13 @@ export class TabElement {
     }
   }
 
-  /* get id() {
+  get id() {
     return this.id;
   }
 
   get type() {
     return this.type;
-  }*/
+  }
 }
 
 // Stores user defined info about tab
@@ -79,6 +79,9 @@ export class TabStorage {
     return this.elements;
   }
 
+  getElementsByParentId(parentId) {
+    return this.elements.filter((x) => x.parentId === parentId);
+  }
   editElement(id, action) {
     var element = this.elements.find((x) => x.id === id);
     action(element);
