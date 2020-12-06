@@ -28,6 +28,6 @@
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
-
+  "web_accessible_resources": ["images/plus.png"],
   "manifest_version": 2
 }

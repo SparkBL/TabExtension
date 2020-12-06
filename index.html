@@ -1,18 +1,37 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Express panel</title>
-		<link rel="stylesheet" type="text/css" href="style.css">
-	</head>
-	<body>
-		<div class="container">
-	<div class="logo"><img  height="200px" src="images/chrome.png"/></div>
-			<div class="search_box">
-				<form action="https://www.google.com/search" method="get"> 
-					<input class="input_box" type="text" name="q" placeholder="Search with Google"/>
-				
-			</div>
-			
-		<script src="index.js"></script>
-	</body>
+  <head>
+   
+
+    <title>Express panel</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="node_modules/muuri/dist/muuri.min.js"></script>
+  </head>
+  <body>
+    <div class="search_box" id="trash">
+      <form action="https://www.google.com/search" method="get"> 
+        <input class="input_box" type="text" name="q" placeholder="Search with Google"/>
+    </div>
+    <div class="grid">
+      
+    </div>
+
+    <ul id="menu">
+      <li class="menu-item" id="delete">Delete</li>
+      <li class="menu-item" id ="move">Move</li>
+      <li class="menu-item" id = "edit">Edit</li>
+    </ul>
+
+    <div id="out-click"></div>
+
+    <div id="blur" >
+      <div class="modal"  >
+        <span class="close">&times;</span>
+        <div id = "modalContent"></div>
+      </div>
+    </div>
+
+    <script type="module" src="index.js"></script>
+   
+  </body>
 </html>
