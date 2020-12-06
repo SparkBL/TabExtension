@@ -1,7 +1,10 @@
-import { Grid } from "./grid.js";
-import { TabStorage, Shortcut } from "./core.js";
+import { Grid, buildAddButton, buildShortcut } from "./grid.js";
+import { TabStorage, TabElement, folderType, shortcutType } from "./core.js";
 import { ContextMenuHandler } from "./contextMenuHandler.js";
-import { ModalWindowHandler } from "./modalWindowHandler.js";
+import {
+  ModalWindowHandler,
+  buildAddShortcutForm,
+} from "./modalWindowHandler.js";
 chrome.storage.onChanged.addListener(function (changes, namespace) {
   for (var key in changes) {
     var storageChange = changes[key];
@@ -15,36 +18,46 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
     );
   }
 });
-
-var grid = new Grid();
-var contextmenu = new ContextMenuHandler();
-var modalwindow = new ModalWindowHandler();
 let strge = new TabStorage();
-contextmenu.setOptions(function () {
-  var id = grid.removeSelected();
-  strge.removeElement(id);
+var grid = new Grid();
+var modalwindow = new ModalWindowHandler();
+var contextmenu = new ContextMenuHandler();
+
+contextmenu.AddOption("delete", "Delete Item", function (target) {
+  grid.removeItems(target);
+  strge.removeElement(target.id);
   strge.saveElements();
 });
 
-grid.gridAddEvent(function (items) {
-  contextmenu.addListenedItems(items, function (item) {
-    grid.selectItem(item);
-  });
-});
-
-grid.setAddButtonHandler(function () {
-  modalwindow.showAddModal(function (newElementData) {
-    var newElement = new Shortcut(
-      newElementData["name"].value,
-      newElementData["url"].value,
-      ""
+var addButton = buildAddButton();
+addButton.addEventListener("click", function () {
+  modalwindow.InvokeModal(buildAddShortcutForm(), function (TabElementData) {
+    var newTabElement = new TabElement(
+      shortcutType,
+      TabElementData["name"].value,
+      TabElementData["url"].value,
+      null
     );
-    var item = grid.addItems(strge.addElements(newElement));
-    console.log(item);
+    strge.addElements(newTabElement);
+    var item = buildShortcut(
+      newTabElement.id,
+      newTabElement.url,
+      newTabElement.name
+    );
+    var gridItems = grid.addItems(item);
+    console.log(gridItems);
+    contextmenu.addListenedItems(gridItems, ["delete"]);
     strge.saveElements();
   });
 });
+grid.addItems(addButton, { index: -1 });
 
 strge.loadElements(function (items) {
-  grid.addItems(items);
+  items.forEach(function (item) {
+    console.log(item.id);
+    contextmenu.addListenedItems(
+      grid.addItems(buildShortcut(item.id, item.url, item.name)),
+      ["delete"]
+    );
+  });
 });

@@ -1,8 +1,7 @@
 export class Grid {
-  grid;
-  selectedItem = null;
+  #grid;
   constructor() {
-    this.grid = new Muuri(".grid", {
+    this.#grid = new Muuri(".grid", {
       layout: {
         fillGaps: false,
         horizontal: false,
@@ -20,115 +19,99 @@ export class Grid {
         touchCallout: "",
         contentZooming: "",
       },
-
-      //itemVisibleClass: 'muuri-item-shown',
-    });
-    this.grid.add(this.buildAddButton(), {
-      index: -1,
     });
   }
 
-  buildShortcut(id, url, name) {
-    var liImg = document.createElement("li");
-    var liName = document.createElement("li");
-    var img = liImg.appendChild(document.createElement("img"));
-    img.src = "chrome://favicon/" + url;
-    img.setAttribute("class", "favicon");
-    var span = document.createElement("span");
-
-    if (!name) span.innerHTML = url;
-    else span.innerHTML = name;
-    liName.appendChild(span);
-    var viewDiv = document.createElement("div");
-    viewDiv.appendChild(liImg);
-    viewDiv.appendChild(liName);
-    viewDiv.setAttribute("class", "item-content");
-    var wrapper = document.createElement("a");
-    wrapper.setAttribute("class", "item");
-    wrapper.href = url;
-    wrapper.setAttribute("target", "_blank");
-    wrapper.setAttribute("rel", "noopener noreferrer");
-    wrapper.appendChild(viewDiv);
-    wrapper.id = id;
-    return wrapper;
-  }
-
-  buildFolder(id, name) {
-    var liName = document.createElement("li");
-    var span = document.createElement("span");
-    if (!name) span.innerHTML = "New Folder";
-    else span.innerHTML = name;
-    liName.appendChild(a);
-    var returnDiv = document.createElement("div");
-    returnDiv.appendChild(liName);
-    // returnDiv.setAttribute("class", "item-content");
-    return liName;
-  }
-
-  buildAddButton() {
-    var liImg = document.createElement("li");
-    var liName = document.createElement("li");
-    var img = liImg.appendChild(document.createElement("img"));
-    img.src =
-      "chrome-extension://ehbpekfnoogckmdibaphbloichpldcdb/images/plus.png";
-    img.setAttribute("class", "addicon");
-    var span = document.createElement("span");
-    span.innerHTML = "Add element";
-    liName.appendChild(span);
-    var viewDiv = document.createElement("div");
-    viewDiv.appendChild(liImg);
-    viewDiv.appendChild(liName);
-    viewDiv.setAttribute("class", "item-content");
-    var wrapper = document.createElement("a");
-    wrapper.id = "AddElement";
-    wrapper.setAttribute("class", "item");
-    wrapper.appendChild(viewDiv);
-    return wrapper;
-  }
-
-  addItems(item) {
+  addItems(item, opts) {
     var items = [].concat(item || []);
-    var gridItems = [];
-    for (var i = 0; i < items.length; i++) {
-      if (items[i].type == "shortcut") {
-        var newItem = this.buildShortcut(
-          items[i].id,
-          items[i].url,
-          items[i].name
-        );
-        gridItems.push(newItem);
-      }
-      if (items[i].type == "folder") {
-        var newItem = this.buildFolder(items[i].id, items[i].name);
-        gridItems.push(newItem);
-      }
-    }
-    var ret = this.grid.add(gridItems, { index: 0 });
-    return ret;
+    items.forEach(function (elem) {
+      elem.addEventListener("click", function (e) {
+        e.preventDefault();
+      });
+    });
+    return this.#grid.add(items, opts);
   }
 
-  selectItem(item) {
-    this.selectedItem = this.grid.getItem(item);
+  removeItems(item) {
+    var item = [].concat(item || []);
+    var toRemove = this.#grid.getItems(item);
+    this.#grid.remove(toRemove, { removeElements: true });
+    this.#grid.refreshItems(null, true);
   }
-  getSelected() {
-    return this.selectedItem;
-  }
-  setAddButtonHandler(action) {
-    document
-      .getElementById("AddElement")
-      .addEventListener("click", function (e) {
-        action();
-      });
-  }
-  removeSelected() {
-    var id = this.selectedItem.getElement().id;
-    this.grid.remove([this.selectedItem], { removeElements: true });
-    this.grid.refreshItems(null, true);
-    return id;
-  }
-  gridAddEvent(action) {
-    this.grid.on("add", function (items) {
+  addGridEvent(type, action) {
+    this.#grid.on(type, function (items) {
       action(items);
     });
   }
+
+  getItemById(id, action) {
+    var items = this.#grid.getItems();
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].getElement().id == id) return action(items[i].getElement());
+    }
+  }
+}
+
+export function buildShortcut(id, url, name) {
+  var liImg = document.createElement("li");
+  var liName = document.createElement("li");
+  var img = liImg.appendChild(document.createElement("img"));
+  img.src = "chrome://favicon/" + url;
+  img.setAttribute("class", "favicon");
+  var span = document.createElement("span");
+
+  if (!name) span.innerHTML = url;
+  else span.innerHTML = name;
+  liName.appendChild(span);
+  var viewDiv = document.createElement("div");
+  viewDiv.appendChild(liImg);
+  viewDiv.appendChild(liName);
+  viewDiv.setAttribute("class", "item-content");
+  var wrapper = document.createElement("a");
+  wrapper.setAttribute("class", "item");
+  wrapper.href = url;
+  wrapper.setAttribute("target", "_blank");
+  wrapper.setAttribute("rel", "noopener noreferrer");
+  wrapper.appendChild(viewDiv);
+  wrapper.id = id;
+  return wrapper;
+}
+
+export function buildFolder(id, name) {
+  var liName = document.createElement("li");
+
+  var span = document.createElement("span");
+
+  if (!name) span.innerHTML = url;
+  else span.innerHTML = name;
+  liName.appendChild(span);
+  var viewDiv = document.createElement("div");
+  viewDiv.appendChild(liName);
+  viewDiv.setAttribute("class", "item-content");
+  var wrapper = document.createElement("a");
+  wrapper.setAttribute("class", "item");
+  wrapper.appendChild(viewDiv);
+  wrapper.id = id;
+  return wrapper;
+}
+
+export function buildAddButton() {
+  var liImg = document.createElement("li");
+  var liName = document.createElement("li");
+  var img = liImg.appendChild(document.createElement("img"));
+  img.src =
+    "chrome-extension://ehbpekfnoogckmdibaphbloichpldcdb/images/plus.png";
+  img.setAttribute("class", "addicon");
+  var span = document.createElement("span");
+  span.innerHTML = "Add element";
+  liName.appendChild(span);
+  var viewDiv = document.createElement("div");
+  viewDiv.appendChild(liImg);
+  viewDiv.appendChild(liName);
+  viewDiv.setAttribute("class", "item-content");
+  var wrapper = document.createElement("a");
+  wrapper.id = "AddElement";
+  wrapper.setAttribute("class", "item");
+  wrapper.appendChild(viewDiv);
+  return wrapper;
 }

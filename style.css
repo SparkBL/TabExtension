@@ -139,7 +139,7 @@ a:hover {
 }
 
 .menu-item {
-  display: block;
+  display: none;
   padding: 10px 30px;
   transition: 0.1s;
   color: #666;

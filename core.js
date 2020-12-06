@@ -1,53 +1,51 @@
-// Abstract element, storing tab info
+export const folderType = "folder";
+export const shortcutType = "shortcut"; // Abstract element, storing tab info
 export class TabElement {
   id;
   parentId;
   name;
   index = 0;
   type;
-  static generateId() {
+  url;
+  #generateId() {
     return "id" + Math.random().toString(16).slice(2);
   }
-  constructor(name, parentId) {
-    this.id = TabElement.generateId();
-    this.name = name;
-    this.parentId = parentId;
+
+  constructor(type, name, url, parentId) {
+    if (type === shortcutType) {
+      this.id = this.#generateId();
+      this.name = name;
+      this.parentId = parentId;
+      this.url = url;
+      this.type = shortcutType;
+    }
+    if (type === folderType) {
+      this.id = this.#generateId();
+      this.name = name;
+      this.parentId = parentId;
+      this.url = null;
+      this.type = folderType;
+    }
   }
 
-  setParent(id) {
-    this.parentId = id;
+  /* get id() {
+    return this.id;
   }
+
+  get type() {
+    return this.type;
+  }*/
 }
+
 // Stores user defined info about tab
-export class Shortcut extends TabElement {
-  url;
-  icon;
-  constructor(name, url, icon) {
-    super(name);
-    this.url = url;
-    this.type = "shortcut";
-    this.icon = icon;
-  }
-}
-//Aggregates TabElements
-export class Folder extends TabElement {
-  constructor(name) {
-    super(name);
-    this.type = "folder";
-  }
-}
+
 //Provides storing TabElements in chrom storage and loading from it
 export class TabStorage {
   elements = [];
   constructor() {}
   addElements(element) {
     var elements = [].concat(element || []);
-    for (var i = 0; i < elements.length; i++)
-      if (elements[i].type != "shortcut" && elements[i].type != "folder")
-        console.log("Wrong element type on storage insertion!");
-      else {
-        this.elements.push(elements[i]);
-      }
+    this.elements = this.elements.concat(elements);
     return elements;
   }
   removeElement(id) {
@@ -61,7 +59,7 @@ export class TabStorage {
         // alert(JSON.stringify(result));
         this.elements = result.storageElements;
         if (!this.elements) console.log("Failed to get elements from storage!");
-        console.log("Load elements: \n", this.elements);
+        console.log("Load elements: \n", result.storageElements);
         callback(this.elements);
       }.bind(this)
     );
@@ -77,8 +75,7 @@ export class TabStorage {
     );
   }
 
-  getElements() {
-    console.log("Get elements: \n", this.elements);
+  get elements() {
     return this.elements;
   }
 
