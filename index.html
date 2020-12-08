@@ -1,28 +1,196 @@
 <!DOCTYPE html>
 <html>
   <head>
-   
-
     <title>Express panel</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" href="node_modules/tingle.js/dist/tingle.min.css" />
     <script src="node_modules/muuri/dist/muuri.min.js"></script>
+    <meta
+      name="viewport"
+      content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1"
+    />
   </head>
   <body>
-    <div class="search_box" id="trash">
-      <form action="https://www.google.com/search" method="get"> 
-        <input class="input_box" type="text" name="q" placeholder="Search with Google"/>
+    <div class="drag-container"></div>
+    <h2 class="section-title"><span>Cringe Tabs by TeAm2</span></h2>
+
+    <div>
+      <!-- 
+        <div class="grid-controls">
+        <div class="grid-control search">
+          <input
+            class="grid-control-field search-field form-control"
+            type="text"
+            name="search"
+            placeholder="Search..."
+          />
+          <div class="grid-control-icon">
+            <svg
+              aria-hidden="true"
+              focusable="false"
+              role="img"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+            >
+              <path
+                fill="currentColor"
+                d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
+              ></path>
+            </svg>
+          </div>
+        </div>
+        <div class="grid-control filter">
+          <select class="grid-control-field filter-field form-control">
+            <option value="" selected="">All</option>
+            <option value="red">Red</option>
+            <option value="blue">Blue</option>
+            <option value="green">Green</option>
+          </select>
+          <div class="grid-control-icon">
+            <svg
+              aria-hidden="true"
+              focusable="false"
+              role="img"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+            >
+              <path
+                fill="currentColor"
+                d="M463.952 0H48.057C5.419 0-16.094 51.731 14.116 81.941L176 243.882V416c0 15.108 7.113 29.335 19.2 40l64 47.066c31.273 21.855 76.8 1.538 76.8-38.4V243.882L497.893 81.941C528.042 51.792 506.675 0 463.952 0zM288 224v240l-64-48V224L48 48h416L288 224z"
+              ></path>
+            </svg>
+          </div>
+          <div class="grid-select-arrow">
+            <svg
+              aria-hidden="true"
+              focusable="false"
+              role="img"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 256 512"
+            >
+              <path
+                fill="currentColor"
+                d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z"
+              ></path>
+            </svg>
+          </div>
+        </div>
+        <div class="grid-control sort">
+          <select class="grid-control-field sort-field form-control">
+            <option value="order" selected="">Drag</option>
+            <option value="title">Title (drag disabled)</option>
+            <option value="color">Color (drag disabled)</option>
+          </select>
+          <div class="grid-control-icon">
+            <svg
+              aria-hidden="true"
+              focusable="false"
+              role="img"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+            >
+              <path
+                fill="currentColor"
+                d="M244 192h184a20 20 0 0 0 20-20V52a20 20 0 0 0-20-20H244a20 20 0 0 0-20 20v120a20 20 0 0 0 20 20zm28-112h128v64H272zm212 176H252a28 28 0 0 0-28 28v168a28 28 0 0 0 28 28h232a28 28 0 0 0 28-28V284a28 28 0 0 0-28-28zm-20 176H272V304h192zm-300-48h-44V48a16 16 0 0 0-16-16H88a16 16 0 0 0-16 16v336H28a12 12 0 0 0-8.73 20.24l68 72a12 12 0 0 0 17.44 0l68-72A12 12 0 0 0 164 384z"
+              ></path>
+            </svg>
+          </div>
+          <div class="grid-select-arrow">
+            <svg
+              aria-hidden="true"
+              focusable="false"
+              role="img"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 256 512"
+            >
+              <path
+                fill="currentColor"
+                d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z"
+              ></path>
+            </svg>
+          </div>
+        </div>
+        <div class="grid-control layout">
+          <select class="grid-control-field layout-field form-control">
+            <option value="left-top" selected="">Left Top</option>
+            <option value="left-top-fillgaps">Left Top (fill gaps)</option>
+            <option value="right-top">Right Top</option>
+            <option value="right-top-fillgaps">Right Top (fill gaps)</option>
+            <option value="left-bottom">Left Bottom</option>
+            <option value="left-bottom-fillgaps">
+              Left Bottom (fill gaps)
+            </option>
+            <option value="right-bottom">Right Bottom</option>
+            <option value="right-bottom-fillgaps">
+              Right Bottom (fill gaps)
+            </option>
+          </select>
+          <div class="grid-control-icon">
+            <svg
+              aria-hidden="true"
+              focusable="false"
+              role="img"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+            >
+              <path
+                fill="currentColor"
+                d="M480 0H32A32 32 0 0 0 0 32v448a32 32 0 0 0 32 32h448a32 32 0 0 0 32-32V32a32 32 0 0 0-32-32zm-16 464H48V48h416zm-48-48V256H256v160zM256 96H96v160h160z"
+              ></path>
+            </svg>
+          </div>
+          <div class="grid-select-arrow">
+            <svg
+              aria-hidden="true"
+              focusable="false"
+              role="img"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 256 512"
+            >
+              <path
+                fill="currentColor"
+                d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z"
+              ></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+-->
+      <div class="grid" style="height: 1200px"></div>
+
+      <!-- The Modal -->
+      <div class="blur">
+        <!-- Modal content -->
+        <div class="modal">
+          <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>Modal Header</h2>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <h3>Modal Footer</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-footer">
+        <button class="grid-button add-more-items" data-id="addButton">
+          <svg
+            aria-hidden="true"
+            focusable="false"
+            role="img"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"
+          >
+            <path
+              fill="currentColor"
+              d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+            ></path>
+          </svg>
+        </button>
+      </div>
     </div>
-    <div class="grid">
-      
-    </div>
-
-    <ul id="menu"></ul>
-
-    <div id="out-click"></div>
-
-   
 
     <script type="module" src="index.js"></script>
-   
   </body>
 </html>
