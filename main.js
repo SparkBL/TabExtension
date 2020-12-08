@@ -27,6 +27,7 @@ export var Main = (function () {
     Pubsub.publish("createShortcut", null);
   });
   Menu.addListenedItems(addButton, ["createShortcut", "createFolder"]);
+
   Pubsub.subscribe("menuDelete", function (target) {
     var targetId = Grid.remove(target);
     Storage.removeElement(targetId);

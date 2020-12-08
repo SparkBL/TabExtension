@@ -79,6 +79,15 @@ a:hover {
   /*filter: grayscale(100%);*/
 }
 
+.section-title {
+  padding: 3rem;
+  box-sizing: content-box;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .grid {
   /* background: #ffffff;*/
   /*#2e3440*/
@@ -157,6 +166,14 @@ a:hover {
 
 .item.w2 {
   width: 22rem;
+}
+
+.item.h3 {
+  height: 44rem;
+}
+
+.item.w3 {
+  width: 44rem;
 }
 
 .item.red .item-content {

@@ -34,15 +34,15 @@ export var Grid = (function () {
     },
     dragEnabled: true,
     dragHandle: null,
-    dragContainer: dragContainer,
+    //dragContainer: dragContainer,
     dragRelease: {
       duration: 400,
       easing: "cubic-bezier(0.625, 0.225, 0.100, 0.890)",
-      useDragContainer: true,
+      useDragContainer: false,
     },
     dragStartPredicate: {
-      distance: 30,
-      delay: 30,
+      distance: 15,
+      delay: 15,
     },
     dragPlaceholder: {
       enabled: true,
@@ -131,7 +131,9 @@ export var Grid = (function () {
       layout: true,
       active: true,
     });
-
+    elem.addEventListener("click", function (e) {
+      e.preventDefault();
+    });
     /*  if (sortFieldValue !== "order") {
         grid.sort(sortFieldValue === "title" ? "title" : "color title", {
           layout: false,
@@ -141,11 +143,6 @@ export var Grid = (function () {
 */
     // filter();
 
-    /* if (addEffectTimeout) clearTimeout(addEffectTimeout);
-    addEffectTimeout = setTimeout(() => {
-      addEffectTimeout = null;
-      addButton.classList.remove("processing");
-    }, 250);*/
     return elem;
   }
 
