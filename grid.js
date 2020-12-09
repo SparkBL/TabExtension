@@ -40,7 +40,6 @@ export var Grid = (function () {
       enabled: true,
       createElement(item) {
         var placeholder = item.getElement().cloneNode(true);
-        console.log(placeholder);
         placeholder.firstChild.innerHTML = "";
         return placeholder;
       },
