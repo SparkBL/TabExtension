@@ -2,16 +2,12 @@ export var Grid = (function () {
   const dragContainer = document.querySelector(".drag-container");
   const gridElement = document.querySelector(".grid");
   const templateContainer = document.getElementById("template");
-  const filterField = document.querySelector(
-    ".grid-control-field.filter-field"
-  );
   const searchField = document.querySelector(
     ".grid-control-field.search-field"
   );
   const colors = ["shortcut", "folder"];
   var elemWidth = 2;
   var elemHeight = 2;
-  let addEffectTimeout = null;
 
   const grid = new Muuri(gridElement, {
     showDuration: 400,
@@ -163,6 +159,7 @@ export var Grid = (function () {
     if (!item) return;
     grid.hide([item], {
       onFinish: () => {
+        grid.remove([item]);
         item.getElement().remove();
         //  if (sortFieldValue !== "order") {
         //  const itemIndex = dragOrder.indexOf(item);

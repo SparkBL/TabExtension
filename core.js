@@ -1,7 +1,7 @@
 export var Storage = (function () {
   //Dir routing
   var currentElements = [];
-  var currentLayouts = [];
+  var currentLayouts = {};
   var currentParent = "root";
 
   //Commit change into chrome storage
@@ -113,6 +113,7 @@ export var Storage = (function () {
       var toRemove = currentElements.find((x) => x.id == id);
       var toRemoveIndex = currentElements.findIndex((x) => x.id == id);
       currentElements.splice(toRemoveIndex, 1);
+      if (toRemove.type === "folder") delete currentLayouts[id];
       var children = this.getElementsByParentId(toRemove.id);
       if (children && children.length > 0)
         for (var i = 0; i < children.length; i++)
