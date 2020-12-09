@@ -1,7 +1,7 @@
 html {
   overflow-y: scroll;
   overflow-x: hidden;
-  background: #fff;
+  background: rgb(255, 255, 255);
   font-size: 62.5%;
 }
 
@@ -21,6 +21,15 @@ body {
   margin-bottom: 2%;
   width: 100%;
   padding-bottom: 25px;
+}
+
+.path-title {
+  font-size: 1.1em;
+  text-align: center;
+  padding-block: 1.3rem;
+  padding-inline-start: 3rem;
+  align-content: center;
+  color: #5da3ff;
 }
 
 .input_box {
@@ -53,7 +62,19 @@ mark {
 
 li {
   list-style-type: none;
-  padding: 5px;
+  padding-top: 2rem;
+  font-size: 2.5rem;
+}
+
+li svg {
+  width: 6rem;
+  height: 6rem;
+  position: relative;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  /* background: #ff6262;*/
+  color: #ffe67a;
 }
 
 a {
@@ -176,19 +197,14 @@ a:hover {
   width: 44rem;
 }
 
-.item.red .item-content {
-  color: #ff7e7e;
-  background: #cff8a0;
-}
-
-.item.green .item-content {
-  color: #303063;
-  background: #f3e38b;
-}
-
-.item.blue .item-content {
+.item.shortcut .item-content {
   color: #fff7c7;
-  background-color: rgb(191, 199, 255);
+  background: rgb(144, 156, 252);
+}
+
+.item.folder .item-content {
+  color: #fff7c7;
+  background: rgb(176, 185, 255);
 }
 
 .grid-footer {
@@ -196,7 +212,7 @@ a:hover {
   justify-content: center;
   position: absolute;
   left: 50%;
-  bottom: -3.5rem;
+  bottom: +30.5rem;
   transform: translateX(-50%);
   z-index: 2;
 }
@@ -270,7 +286,7 @@ a:hover {
   display: block;
   background-color: white;
   padding: 10px 0px;
-  border-radius: 5px;
+  border-radius: 1.5rem;
   box-shadow: 2px 2px 30px lightgrey;
   position: absolute;
   transform-origin: center;
@@ -342,7 +358,6 @@ a:hover {
   background-color: #fefefe;
   margin: auto;
   padding: 0;
-  border: 1px solid #888;
   width: 50%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   -webkit-animation-name: animatetop;
@@ -414,10 +429,13 @@ a:hover {
   border: none;
   outline: none;
   margin-bottom: 2%;
-  padding-bottom: 10px;
+  margin-right: 2rem;
+  padding-bottom: 5rem;
   background: #ebebeb;
-  /*#4c566a*/
-  padding: 11px;
+  width: 30rem;
+  float: right;
+  font-size: 2rem;
+  padding: 2rem;
   color: #5a5a5a;
   border-radius: 5px 5px 5px 5px;
   /*box-shadow: 3px 4px #0F1011;*/
@@ -429,19 +447,20 @@ a:hover {
   margin-top: 10%;
   padding-bottom: 10px;
   background: #dddddd;
-  width: 120px;
+  width: 30rem;
   /*#4c566a*/
   padding: 15px;
   color: #5a5a5a;
   transition: 2px all;
   border-radius: 5px 5px 5px 5px;
-  margin-left: calc(97% - 120px);
+  border: none;
+  font-size: 3rem;
   /*box-shadow: 3px 4px #0F1011;*/
 }
 
 .button_modal:active {
-  transform: scale(1.1, 1.1);
-  transition: transform 0.3s ease-in;
+  transform: scale(1.05, 1.05);
+  transition: transform 0.1s ease-in;
 }
 
 .button_modal::after {
@@ -452,5 +471,151 @@ a:hover {
 label {
   margin-right: 25px;
   margin-bottom: 25px;
-  font-size: 20px;
+  margin-top: 3rem;
+  font-size: 3rem;
+}
+
+/* Grid Control */
+
+.grid-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+@media (max-width: 767px) {
+  .grid-controls {
+    flex-direction: column;
+  }
+}
+
+.grid-control {
+  display: flex;
+  position: relative;
+  width: 33%;
+  flex-wrap: nowrap;
+}
+
+.grid-control:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: 0;
+  border-bottom: 0.4rem dashed #f8a94e;
+}
+
+.grid-control:focus-within:before {
+  border-bottom: 0.7rem double #5455ff;
+}
+
+.grid-control:after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: -0.2rem;
+  top: 1.5rem;
+  bottom: 1.5rem;
+  border-left: 0.4rem dashed #f8a94e;
+}
+
+.grid-control:first-child:after {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .grid-control {
+    width: 100%;
+  }
+  .grid-control:after {
+    display: none;
+  }
+}
+
+.grid-control-field {
+  display: block;
+  position: relative;
+  width: 100%;
+  /*  height: 6rem;*/
+  padding: 1rem 1.5rem 1rem 5rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 4rem;
+  color: #5455ff;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  z-index: 1;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+}
+
+@media (max-width: 767px) {
+  .grid-control-field {
+    height: 5rem;
+    line-height: 3rem;
+  }
+}
+
+.grid-control-field::placeholder {
+  opacity: 0.7;
+  color: #5455ff;
+  font-style: italic;
+}
+
+select.grid-control-field {
+  padding-right: 5rem;
+  cursor: pointer;
+}
+
+select.grid-control-field::-ms-expand {
+  display: none;
+}
+
+.grid-control-field:focus {
+  outline: 0;
+}
+
+.grid-control-icon, .grid-select-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  width: 25px;
+  height: 25px;
+  padding: 1.5rem;
+  z-index: 2;
+  pointer-events: none;
+  color: #5da3ff;
+}
+
+/*
+  .grid-control:focus-within .grid-control-icon,
+  .grid-control:focus-within .grid-select-arrow {
+    color: rgb(101, 255, 195);
+  }
+  */
+
+@media (max-width: 767px) {
+  .grid-control-icon, .grid-select-arrow {
+    height: 5rem;
+  }
+}
+
+.grid-control-icon {
+  left: 0;
+}
+
+.grid-select-arrow {
+  right: 0;
+  padding: 1.7rem;
+}
+
+.grid-control-icon svg, .grid-select-arrow svg {
+  flex-grow: 1;
 }

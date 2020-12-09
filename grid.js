@@ -1,18 +1,14 @@
 export var Grid = (function () {
   const dragContainer = document.querySelector(".drag-container");
   const gridElement = document.querySelector(".grid");
+  const templateContainer = document.getElementById("template");
   const filterField = document.querySelector(
     ".grid-control-field.filter-field"
   );
   const searchField = document.querySelector(
     ".grid-control-field.search-field"
   );
-  const sortField = document.querySelector(".grid-control-field.sort-field");
-  const layoutField = document.querySelector(
-    ".grid-control-field.layout-field"
-  );
-  const addButton = document.querySelector(".grid-button.add-more-items");
-  const colors = ["red", "blue", "green"];
+  const colors = ["shortcut", "folder"];
   var elemWidth = 2;
   var elemHeight = 2;
   let addEffectTimeout = null;
@@ -34,11 +30,11 @@ export var Grid = (function () {
     },
     dragEnabled: true,
     dragHandle: null,
-    //dragContainer: dragContainer,
+    dragContainer: dragContainer,
     dragRelease: {
       duration: 400,
       easing: "cubic-bezier(0.625, 0.225, 0.100, 0.890)",
-      useDragContainer: false,
+      useDragContainer: true,
     },
     dragStartPredicate: {
       distance: 15,
@@ -61,8 +57,31 @@ export var Grid = (function () {
     itemClass: "item",
   });
 
-  function getRandomItem(collection) {
-    return collection[Math.floor(Math.random() * collection.length)];
+  function serializeLayout() {
+    var itemIds = grid.getItems().map(function (item) {
+      return item.getElement().getAttribute("data-id");
+    });
+    return itemIds;
+  }
+
+  function loadLayout(layout) {
+    var currentItems = grid.getItems();
+    var currentItemIds = currentItems.map(function (item) {
+      return item.getElement().getAttribute("data-id");
+    });
+    var newItems = [];
+    var itemId;
+    var itemIndex;
+
+    for (var i = 0; i < layout.length; i++) {
+      itemId = layout[i];
+      itemIndex = currentItemIds.indexOf(itemId);
+      if (itemIndex > -1) {
+        newItems.push(currentItems[itemIndex]);
+      }
+    }
+
+    grid.sort(newItems, { layout: "instant" });
   }
 
   function buildShortcut(id, url, name, parent) {
@@ -90,24 +109,24 @@ export var Grid = (function () {
     wrapper.setAttribute("data-name", name);
     wrapper.setAttribute("data-parent", parent);
     wrapper.setAttribute("data-type", "shortcut");
-    wrapper.classList.add(
-      "h" + elemHeight,
-      "w" + elemWidth,
-      getRandomItem(colors)
-    );
+    wrapper.classList.add("h" + elemHeight, "w" + elemWidth, colors[0]);
     return wrapper;
   }
 
   function buildFolder(id, name, parent) {
     var liName = document.createElement("li");
-
+    var liImg = document.createElement("li");
+    var img = document.importNode(templateContainer.content.children[0], true);
+    liImg.appendChild(img);
     var span = document.createElement("span");
 
     if (!name) span.innerHTML = url;
     else span.innerHTML = name;
     liName.appendChild(span);
     var viewDiv = document.createElement("div");
+    viewDiv.appendChild(liImg);
     viewDiv.appendChild(liName);
+
     viewDiv.setAttribute("class", "item-content");
     var wrapper = document.createElement("a");
     wrapper.setAttribute("class", "item");
@@ -116,17 +135,11 @@ export var Grid = (function () {
     wrapper.setAttribute("data-name", name);
     wrapper.setAttribute("data-parent", parent);
     wrapper.setAttribute("data-type", "folder");
-    wrapper.classList.add(
-      "h" + elemHeight,
-      "w" + elemWidth,
-      getRandomItem(colors)
-    );
+    wrapper.classList.add("h" + elemHeight, "w" + elemWidth, colors[1]);
     return wrapper;
   }
 
   function addItem(elem) {
-    //  addButton.classList.add("processing");
-
     grid.add(elem, {
       layout: true,
       active: true,
@@ -183,6 +196,15 @@ export var Grid = (function () {
     },
     isDragging: function (element) {
       return grid.getItem(element).isReleasing();
+    },
+    getLayout: function () {
+      return serializeLayout();
+    },
+    applyLayout: function (data) {
+      if (data) loadLayout(data);
+    },
+    onMove: function (callback) {
+      if (callback && typeof callback == "function") grid.on("move", callback);
     },
   };
 })();

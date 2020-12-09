@@ -4,9 +4,11 @@ import { Modal } from "./modal.js";
 import { Menu } from "./menu.js";
 import { Pubsub } from "./pubsub.js";
 export var Main = (function () {
+  const path = document.querySelector(".path-title");
   const addButton = document.querySelector(".grid-button.add-more-items");
+  const backButton = document.getElementById("backButton");
   Menu.addOption("delete", "Delete Item", function (target) {
-    Pubsub.publish("menuDelete", target);
+    Pubsub.publish("delete", target);
   });
   Menu.addOption("edit", "Edit Item", function (target) {
     Pubsub.publish("menuEdit", target);
@@ -26,9 +28,16 @@ export var Main = (function () {
   addButton.addEventListener("click", function () {
     Pubsub.publish("createShortcut", null);
   });
+
+  backButton.addEventListener("click", function (e) {
+    if (!Storage.isInRoot()) {
+      Storage.setPreviousParent();
+      Pubsub.publish("needGridLoad");
+    }
+  });
   Menu.addListenedItems(addButton, ["createShortcut", "createFolder"]);
 
-  Pubsub.subscribe("menuDelete", function (target) {
+  Pubsub.subscribe("delete", function (target) {
     var targetId = Grid.remove(target);
     Storage.removeElement(targetId);
   });
@@ -54,15 +63,15 @@ export var Main = (function () {
     Menu.addListenedItems(target, ["delete", "edit", "move"]);
 
     target.onmouseup = function (e) {
-      if (!Grid.isDragging(target)) {
-        Storage.setCurrentParent(target.getAttribute("data-id"));
-        Grid.clear();
+      if (!Grid.isDragging(target) && e.button != 2) {
+        Storage.setCurrentParentId(target.getAttribute("data-id"));
         Pubsub.publish("needGridLoad", null);
       }
     };
   });
 
   Pubsub.subscribe("needGridLoad", function (targets) {
+    Grid.clear();
     var dirContent = Storage.getCurrentChildren();
     if (Array.isArray(targets)) dirContent = targets;
     dirContent.forEach(function (item) {
@@ -79,6 +88,8 @@ export var Main = (function () {
         );
       }
     });
+    path.innerHTML = Storage.getCurrentParent().name;
+    Grid.applyLayout(Storage.getCurrentLayout());
   });
 
   Pubsub.subscribe("createFolder", function () {
@@ -92,6 +103,10 @@ export var Main = (function () {
         Grid.addFolder(newTab.id, newTab.name, newTab.parentId)
       );
     });
+  });
+
+  Grid.onMove(function () {
+    Storage.saveGridLayout(Grid.getLayout());
   });
 
   return {
