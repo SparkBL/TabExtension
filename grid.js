@@ -163,7 +163,7 @@ export var Grid = (function () {
     if (!item) return;
     grid.hide([item], {
       onFinish: () => {
-        grid.remove(item, { removeElements: true });
+        item.getElement().remove();
         //  if (sortFieldValue !== "order") {
         //  const itemIndex = dragOrder.indexOf(item);
         //  if (itemIndex > -1) dragOrder.splice(itemIndex, 1);
