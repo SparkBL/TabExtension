@@ -21,10 +21,11 @@ export var Modal = (function () {
     var f = document.createElement("form");
     var title = document.createElement("h1");
     title.textContent = "Add new shortcut";
+    title.className = "title-modal";
     var inname = document.createElement("input");
     inname.setAttribute("type", "text");
     inname.setAttribute("name", "name");
-    inname.setAttribute("class", "input_modal");
+    inname.setAttribute("class", "input-modal");
     if (name) inname.value = name;
     var namelabel = document.createElement("label");
 
@@ -34,7 +35,7 @@ export var Modal = (function () {
     var inurl = document.createElement("input");
     inurl.setAttribute("type", "text");
     inurl.setAttribute("name", "url");
-    inurl.setAttribute("class", "input_modal");
+    inurl.setAttribute("class", "input-modal");
     if (url) inurl.value = url;
     var urllabel = document.createElement("label");
 
@@ -42,7 +43,7 @@ export var Modal = (function () {
     urllabel.innerHTML = "Shortcut URL";
     var s = document.createElement("button");
     s.setAttribute("type", "submit");
-    s.setAttribute("class", "button_modal");
+    s.setAttribute("class", "button-modal");
     s.innerHTML = "Create shortcut";
     var namewrapper = document.createElement("div");
     namewrapper.appendChild(namelabel);
@@ -64,10 +65,11 @@ export var Modal = (function () {
     var f = document.createElement("form");
     var title = document.createElement("h1");
     title.textContent = "Add new folder";
+    title.className = "title-modal";
     var inname = document.createElement("input");
     inname.setAttribute("type", "text");
     inname.setAttribute("name", "name");
-    inname.setAttribute("class", "input_modal");
+    inname.setAttribute("class", "input-modal");
     if (name) inname.value = name;
     var namelabel = document.createElement("label");
 
@@ -75,7 +77,7 @@ export var Modal = (function () {
     namelabel.innerHTML = "Folder name";
     var s = document.createElement("button");
     s.setAttribute("type", "submit");
-    s.setAttribute("class", "button_modal");
+    s.setAttribute("class", "button-modal");
     s.innerHTML = "Create folder";
     var namewrapper = document.createElement("div");
     namewrapper.appendChild(namelabel);

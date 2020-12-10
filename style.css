@@ -24,49 +24,27 @@
   --button-modal-cover: #cfcfcf;
   --modal-bg: #fefefe;
   /*NEW*/
-  --color-base-darker-darker: #3d3d3d;
-  --color-base-darker: #5c5c5c;
+  --color-base-ddd: #333333;
+  --color-base-dd: #4d4d4d;
+  --color-base-d: #6e6e6e;
   --color-base: #808080;
-  --color-base-lighter: #b4b4b4;
-  --color-base-lighter-lighter: #dddddd;
-  /* Base text size*/
-  --text-base-size: 1em;
-  /* Type Scale*/
-  --text-scale-ratio: 1.2;
-  --text-xs: calc((1em / var(--text-scale-ratio)) / var(--text-scale-ratio));
-  --text-sm: calc(var(--text-xs) * var(--text-scale-ratio));
-  --text-md: calc(var(--text-sm) * var(--text-scale-ratio) * var(--text-scale-ratio));
-  --text-lg: calc(var(--text-md) * var(--text-scale-ratio));
-  --text-xl: calc(var(--text-lg) * var(--text-scale-ratio));
-  --text-xxl: calc(var(--text-xl) * var(--text-scale-ratio));
-  --text-xxxl: calc(var(--text-xxl) * var(--text-scale-ratio));
-  /*Intervals*/
-  --space-unit: 1em;
-  --space-xxxxs: calc(0.125 * var(--space-unit));
-  --space-xxxs: calc(0.25 * var(--space-unit));
-  --space-xxs: calc(0.375 * var(--space-unit));
-  --space-xs: calc(0.5 * var(--space-unit));
-  --space-sm: calc(0.75 * var(--space-unit));
-  --space-md: calc(1.25 * var(--space-unit));
-  --space-lg: calc(2 * var(--space-unit));
-  --space-xl: calc(3.25 * var(--space-unit));
-  --space-xxl: calc(5.25 * var(--space-unit));
-  --space-xxxl: calc(8.5 * var(--space-unit));
-  --space-xxxxl: calc(13.75 * var(--space-unit));
+  --color-base-l: #a7a7a7;
+  --color-base-ll: #cfcfcf;
+  --color-base-lll: #ebebeb;
 }
 
 html {
   overflow-y: scroll;
   overflow-x: hidden;
   background: var(--color-background);
-  font-size: 62.5%;
+  font-size: 55%
 }
 
 body {
   display: flex;
   flex-direction: column;
   font-family: "Fira Sans", Helvetica, Arial, sans-serif;
-  font-size: 1.8rem;
+  font-size: 2.5rem;
   line-height: 1.5;
   margin: 0 5vw;
   color: var(--color-text)
@@ -85,18 +63,11 @@ body {
   padding: 0.5rem;
   border-radius: 1rem;
   cursor: pointer;
-  /* background: #ff6262;*/
   color: var(--folder-img-color);
 }
 
 a {
-  color: #5656ff;
-  font-weight: 500;
   text-decoration: none;
-}
-
-a:hover {
-  color: #ff9c40;
 }
 
 .modal form {
@@ -107,27 +78,17 @@ a:hover {
 }
 
 form label {
-  margin-right: 25px;
-  margin-bottom: 25px;
+  margin-right: 2rem;
   margin-top: 3rem;
-  font-size: 3rem;
-  align-self: center;
+  font-size: 3.1rem;
 }
 
 .favicon {
   -webkit-user-select: none;
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 3rem;
   margin: auto;
   backdrop-filter: grayscale(30%);
-}
-
-.addicon {
-  margin: auto;
-  width: 50px;
-  height: 50px;
-  opacity: 0.4;
-  /*filter: grayscale(100%);*/
 }
 
 .section-title {
@@ -169,7 +130,7 @@ form label {
   display: block;
   position: absolute;
   left: 0.5rem;
-  right: 0.5rem;
+  right: 0.8rem;
   bottom: 0;
   border-bottom: 0.1rem solid var(--grid-control-border-color);
 }
@@ -202,7 +163,7 @@ form label {
   position: relative;
   width: 100%;
   padding: 1rem 1.5rem 1rem 5rem;
-  font-size: 1.6rem;
+  font-size: 2.5rem;
   font-weight: 700;
   line-height: 4rem;
   color: var(--grid-control-field-color);
@@ -227,15 +188,6 @@ form label {
   opacity: 0.7;
   color: var(--grid-control-field-color);
   font-style: italic;
-}
-
-select.grid-control-field {
-  padding-right: 5rem;
-  cursor: pointer;
-}
-
-select.grid-control-field::-ms-expand {
-  display: none;
 }
 
 .grid-control-field:focus {
@@ -276,10 +228,9 @@ select.grid-control-field::-ms-expand {
 }
 
 .path-title {
-  font-size: 2em;
+  font-size: 3rem;
   text-align: center;
-  padding-inline-start: 3rem;
-  align-content: center;
+  padding-inline-start: 3.3rem;
   color: var(--color-text-headers);
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -297,9 +248,8 @@ select.grid-control-field::-ms-expand {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  /*height: 500px;
-  margin-top: 5%;
-  margin-bottom: 2%;
+  margin-top: 2rem;
+  /* margin-bottom: 2%;
   margin-left: 15%;
   margin-right: 15%;
   color: #5a5a5a;*/
@@ -489,6 +439,7 @@ select.grid-control-field::-ms-expand {
 
 .menu-item {
   display: none;
+  font-size: 2.1rem;
   padding: 10px 30px;
   transition: 0.1s;
   color: var(--menu-color)
@@ -531,7 +482,7 @@ select.grid-control-field::-ms-expand {
   border-radius: 2rem;
   background-color: var(--modal-bg);
   margin: auto;
-  padding: 0;
+  padding: 1rem;
   width: 62rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   -webkit-animation-name: animatetop;
@@ -583,11 +534,10 @@ select.grid-control-field::-ms-expand {
   padding: 2px 16px;
 }
 
-.input_modal {
+.input-modal {
   border: none;
   outline: none;
   margin-bottom: 2%;
-  margin-right: 0rem;
   padding-bottom: 5rem;
   background: var(--input-bg);
   width: 30rem;
@@ -599,7 +549,7 @@ select.grid-control-field::-ms-expand {
   /*box-shadow: 3px 4px #0F1011;*/
 }
 
-.button_modal {
+.button-modal {
   outline: 0;
   border: 1px rgb(85, 85, 85);
   margin-bottom: 2%;
@@ -613,16 +563,20 @@ select.grid-control-field::-ms-expand {
   transition: 2px all;
   border-radius: 1rem;
   border: none;
-  font-size: 3rem;
+  font-size: 2.5rem;
   /*box-shadow: 3px 4px #0F1011;*/
 }
 
-.button_modal:active {
+.button-modal:active {
   transform: scale(1.05, 1.05);
   transition: transform 0.1s ease-in;
 }
 
-.button_modal::after {
+.button-modal::after {
   transform: scale(1, 1);
   transition: transform 0.3s ease-in;
+}
+
+.title-modal {
+  padding-bottom: 3rem;
 }
