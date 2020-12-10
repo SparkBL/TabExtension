@@ -2,24 +2,57 @@
 
 :root {
   /*BASE COLORS*/
-  --color-background: rgb(255, 255, 255);
+  --color-background: #ffffff;
   --color-text: #5e5e5e;
-  --color-text-headers: #5da3ff;
+  --color-text-headers: #5e5e5e;
+  /*#5da3ff;
   /*INPUTFIELDS*/
   --input-bg: #dddddd;
-  --input-color: #5a5a5a;
-  --grid-item-color: #fff7c7;
-  --grid-item-border: #fff;
-  --hover-color: rgb(41, 41, 41);
-  --folder-img-color: #ffe67a;
-  --grid-shortcut-bg: rgb(144, 156, 252);
-  --grid-folder-bg: rgb(176, 185, 255);
-  --menu-bg: #eee;
-  --menu-color: #666;
-  --grid-control-icon-color: #5da3ff;
-  --grid-control-field-color: #5455ff;
-  --grid-control-border-color: #f8a94e;
-  --button-modal-cover: #5a5a5a;
+  --input-color: #5e5e5e;
+  /*#5a5a5a;*/
+  --grid-item-color: #5e5e5e;
+  --grid-item-border: #ffffff;
+  --hover-color: #3f3f3f;
+  --folder-img-color: #5e5e5e;
+  --grid-shortcut-bg: #cfcfcf;
+  --grid-folder-bg: #cfcfcf;
+  --menu-bg: #dddddd;
+  --menu-color: #5e5e5e;
+  --grid-control-icon-color: #5e5e5e;
+  --grid-control-field-color: #cfcfcf;
+  --grid-control-border-color: #cfcfcf;
+  --button-modal-cover: #cfcfcf;
+  --modal-bg: #fefefe;
+  /*NEW*/
+  --color-base-darker-darker: #3d3d3d;
+  --color-base-darker: #5c5c5c;
+  --color-base: #808080;
+  --color-base-lighter: #b4b4b4;
+  --color-base-lighter-lighter: #dddddd;
+  /* Base text size*/
+  --text-base-size: 1em;
+  /* Type Scale*/
+  --text-scale-ratio: 1.2;
+  --text-xs: calc((1em / var(--text-scale-ratio)) / var(--text-scale-ratio));
+  --text-sm: calc(var(--text-xs) * var(--text-scale-ratio));
+  --text-md: calc(var(--text-sm) * var(--text-scale-ratio) * var(--text-scale-ratio));
+  --text-lg: calc(var(--text-md) * var(--text-scale-ratio));
+  --text-xl: calc(var(--text-lg) * var(--text-scale-ratio));
+  --text-xxl: calc(var(--text-xl) * var(--text-scale-ratio));
+  --text-xxxl: calc(var(--text-xxl) * var(--text-scale-ratio));
+  /*Intervals*/
+  --space-unit: 1em;
+  --space-xxxxs: calc(0.125 * var(--space-unit));
+  --space-xxxs: calc(0.25 * var(--space-unit));
+  --space-xxs: calc(0.375 * var(--space-unit));
+  --space-xs: calc(0.5 * var(--space-unit));
+  --space-sm: calc(0.75 * var(--space-unit));
+  --space-md: calc(1.25 * var(--space-unit));
+  --space-lg: calc(2 * var(--space-unit));
+  --space-xl: calc(3.25 * var(--space-unit));
+  --space-xxl: calc(5.25 * var(--space-unit));
+  --space-xxxl: calc(8.5 * var(--space-unit));
+  --space-xxxxl: calc(13.75 * var(--space-unit));
 }
 
 html {
@@ -86,6 +119,7 @@ form label {
   width: 2rem;
   height: 2rem;
   margin: auto;
+  backdrop-filter: grayscale(30%);
 }
 
 .addicon {
@@ -137,7 +171,7 @@ form label {
   left: 0.5rem;
   right: 0.5rem;
   bottom: 0;
-  border-bottom: 0.4rem dashed var(--grid-control-border-color);
+  border-bottom: 0.1rem solid var(--grid-control-border-color);
 }
 
 .grid-control:after {
@@ -147,7 +181,7 @@ form label {
   left: -0.2rem;
   top: 1.5rem;
   bottom: 1.5rem;
-  border-left: 0.4rem dashed var(--grid-control-border-color);
+  border-left: 0.1rem solid var(--grid-control-border-color);
 }
 
 .grid-control:first-child:after {
@@ -393,8 +427,8 @@ select.grid-control-field::-ms-expand {
   height: 6rem;
   white-space: nowrap;
   background: none;
-  border: 0.3rem solid #ff9c40;
-  color: #ff9c40;
+  border: 0.3rem solid var(--folder-img-color);
+  color: var(--folder-img-color);
   -ms-touch-action: manipulation;
   touch-action: manipulation;
   cursor: pointer;
@@ -435,7 +469,7 @@ select.grid-control-field::-ms-expand {
 
 #menu {
   display: block;
-  background-color: white;
+  background-color: var(--input-bg);
   padding: 10px 0px;
   border-radius: 1.5rem;
   box-shadow: 2px 2px 30px lightgrey;
@@ -495,7 +529,7 @@ select.grid-control-field::-ms-expand {
 .modal {
   position: relative;
   border-radius: 2rem;
-  background-color: #fefefe;
+  background-color: var(--modal-bg);
   margin: auto;
   padding: 0;
   width: 62rem;
@@ -555,7 +589,7 @@ select.grid-control-field::-ms-expand {
   margin-bottom: 2%;
   margin-right: 0rem;
   padding-bottom: 5rem;
-  background: #ebebeb;
+  background: var(--input-bg);
   width: 30rem;
   float: right;
   font-size: 2rem;
