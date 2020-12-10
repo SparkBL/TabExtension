@@ -5,9 +5,9 @@ export var Grid = (function () {
   const searchField = document.querySelector(
     ".grid-control-field.search-field"
   );
-  const colors = ["shortcut", "folder"];
-  var elemWidth = 2;
-  var elemHeight = 2;
+  const types = ["shortcut", "folder"];
+  const sizes = [1, 2, 3, 4, 5, 6];
+  var currentSize = 1;
 
   const grid = new Muuri(gridElement, {
     showDuration: 400,
@@ -103,8 +103,9 @@ export var Grid = (function () {
     wrapper.setAttribute("data-id", id);
     wrapper.setAttribute("data-name", name);
     wrapper.setAttribute("data-parent", parent);
-    wrapper.setAttribute("data-type", "shortcut");
-    wrapper.classList.add("h" + elemHeight, "w" + elemWidth, colors[0]);
+    wrapper.setAttribute("data-type", types[0]);
+    wrapper.setAttribute("data-size", sizes[currentSize]);
+    //  wrapper.classList.add("h" + elemHeight, "w" + elemWidth, colors[0]);
     return wrapper;
   }
 
@@ -129,8 +130,9 @@ export var Grid = (function () {
     wrapper.setAttribute("data-id", id);
     wrapper.setAttribute("data-name", name);
     wrapper.setAttribute("data-parent", parent);
-    wrapper.setAttribute("data-type", "folder");
-    wrapper.classList.add("h" + elemHeight, "w" + elemWidth, colors[1]);
+    wrapper.setAttribute("data-type", types[1]);
+    wrapper.setAttribute("data-size", sizes[currentSize]);
+    //wrapper.classList.add("h" + elemHeight, "w" + elemWidth, colors[1]);
     return wrapper;
   }
 

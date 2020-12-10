@@ -1,8 +1,6 @@
 export var Modal = (function () {
   var blur = document.querySelector(".blur");
   var modal = document.querySelector(".modal");
-  var header = document.querySelector(".modal-header");
-  var footer = document.querySelector(".modal-footer");
   var body = document.querySelector(".modal-body");
   var close = document.querySelector(".close");
   function showModal() {
@@ -21,7 +19,6 @@ export var Modal = (function () {
 
   function buildShortcutForm(name, url) {
     var f = document.createElement("form");
-    // f.setAttribute("method", "post");
     var title = document.createElement("h1");
     title.textContent = "Add new shortcut";
     var inname = document.createElement("input");
@@ -47,12 +44,17 @@ export var Modal = (function () {
     s.setAttribute("type", "submit");
     s.setAttribute("class", "button_modal");
     s.innerHTML = "Create shortcut";
+    var namewrapper = document.createElement("div");
+    namewrapper.appendChild(namelabel);
+    namewrapper.appendChild(inname);
+    var urlwrapper = document.createElement("div");
+    urlwrapper.appendChild(urllabel);
+    urlwrapper.appendChild(inurl);
     f.appendChild(title);
-    f.appendChild(namelabel);
-    f.appendChild(inname);
+    f.appendChild(namewrapper);
+
     f.appendChild(document.createElement("br"));
-    f.appendChild(urllabel);
-    f.appendChild(inurl);
+    f.appendChild(urlwrapper);
     f.appendChild(document.createElement("br"));
     f.appendChild(s);
     return f;
@@ -60,7 +62,6 @@ export var Modal = (function () {
 
   function buildFolderForm(name) {
     var f = document.createElement("form");
-    // f.setAttribute("method", "post");
     var title = document.createElement("h1");
     title.textContent = "Add new folder";
     var inname = document.createElement("input");
@@ -76,9 +77,12 @@ export var Modal = (function () {
     s.setAttribute("type", "submit");
     s.setAttribute("class", "button_modal");
     s.innerHTML = "Create folder";
+    var namewrapper = document.createElement("div");
+    namewrapper.appendChild(namelabel);
+    namewrapper.appendChild(inname);
     f.appendChild(title);
-    f.appendChild(namelabel);
-    f.appendChild(inname);
+    f.appendChild(namewrapper);
+
     f.appendChild(document.createElement("br"));
     f.appendChild(s);
     return f;

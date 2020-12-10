@@ -1,65 +1,51 @@
+/*--------------- COLOR THEMES ---------------*/
+
+:root {
+  /*BASE COLORS*/
+  --color-background: rgb(255, 255, 255);
+  --color-text: #5e5e5e;
+  --color-text-headers: #5da3ff;
+  /*INPUTFIELDS*/
+  --input-bg: #dddddd;
+  --input-color: #5a5a5a;
+  --grid-item-color: #fff7c7;
+  --grid-item-border: #fff;
+  --hover-color: rgb(41, 41, 41);
+  --folder-img-color: #ffe67a;
+  --grid-shortcut-bg: rgb(144, 156, 252);
+  --grid-folder-bg: rgb(176, 185, 255);
+  --menu-bg: #eee;
+  --menu-color: #666;
+  --grid-control-icon-color: #5da3ff;
+  --grid-control-field-color: #5455ff;
+  --grid-control-border-color: #f8a94e;
+  --button-modal-cover: #5a5a5a;
+}
+
 html {
   overflow-y: scroll;
   overflow-x: hidden;
-  background: rgb(255, 255, 255);
+  background: var(--color-background);
   font-size: 62.5%;
 }
 
 body {
   display: flex;
   flex-direction: column;
-  /* position: relative;*/
   font-family: "Fira Sans", Helvetica, Arial, sans-serif;
   font-size: 1.8rem;
   line-height: 1.5;
   margin: 0 5vw;
-  color: #5e5e5e;
+  color: var(--color-text)
 }
 
-.path-title {
-  font-size: 1.1em;
-  text-align: center;
-  padding-block: 1.3rem;
-  padding-inline-start: 3rem;
-  align-content: center;
-  color: #5da3ff;
-}
-
-.input_box {
-  border: none;
-  outline: none;
-  margin-bottom: 2%;
-  margin-left: 15%;
-  margin-right: 15%;
-  padding-bottom: 10px;
-  background: #dddddd;
-  /*#4c566a*/
-  padding: 15px;
-  color: #5a5a5a;
-  font-size: 20px;
-  transition: 0.4px all;
-  border-radius: 5px 5px 5px 5px;
-  width: 600px;
-  /*box-shadow: 3px 4px #0F1011;*/
-}
-
-b, strong {
-  font-weight: 500;
-}
-
-mark {
-  background-color: #fef2ba;
-  color: #3e3e3e;
-  font-weight: 500;
-}
-
-li {
+.item-content li {
   list-style-type: none;
   padding-top: 2rem;
   font-size: 2.5rem;
 }
 
-li svg {
+.item-content li svg {
   width: 6rem;
   height: 6rem;
   position: relative;
@@ -67,7 +53,7 @@ li svg {
   border-radius: 1rem;
   cursor: pointer;
   /* background: #ff6262;*/
-  color: #ffe67a;
+  color: var(--folder-img-color);
 }
 
 a {
@@ -80,8 +66,25 @@ a:hover {
   color: #ff9c40;
 }
 
+.modal form {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: inherit;
+}
+
+form label {
+  margin-right: 25px;
+  margin-bottom: 25px;
+  margin-top: 3rem;
+  font-size: 3rem;
+  align-self: center;
+}
+
 .favicon {
   -webkit-user-select: none;
+  width: 2rem;
+  height: 2rem;
   margin: auto;
 }
 
@@ -101,9 +104,158 @@ a:hover {
   user-select: none;
 }
 
+/*-------------- GRID HEADER -----------------*/
+
+.grid-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+@media (max-width: 767px) {
+  .grid-controls {
+    flex-direction: column;
+  }
+}
+
+.grid-control {
+  display: flex;
+  position: relative;
+  width: 70%;
+  flex-wrap: nowrap;
+}
+
+.grid-control.search {
+  width: 30%;
+}
+
+.grid-control:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: 0;
+  border-bottom: 0.4rem dashed var(--grid-control-border-color);
+}
+
+.grid-control:after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: -0.2rem;
+  top: 1.5rem;
+  bottom: 1.5rem;
+  border-left: 0.4rem dashed var(--grid-control-border-color);
+}
+
+.grid-control:first-child:after {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .grid-control {
+    width: 100%;
+  }
+  .grid-control:after {
+    display: none;
+  }
+}
+
+.grid-control-field {
+  display: block;
+  position: relative;
+  width: 100%;
+  padding: 1rem 1.5rem 1rem 5rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 4rem;
+  color: var(--grid-control-field-color);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  z-index: 1;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+}
+
+@media (max-width: 767px) {
+  .grid-control-field {
+    height: 5rem;
+    line-height: 3rem;
+  }
+}
+
+.grid-control-field::placeholder {
+  opacity: 0.7;
+  color: var(--grid-control-field-color);
+  font-style: italic;
+}
+
+select.grid-control-field {
+  padding-right: 5rem;
+  cursor: pointer;
+}
+
+select.grid-control-field::-ms-expand {
+  display: none;
+}
+
+.grid-control-field:focus {
+  outline: 0;
+}
+
+.grid-control-icon, .grid-select-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  width: 25px;
+  height: 25px;
+  padding: 1.5rem;
+  z-index: 2;
+  pointer-events: none;
+  color: var(--grid-control-icon-color);
+}
+
+@media (max-width: 767px) {
+  .grid-control-icon, .grid-select-arrow {
+    height: 5rem;
+  }
+}
+
+.grid-control-icon {
+  left: 0;
+}
+
+.grid-select-arrow {
+  right: 0;
+  padding: 1.7rem;
+}
+
+.grid-control-icon svg, .grid-select-arrow svg {
+  flex-grow: 1;
+}
+
+.path-title {
+  font-size: 2em;
+  text-align: center;
+  padding-inline-start: 3rem;
+  align-content: center;
+  color: var(--color-text-headers);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/*-------------------- GRID CLASSES ---------------------*/
+
 .grid {
-  /* background: #ffffff;*/
-  /*#2e3440*/
   position: relative;
   /* max-width: 96rem;*/
   padding-bottom: 3rem;
@@ -132,20 +284,21 @@ a:hover {
   -ms-transition: all 0.2s ease-out;
   -o-transition: all 0.2s ease-out;
   transition: all 0.2s ease-out;
-  /* background: #dddddd;*/
-  /*border: #191c1e;*/
 }
 
 .item-content {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
   border-radius: 3rem;
   position: relative;
-  border: 0.5rem solid #fff;
+  border: 0.5rem solid var(--grid-item-border);
+  color: var(--grid-item-color);
   text-align: center;
   overflow: hidden;
   overflow-wrap: break-word;
   width: 100%;
   height: 100%;
-  display: block;
   -webkit-transition: all 0.25s ease-out;
   -moz-transition: all 0.25s ease-out;
   -ms-transition: all 0.25s ease-out;
@@ -156,7 +309,7 @@ a:hover {
 
 .item.muuri-item-shown .item-content:hover {
   transition: all 0.35s ease-out;
-  color: rgb(41, 41, 41);
+  color: var(--hover-color);
   transform: scale(0.99)
 }
 
@@ -183,30 +336,17 @@ a:hover {
   z-index: 0;
 }
 
-.item.h2 {
+.item[data-size="2"] {
   height: 22rem;
-}
-
-.item.w2 {
   width: 22rem;
 }
 
-.item.h3 {
-  height: 44rem;
+.item[data-type="shortcut"] .item-content {
+  background: var(--grid-shortcut-bg);
 }
 
-.item.w3 {
-  width: 44rem;
-}
-
-.item.shortcut .item-content {
-  color: #fff7c7;
-  background: rgb(144, 156, 252);
-}
-
-.item.folder .item-content {
-  color: #fff7c7;
-  background: rgb(176, 185, 255);
+.item[data-type="folder"] .item-content {
+  background: var(--grid-folder-bg);
 }
 
 .grid-footer {
@@ -291,6 +431,8 @@ a:hover {
   transition: all 0.2s ease-in-out;
 }
 
+/*-------------- CONTEXT MENU -----------------*/
+
 #menu {
   display: block;
   background-color: white;
@@ -315,11 +457,11 @@ a:hover {
   display: none;
   padding: 10px 30px;
   transition: 0.1s;
-  color: #666;
+  color: var(--menu-color)
 }
 
 .menu-item:hover {
-  background-color: #eee;
+  background-color: var(--menu-bg);
   cursor: pointer;
 }
 
@@ -333,46 +475,36 @@ a:hover {
   display: none;
 }
 
-/* Modal */
+/*-------------- MODAL WINDOW -----------------*/
 
 .blur {
   display: none;
-  /* Hidden by default */
   position: fixed;
-  /* Stay in place */
   z-index: 5;
-  /* Sit on top */
   padding-top: 100px;
-  /* filter: blur(100px);*/
-  /* Location of the box */
   left: 0;
   top: 0;
   width: 100%;
-  /* Full width */
   height: 100%;
-  /* Full height */
   overflow: auto;
-  /* Enable scroll if needed */
   background-color: rgb(0, 0, 0);
-  /* Fallback color */
   background-color: rgba(255, 255, 255, 0.5);
-  /* Black w/ opacity */
+  backdrop-filter: blur(10px);
 }
-
-/* Modal Content */
 
 .modal {
   position: relative;
-  border-radius: 3rem;
+  border-radius: 2rem;
   background-color: #fefefe;
   margin: auto;
   padding: 0;
-  width: 50%;
+  width: 62rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   -webkit-animation-name: animatetop;
   -webkit-animation-duration: 0.4s;
   animation-name: animatetop;
   animation-duration: 0.4s;
+  min-width: fit-content;
 }
 
 /* Add Animation */
@@ -399,69 +531,53 @@ a:hover {
   }
 }
 
-/* The Close Button */
-
 .close {
-  color: white;
+  color: var(--input-color);
   float: right;
+  margin-right: 1.5rem;
   font-size: 28px;
   font-weight: bold;
 }
 
 .close:hover, .close:focus {
-  color: #000;
+  color: var(--color-text-headers);
   text-decoration: none;
   cursor: pointer;
-}
-
-.modal-header {
-  padding: 2px 16px;
-  border-top-left-radius: 3rem;
-  border-top-right-radius: 3rem;
-  background-color: #ffcc92;
-  color: white;
 }
 
 .modal-body {
   padding: 2px 16px;
 }
 
-.modal-footer {
-  padding: 2px 16px;
-  border-bottom-left-radius: 3rem;
-  border-bottom-right-radius: 3rem;
-  background-color: #ffcc92;
-  color: white;
-}
-
 .input_modal {
   border: none;
   outline: none;
   margin-bottom: 2%;
-  margin-right: 2rem;
+  margin-right: 0rem;
   padding-bottom: 5rem;
   background: #ebebeb;
   width: 30rem;
   float: right;
   font-size: 2rem;
   padding: 2rem;
-  color: #5a5a5a;
-  border-radius: 5px 5px 5px 5px;
+  color: var(--color-text);
+  border-radius: 1rem;
   /*box-shadow: 3px 4px #0F1011;*/
 }
 
 .button_modal {
+  outline: 0;
   border: 1px rgb(85, 85, 85);
   margin-bottom: 2%;
   margin-top: 10%;
   padding-bottom: 10px;
-  background: #dddddd;
-  width: 30rem;
+  background: var(--input-bg);
+  width: 25rem;
   /*#4c566a*/
   padding: 15px;
-  color: #5a5a5a;
+  color: var(--button-modal-color);
   transition: 2px all;
-  border-radius: 5px 5px 5px 5px;
+  border-radius: 1rem;
   border: none;
   font-size: 3rem;
   /*box-shadow: 3px 4px #0F1011;*/
@@ -475,160 +591,4 @@ a:hover {
 .button_modal::after {
   transform: scale(1, 1);
   transition: transform 0.3s ease-in;
-}
-
-label {
-  margin-right: 25px;
-  margin-bottom: 25px;
-  margin-top: 3rem;
-  font-size: 3rem;
-}
-
-/* Grid Control */
-
-.grid-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-@media (max-width: 767px) {
-  .grid-controls {
-    flex-direction: column;
-  }
-}
-
-.grid-control {
-  display: flex;
-  position: relative;
-  width: 70%;
-  flex-wrap: nowrap;
-}
-
-.grid-control.search {
-  width: 30%;
-}
-
-.grid-control:before {
-  content: "";
-  display: block;
-  position: absolute;
-  left: 0.5rem;
-  right: 0.5rem;
-  bottom: 0;
-  border-bottom: 0.4rem dashed #f8a94e;
-}
-
-.grid-control:focus-within:before {
-  border-bottom: 0.7rem double #5455ff;
-}
-
-.grid-control:after {
-  content: "";
-  display: block;
-  position: absolute;
-  left: -0.2rem;
-  top: 1.5rem;
-  bottom: 1.5rem;
-  border-left: 0.4rem dashed #f8a94e;
-}
-
-.grid-control:first-child:after {
-  display: none;
-}
-
-@media (max-width: 767px) {
-  .grid-control {
-    width: 100%;
-  }
-  .grid-control:after {
-    display: none;
-  }
-}
-
-.grid-control-field {
-  display: block;
-  position: relative;
-  width: 100%;
-  /*  height: 6rem;*/
-  padding: 1rem 1.5rem 1rem 5rem;
-  font-size: 1.6rem;
-  font-weight: 700;
-  line-height: 4rem;
-  color: #5455ff;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  z-index: 1;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -o-appearance: none;
-  appearance: none;
-}
-
-@media (max-width: 767px) {
-  .grid-control-field {
-    height: 5rem;
-    line-height: 3rem;
-  }
-}
-
-.grid-control-field::placeholder {
-  opacity: 0.7;
-  color: #5455ff;
-  font-style: italic;
-}
-
-select.grid-control-field {
-  padding-right: 5rem;
-  cursor: pointer;
-}
-
-select.grid-control-field::-ms-expand {
-  display: none;
-}
-
-.grid-control-field:focus {
-  outline: 0;
-}
-
-.grid-control-icon, .grid-select-arrow {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  width: 25px;
-  height: 25px;
-  padding: 1.5rem;
-  z-index: 2;
-  pointer-events: none;
-  color: #5da3ff;
-}
-
-/*
-  .grid-control:focus-within .grid-control-icon,
-  .grid-control:focus-within .grid-select-arrow {
-    color: rgb(101, 255, 195);
-  }
-  */
-
-@media (max-width: 767px) {
-  .grid-control-icon, .grid-select-arrow {
-    height: 5rem;
-  }
-}
-
-.grid-control-icon {
-  left: 0;
-}
-
-.grid-select-arrow {
-  right: 0;
-  padding: 1.7rem;
-}
-
-.grid-control-icon svg, .grid-select-arrow svg {
-  flex-grow: 1;
 }
