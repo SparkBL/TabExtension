@@ -411,7 +411,7 @@ form label {
 }
 
 .grid-control .grid-button:hover {
-  transform: translate(-2px) scale(1.1);
+  transform: translate(-2px) scale(1.05);
   transition: all 0.2s ease-in-out;
 }
 

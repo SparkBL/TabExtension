@@ -11,7 +11,7 @@ export var Main = (function () {
     Pubsub.publish("delete", target);
   });
   Menu.addOption("edit", "Edit Item", function (target) {
-    Pubsub.publish("menuEdit", target);
+    Pubsub.publish("edit", target);
   });
   Menu.addOption("move", "Move Item", function (target) {
     Pubsub.publish("menuMove", target);

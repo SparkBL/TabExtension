@@ -14,23 +14,18 @@ export var Menu = (function () {
   outClick = document.body.appendChild(document.createElement("div"));
   outClick.id = "outClick";
 
-  outClick.addEventListener("click", (e) => {
+  function hideAll() {
     menu.classList.remove("show");
     outClick.style.display = "none";
     options.forEach(function (elem) {
       elem.style.display = "none";
       nowSelected = null;
     });
-  });
+  }
 
-  window.addEventListener("click", () => {
-    menu.classList.remove("show");
-    outClick.style.display = "none";
-    options.forEach(function (elem) {
-      elem.style.display = "none";
-      nowSelected = null;
-    });
-  });
+  outClick.addEventListener("click", hideAll);
+
+  window.addEventListener("click", hideAll);
 
   return {
     addOption: function (id, name, action) {
@@ -54,6 +49,7 @@ export var Menu = (function () {
         var elemId = elem.getAttribute("data-id");
         allowedOptions[elemId] = opts;
         elem.addEventListener("contextmenu", function (e) {
+          hideAll();
           e.preventDefault();
           nowSelected = e.currentTarget;
           menu.style.top = `${e.clientY}px`;
