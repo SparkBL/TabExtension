@@ -8,7 +8,7 @@ export var Grid = (function () {
   const types = ["shortcut", "folder"];
   const sizes = [1, 2, 3, 4, 5, 6];
   var currentSize = 1;
-
+  var tabOpenMode = "_blank";
   const grid = new Muuri(gridElement, {
     showDuration: 400,
     showEasing: "ease",
@@ -33,8 +33,8 @@ export var Grid = (function () {
       useDragContainer: true,
     },
     dragStartPredicate: {
-      distance: 15,
-      delay: 15,
+      distance: 3,
+      delay: 3,
     },
     dragPlaceholder: {
       enabled: true,
@@ -90,11 +90,15 @@ export var Grid = (function () {
     viewDiv.appendChild(img);
     viewDiv.appendChild(span);
     viewDiv.setAttribute("class", "item-content");
-    var wrapper = document.createElement("a");
+    var wrapper = document.createElement("div");
+    wrapper.onclick = function (e) {
+      // location.href = url;
+      window.open(url, tabOpenMode, "noopener noreferrer");
+    };
     wrapper.setAttribute("class", "item");
-    wrapper.href = url;
-    wrapper.setAttribute("target", "_blank");
-    wrapper.setAttribute("rel", "noopener noreferrer");
+    // wrapper.href = url;
+    //  wrapper.setAttribute("target", "_blank");
+    // wrapper.setAttribute("rel", "noopener noreferrer");
     wrapper.appendChild(viewDiv);
     wrapper.setAttribute("data-id", id);
     wrapper.setAttribute("data-name", name);
@@ -113,7 +117,7 @@ export var Grid = (function () {
     viewDiv.appendChild(img);
     viewDiv.appendChild(span);
     viewDiv.setAttribute("class", "item-content");
-    var wrapper = document.createElement("a");
+    var wrapper = document.createElement("div");
     wrapper.setAttribute("class", "item");
     wrapper.appendChild(viewDiv);
     wrapper.setAttribute("data-id", id);
@@ -129,9 +133,9 @@ export var Grid = (function () {
       layout: true,
       active: true,
     });
-    elem.addEventListener("click", function (e) {
+    /* elem.addEventListener("click", function (e) {
       e.preventDefault();
-    });
+    });*/
 
     return elem;
   }
@@ -179,6 +183,10 @@ export var Grid = (function () {
     },
     onMove: function (callback) {
       if (callback && typeof callback == "function") grid.on("move", callback);
+    },
+    setTabOpenMode: function (blank) {
+      if (blank) tabOpenMode = "_blank";
+      else tabOpenMode = "_self";
     },
   };
 })();

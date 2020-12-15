@@ -68,7 +68,7 @@ export var Main = (function () {
   Pubsub.subscribe("addedFolderToGrid", function (target) {
     Menu.addListenedItems(target, ["delete", "edit", "move"]);
 
-    target.onmouseup = function (e) {
+    target.onclick = function (e) {
       if (!Grid.isDragging(target) && e.button != 2) {
         Storage.setCurrentParentId(target.getAttribute("data-id"));
         Pubsub.publish("needGridLoad", null);
