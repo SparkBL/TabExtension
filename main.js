@@ -39,6 +39,7 @@ export var Main = (function () {
 
   Pubsub.subscribe("delete", function (target) {
     var targetId = Grid.remove(target);
+    Storage.saveGridLayout(Grid.getLayout());
     Storage.removeElement(targetId);
   });
 
@@ -52,10 +53,15 @@ export var Main = (function () {
       var enteredData = data;
       var newTab = Storage.buildShortcut(enteredData.name, enteredData.url);
       Storage.addElements(newTab);
-      Pubsub.publish(
-        "addedShortcutToGrid",
-        Grid.addShortcut(newTab.id, newTab.url, newTab.name, newTab.parentId)
+      Storage.saveGridLayout(Grid.getLayout());
+      var newItem = Grid.addShortcut(
+        newTab.id,
+        newTab.url,
+        newTab.name,
+        newTab.parentId
       );
+
+      Pubsub.publish("addedShortcutToGrid", newItem);
     });
   });
 
@@ -98,10 +104,9 @@ export var Main = (function () {
       var enteredData = data;
       var newTab = Storage.buildFolder(enteredData.name);
       Storage.addElements(newTab);
-      Pubsub.publish(
-        "addedFolderToGrid",
-        Grid.addFolder(newTab.id, newTab.name, newTab.parentId)
-      );
+      var newItem = Grid.addFolder(newTab.id, newTab.name, newTab.parentId);
+      Storage.saveGridLayout(Grid.getLayout());
+      Pubsub.publish("addedFolderToGrid", newItem);
     });
   });
 

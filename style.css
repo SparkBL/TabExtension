@@ -275,6 +275,7 @@ form label {
   flex-direction: column;
   align-content: center;
   border-radius: 3rem;
+  padding: 0.8rem;
   position: relative;
   border: 0.5rem solid var(--grid-item-border);
   color: var(--grid-item-color);
@@ -388,6 +389,11 @@ form label {
   user-select: none;
   border-radius: 2rem;
   transition: all 0.1s ease-in-out;
+}
+
+.grid-footer .grid-button {
+  width: 8rem;
+  height: 8rem;
 }
 
 .grid-footer .grid-button:hover {

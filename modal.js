@@ -26,6 +26,7 @@ export var Modal = (function () {
     inname.setAttribute("type", "text");
     inname.setAttribute("name", "name");
     inname.setAttribute("class", "input-modal");
+    inname.maxLength = 60;
     if (name) inname.value = name;
     var namelabel = document.createElement("label");
 
@@ -70,6 +71,7 @@ export var Modal = (function () {
     inname.setAttribute("type", "text");
     inname.setAttribute("name", "name");
     inname.setAttribute("class", "input-modal");
+    inname.maxLength = 60;
     if (name) inname.value = name;
     var namelabel = document.createElement("label");
 

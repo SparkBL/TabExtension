@@ -80,19 +80,15 @@ export var Grid = (function () {
   }
 
   function buildShortcut(id, url, name, parent) {
-    var liImg = document.createElement("li");
-    var liName = document.createElement("li");
-    var img = liImg.appendChild(document.createElement("img"));
+    var img = document.createElement("img");
     img.src = "chrome://favicon/" + url;
     img.setAttribute("class", "favicon");
     var span = document.createElement("span");
-
     if (!name) span.innerHTML = url;
     else span.innerHTML = name;
-    liName.appendChild(span);
     var viewDiv = document.createElement("div");
-    viewDiv.appendChild(liImg);
-    viewDiv.appendChild(liName);
+    viewDiv.appendChild(img);
+    viewDiv.appendChild(span);
     viewDiv.setAttribute("class", "item-content");
     var wrapper = document.createElement("a");
     wrapper.setAttribute("class", "item");
@@ -105,24 +101,17 @@ export var Grid = (function () {
     wrapper.setAttribute("data-parent", parent);
     wrapper.setAttribute("data-type", types[0]);
     wrapper.setAttribute("data-size", sizes[currentSize]);
-    //  wrapper.classList.add("h" + elemHeight, "w" + elemWidth, colors[0]);
     return wrapper;
   }
 
   function buildFolder(id, name, parent) {
-    var liName = document.createElement("li");
-    var liImg = document.createElement("li");
     var img = document.importNode(templateContainer.content.children[0], true);
-    liImg.appendChild(img);
     var span = document.createElement("span");
-
     if (!name) span.innerHTML = url;
     else span.innerHTML = name;
-    liName.appendChild(span);
     var viewDiv = document.createElement("div");
-    viewDiv.appendChild(liImg);
-    viewDiv.appendChild(liName);
-
+    viewDiv.appendChild(img);
+    viewDiv.appendChild(span);
     viewDiv.setAttribute("class", "item-content");
     var wrapper = document.createElement("a");
     wrapper.setAttribute("class", "item");
@@ -132,7 +121,6 @@ export var Grid = (function () {
     wrapper.setAttribute("data-parent", parent);
     wrapper.setAttribute("data-type", types[1]);
     wrapper.setAttribute("data-size", sizes[currentSize]);
-    //wrapper.classList.add("h" + elemHeight, "w" + elemWidth, colors[1]);
     return wrapper;
   }
 
@@ -144,14 +132,6 @@ export var Grid = (function () {
     elem.addEventListener("click", function (e) {
       e.preventDefault();
     });
-    /*  if (sortFieldValue !== "order") {
-        grid.sort(sortFieldValue === "title" ? "title" : "color title", {
-          layout: false,
-        });
-        dragOrder = dragOrder.concat(item);
-      }
-*/
-    // filter();
 
     return elem;
   }
@@ -162,10 +142,6 @@ export var Grid = (function () {
       onFinish: () => {
         grid.remove([item]);
         item.getElement().remove();
-        //  if (sortFieldValue !== "order") {
-        //  const itemIndex = dragOrder.indexOf(item);
-        //  if (itemIndex > -1) dragOrder.splice(itemIndex, 1);
-        //   }
       },
     });
   }
