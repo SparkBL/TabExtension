@@ -53,14 +53,14 @@ export var Main = (function () {
       var enteredData = data;
       var newTab = Storage.buildShortcut(enteredData.name, enteredData.url);
       Storage.addElements(newTab);
-      Storage.saveGridLayout(Grid.getLayout());
+
       var newItem = Grid.addShortcut(
         newTab.id,
         newTab.url,
         newTab.name,
         newTab.parentId
       );
-
+      Storage.saveGridLayout(Grid.getLayout());
       Pubsub.publish("addedShortcutToGrid", newItem);
     });
   });
