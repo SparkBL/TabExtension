@@ -121,7 +121,7 @@ form label {
   flex-wrap: nowrap;
 }
 
-.grid-control.search {
+.grid-control.size {
   width: 30%;
 }
 
@@ -131,7 +131,7 @@ form label {
   position: absolute;
   left: 0.5rem;
   right: 0.8rem;
-  bottom: 0;
+  bottom: -0.5rem;
   border-bottom: 0.1rem solid var(--grid-control-border-color);
 }
 
