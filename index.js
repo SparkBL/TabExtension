@@ -15,3 +15,8 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
 document.addEventListener("DOMContentLoaded", function () {
   Main.init();
 });
+chrome.history.search({ text: "", maxResults: 10 }, function (data) {
+  data.forEach(function (page) {
+    console.log(page.url);
+  });
+});

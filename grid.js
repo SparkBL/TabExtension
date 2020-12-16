@@ -2,9 +2,7 @@ export var Grid = (function () {
   const dragContainer = document.querySelector(".drag-container");
   const gridElement = document.querySelector(".grid");
   const templateContainer = document.getElementById("template");
-  const searchField = document.querySelector(
-    ".grid-control-field.search-field"
-  );
+
   const types = ["shortcut", "folder"];
   const sizes = [1, 2, 3, 4, 5, 6];
   var currentSize = 1;
@@ -23,6 +21,9 @@ export var Grid = (function () {
       color(item, element) {
         return element.getAttribute("data-color") || "";
       },
+    },
+    layout: {
+      fillGaps: true,
     },
     dragEnabled: true,
     dragHandle: null,
@@ -92,13 +93,9 @@ export var Grid = (function () {
     viewDiv.setAttribute("class", "item-content");
     var wrapper = document.createElement("div");
     wrapper.onclick = function (e) {
-      // location.href = url;
       window.open(url, tabOpenMode, "noopener noreferrer");
     };
     wrapper.setAttribute("class", "item");
-    // wrapper.href = url;
-    //  wrapper.setAttribute("target", "_blank");
-    // wrapper.setAttribute("rel", "noopener noreferrer");
     wrapper.appendChild(viewDiv);
     wrapper.setAttribute("data-id", id);
     wrapper.setAttribute("data-name", name);
@@ -133,9 +130,6 @@ export var Grid = (function () {
       layout: true,
       active: true,
     });
-    /* elem.addEventListener("click", function (e) {
-      e.preventDefault();
-    });*/
 
     return elem;
   }

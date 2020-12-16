@@ -4,6 +4,7 @@
   "description": "Meh",
   "permissions": [
     "storage",
+    "history",
     "declarativeContent",
     "activeTab",
     "topSites",

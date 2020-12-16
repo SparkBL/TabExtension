@@ -37,6 +37,7 @@ export var Modal = (function () {
     inurl.setAttribute("type", "text");
     inurl.setAttribute("name", "url");
     inurl.setAttribute("class", "input-modal");
+    inurl.oninput = function (e) {};
     if (url) inurl.value = url;
     var urllabel = document.createElement("label");
 
