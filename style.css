@@ -584,9 +584,11 @@ form label {
   /*border-top: none;*/
   z-index: 99;
   /*position the autocomplete items to be the same width as the container:*/
-  top: 70%;
+  top: 66%;
   left: 0;
   right: 0;
+  height: 60rem;
+  overflow-y: scroll;
 }
 
 .autocomplete-items div {
@@ -642,4 +644,31 @@ form label {
 
 .title-modal {
   padding-bottom: 3rem;
+}
+
+/* SCROLL BAR */
+
+/* width */
+
+::-webkit-scrollbar {
+  width: 1rem;
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 2rem;
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
