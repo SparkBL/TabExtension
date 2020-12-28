@@ -99,6 +99,7 @@ export var Grid = (function () {
     wrapper.appendChild(viewDiv);
     wrapper.setAttribute("data-id", id);
     wrapper.setAttribute("data-name", name);
+    wrapper.setAttribute("data-url", url);
     wrapper.setAttribute("data-parent", parent);
     wrapper.setAttribute("data-type", types[0]);
     wrapper.setAttribute("data-size", sizes[currentSize]);
@@ -108,8 +109,7 @@ export var Grid = (function () {
   function buildFolder(id, name, parent) {
     var img = document.importNode(templateContainer.content.children[0], true);
     var span = document.createElement("span");
-    if (!name) span.innerHTML = url;
-    else span.innerHTML = name;
+    span.innerHTML = name;
     var viewDiv = document.createElement("div");
     viewDiv.appendChild(img);
     viewDiv.appendChild(span);
@@ -181,6 +181,22 @@ export var Grid = (function () {
     setTabOpenMode: function (blank) {
       if (blank) tabOpenMode = "_blank";
       else tabOpenMode = "_self";
+    },
+    editShortcut: function (id, url, name) {
+      grid.getItems().forEach(function (item) {
+        var el = item.getElement();
+        if (el.getAttribute("data-id") == id) {
+          if (name) el.querySelector("span").innerHTML = name;
+          else el.querySelector("span").innerHTML = url;
+          el.setAttribute("data-url", url);
+          el.setAttribute("data-name", name);
+          el.querySelector("img").src = "chrome://favicon/" + url;
+          el.onclick = function (e) {
+            window.open(url, tabOpenMode, "noopener noreferrer");
+          };
+          return;
+        }
+      });
     },
   };
 })();

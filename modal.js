@@ -17,10 +17,9 @@ export var Modal = (function () {
     if (event.target == blur) hideModal();
   };
 
-  function buildShortcutForm(name, url) {
+  function buildShortcutForm(name, url, edit) {
     var f = document.createElement("form");
     var title = document.createElement("h1");
-    title.textContent = "Add new shortcut";
     title.className = "title-modal";
     var inname = document.createElement("input");
     inname.setAttribute("type", "text");
@@ -46,7 +45,14 @@ export var Modal = (function () {
     var s = document.createElement("button");
     s.setAttribute("type", "submit");
     s.setAttribute("class", "button-modal");
-    s.innerHTML = "Create shortcut";
+
+    if (!edit) {
+      title.textContent = "Add New Shortcut";
+      s.innerHTML = "Create Shortcut";
+    } else {
+      title.textContent = "Edit Shortcut";
+      s.innerHTML = "Ok";
+    }
     var namewrapper = document.createElement("div");
     namewrapper.appendChild(namelabel);
     namewrapper.appendChild(inname);
@@ -94,8 +100,8 @@ export var Modal = (function () {
   }
 
   return {
-    ShowShortcutModal: function (callback, name, url) {
-      var form = buildShortcutForm(name, url);
+    ShowShortcutModal: function (callback, name, url, edit) {
+      var form = buildShortcutForm(name, url, edit);
       body.appendChild(form);
       form.addEventListener("submit", function (e) {
         e.preventDefault();

@@ -95,17 +95,19 @@ export var Storage = (function () {
     //Replaces editing element with one, which was returned from callback function. Commit immediately.
     editElement: function (id, callback) {
       var toEdit = currentElements.find((x) => x.id === id);
+      console.log(typeof callback(toEdit));
       if (
-        action &&
-        typeof action == "function" &&
-        !typeof action(toEdit) === "undefined"
+        callback // &&
+        //{}.toString.call(callback) === "[object Function]" &&
+        //!typeof callback(toEdit) === undefined
       ) {
-        currentElements.splice(toEdit, 1);
+        currentElements.splice(
+          currentElements.findIndex((x) => x.id == id),
+          1
+        );
         currentElements.push(callback(toEdit));
         commit();
-        return true;
       }
-      return false;
     },
 
     //Remove element from storage recursively. Commit immediately.
@@ -114,6 +116,11 @@ export var Storage = (function () {
       var toRemoveIndex = currentElements.findIndex((x) => x.id == id);
       currentElements.splice(toRemoveIndex, 1);
       if (toRemove.type === "folder") delete currentLayouts[id];
+      for (var layout in currentLayouts)
+        currentLayouts[layout].splice(
+          currentLayouts[layout].findIndex((x) => x == id),
+          1
+        );
       var children = this.getElementsByParentId(toRemove.id);
       if (children && children.length > 0)
         for (var i = 0; i < children.length; i++)
