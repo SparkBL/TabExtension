@@ -69,10 +69,9 @@ export var Modal = (function () {
     return f;
   }
 
-  function buildFolderForm(name) {
+  function buildFolderForm(name, edit) {
     var f = document.createElement("form");
     var title = document.createElement("h1");
-    title.textContent = "Add new folder";
     title.className = "title-modal";
     var inname = document.createElement("input");
     inname.setAttribute("type", "text");
@@ -87,7 +86,14 @@ export var Modal = (function () {
     var s = document.createElement("button");
     s.setAttribute("type", "submit");
     s.setAttribute("class", "button-modal");
-    s.innerHTML = "Create folder";
+    if (!edit) {
+      title.textContent = "Add New Folder";
+      s.innerHTML = "Create Folder";
+    } else {
+      title.textContent = "Edit Folder";
+      s.innerHTML = "Ok";
+    }
+
     var namewrapper = document.createElement("div");
     namewrapper.appendChild(namelabel);
     namewrapper.appendChild(inname);
@@ -118,8 +124,8 @@ export var Modal = (function () {
       showModal();
     },
 
-    ShowFolderModal: function (callback, name) {
-      var form = buildFolderForm(name);
+    ShowFolderModal: function (callback, name, edit) {
+      var form = buildFolderForm(name, edit);
       body.appendChild(form);
       form.addEventListener("submit", function (e) {
         e.preventDefault();

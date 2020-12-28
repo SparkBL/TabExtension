@@ -198,5 +198,15 @@ export var Grid = (function () {
         }
       });
     },
+    editFolder: function (id, name) {
+      grid.getItems().forEach(function (item) {
+        var el = item.getElement();
+        if (el.getAttribute("data-id") == id) {
+          el.querySelector("span").innerHTML = name;
+          el.setAttribute("data-name", name);
+          return;
+        }
+      });
+    },
   };
 })();

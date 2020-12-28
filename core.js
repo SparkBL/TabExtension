@@ -96,11 +96,7 @@ export var Storage = (function () {
     editElement: function (id, callback) {
       var toEdit = currentElements.find((x) => x.id === id);
       console.log(typeof callback(toEdit));
-      if (
-        callback // &&
-        //{}.toString.call(callback) === "[object Function]" &&
-        //!typeof callback(toEdit) === undefined
-      ) {
+      if (callback) {
         currentElements.splice(
           currentElements.findIndex((x) => x.id == id),
           1

@@ -65,9 +65,19 @@ export var Main = (function () {
   });
 
   Pubsub.subscribe("editFolder", function (target) {
-    var targetId = Grid.remove(target);
-    Storage.saveGridLayout(Grid.getLayout());
-    Storage.removeElement(targetId);
+    Modal.ShowFolderModal(
+      function (enteredData) {
+        var el;
+        Storage.editElement(target.getAttribute("data-id"), function (element) {
+          element.name = enteredData["name"];
+          el = element;
+          return element;
+        });
+        Grid.editFolder(el.id, el.name, el.parentId);
+      },
+      target.getAttribute("data-name"),
+      true
+    );
   });
 
   Pubsub.subscribe("addedShortcutToGrid", function (target) {
