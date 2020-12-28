@@ -133,7 +133,7 @@ export var Grid = (function () {
     return elem;
   }
 
-  function removeItem(item, instantRemove = false) {
+  function removeItem(item, instantRemove) {
     var items = [].concat(item || []);
     grid.hide(items, {
       onFinish: () => {
@@ -151,13 +151,14 @@ export var Grid = (function () {
       return addItem(buildFolder(id, name, parentId));
     },
     remove: function (elem) {
-      removeItem(grid.getItem(elem));
+      removeItem(grid.getItem(elem), false);
       return elem.getAttribute("data-id");
     },
     removeById: function (id) {
       if (!id) return;
       grid.getItems().forEach(function (item) {
-        if (item.getElement().getAttribute("data-id") === id) removeItem(item);
+        if (item.getElement().getAttribute("data-id") === id)
+          removeItem(item, false);
       });
     },
     clear: function (instantRemove = false) {

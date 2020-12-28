@@ -111,7 +111,7 @@ export var Storage = (function () {
       console.log(typeof callback(toEdit));
       if (callback) {
         currentElements.splice(
-          currentElements.findIndex((x) => x.id == id),
+          currentElements.findIndex((x) => x.id === id),
           1
         );
         currentElements.push(callback(toEdit));
@@ -121,15 +121,15 @@ export var Storage = (function () {
 
     //Remove element from storage recursively. Commit immediately.
     removeElement: function (id) {
-      var toRemove = currentElements.find((x) => x.id == id);
-      var toRemoveIndex = currentElements.findIndex((x) => x.id == id);
+      var toRemove = currentElements.find((x) => x.id === id);
+      var toRemoveIndex = currentElements.findIndex((x) => x.id === id);
       currentElements.splice(toRemoveIndex, 1);
+      var toRemoveLayoutIndex = currentLayouts[currentParent].findIndex(
+        (x) => x === id
+      );
+      currentLayouts[currentParent].splice(toRemoveLayoutIndex, 1);
       if (toRemove.type === "folder") delete currentLayouts[id];
-      for (var layout in currentLayouts)
-        currentLayouts[layout].splice(
-          currentLayouts[layout].findIndex((x) => x == id),
-          1
-        );
+
       var children = this.getElementsByParentId(toRemove.id);
       if (children && children.length > 0)
         for (var i = 0; i < children.length; i++)
