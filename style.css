@@ -575,6 +575,41 @@ form label {
   /*box-shadow: 3px 4px #0F1011;*/
 }
 
+.autocomplete-items {
+  position: absolute;
+  border: none;
+  background-color: #ffffff;
+  /* border-bottom: none;*/
+  border-radius: 2rem;
+  /*border-top: none;*/
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 70%;
+  left: 0;
+  right: 0;
+}
+
+.autocomplete-items div {
+  padding: 2rem;
+  cursor: pointer;
+  border: none;
+  overflow: hidden;
+  border-radius: 2rem;
+}
+
+/*when hovering an item:*/
+
+.autocomplete-items div:hover {
+  background-color: #e9e9e9;
+}
+
+/*when navigating through the items using the arrow keys:*/
+
+.autocomplete-active {
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+
 .button-modal {
   outline: 0;
   border: 1px rgb(85, 85, 85);
