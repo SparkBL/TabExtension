@@ -85,8 +85,8 @@ form label {
 
 .favicon {
   -webkit-user-select: none;
-  width: 3rem;
-  height: 3rem;
+  width: 4rem;
+  height: 4rem;
   margin: auto;
   backdrop-filter: grayscale(30%);
 }
@@ -321,9 +321,29 @@ form label {
   z-index: 0;
 }
 
+.item[data-size="1"] {
+  height: 15rem;
+  width: 15rem;
+}
+
 .item[data-size="2"] {
   height: 22rem;
   width: 22rem;
+}
+
+.item[data-size="3"] {
+  height: 29rem;
+  width: 29rem;
+}
+
+.item[data-size="4"] {
+  height: 36rem;
+  width: 36rem;
+}
+
+.item[data-size="5"] {
+  height: 43rem;
+  width: 43rem;
 }
 
 .item[data-type="shortcut"] .item-content {

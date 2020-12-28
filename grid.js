@@ -4,7 +4,6 @@ export var Grid = (function () {
   const templateContainer = document.getElementById("template");
 
   const types = ["shortcut", "folder"];
-  const sizes = [1, 2, 3, 4, 5, 6];
   var currentSize = 1;
   var tabOpenMode = "_blank";
   const grid = new Muuri(gridElement, {
@@ -102,7 +101,7 @@ export var Grid = (function () {
     wrapper.setAttribute("data-url", url);
     wrapper.setAttribute("data-parent", parent);
     wrapper.setAttribute("data-type", types[0]);
-    wrapper.setAttribute("data-size", sizes[currentSize]);
+    wrapper.setAttribute("data-size", currentSize);
     return wrapper;
   }
 
@@ -121,7 +120,7 @@ export var Grid = (function () {
     wrapper.setAttribute("data-name", name);
     wrapper.setAttribute("data-parent", parent);
     wrapper.setAttribute("data-type", types[1]);
-    wrapper.setAttribute("data-size", sizes[currentSize]);
+    wrapper.setAttribute("data-size", currentSize);
     return wrapper;
   }
 
@@ -134,13 +133,13 @@ export var Grid = (function () {
     return elem;
   }
 
-  function removeItem(item) {
-    if (!item) return;
-    grid.hide([item], {
+  function removeItem(item, instantRemove = false) {
+    var items = [].concat(item || []);
+    grid.hide(items, {
       onFinish: () => {
-        grid.remove([item]);
-        item.getElement().remove();
+        grid.remove(items, { removeElements: true });
       },
+      instant: instantRemove,
     });
   }
 
@@ -161,10 +160,8 @@ export var Grid = (function () {
         if (item.getElement().getAttribute("data-id") === id) removeItem(item);
       });
     },
-    clear: function () {
-      grid.getItems().forEach(function (item) {
-        removeItem(item);
-      });
+    clear: function (instantRemove = false) {
+      removeItem(grid.getItems(), instantRemove);
     },
     isDragging: function (element) {
       return grid.getItem(element).isReleasing();
@@ -207,6 +204,13 @@ export var Grid = (function () {
           return;
         }
       });
+    },
+    setItemSize: function (sizeFactor) {
+      currentSize = sizeFactor;
+      /* grid.getItems().forEach(function (item) {
+        var el = item.getElement();
+        el.setAttribute("data-size", sizeFactor);
+      });*/
     },
   };
 })();

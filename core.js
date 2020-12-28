@@ -3,14 +3,20 @@ export var Storage = (function () {
   var currentElements = [];
   var currentLayouts = {};
   var currentParent = "root";
+  var currentElementSize = 2;
 
   //Commit change into chrome storage
   function commit() {
     chrome.storage.sync.set(
-      { storageElements: currentElements, storageLayouts: currentLayouts },
+      {
+        storageElements: currentElements,
+        storageLayouts: currentLayouts,
+        elementSize: currentElementSize,
+      },
       function () {
         console.log("Saved elements in storage: ", currentElements);
         console.log("Saved layouts in storage: ", currentLayouts);
+        console.log("Saved element size in storage: ", currentElementSize);
       }
     );
   }
@@ -32,7 +38,7 @@ export var Storage = (function () {
     //Synchronize all objects from chrome storage to local one. ASYNC - needs callback
     sync: function (callback) {
       chrome.storage.sync.get(
-        ["storageElements", "storageLayouts"],
+        ["storageElements", "storageLayouts", "elementSize"],
         function (result) {
           if (result.storageElements) {
             currentElements = result.storageElements;
@@ -46,6 +52,13 @@ export var Storage = (function () {
             console.log(
               "Synced layouts with storage: \n",
               result.storageLayouts
+            );
+          } else console.log("Failed to get layouts from storage!");
+          if (result.elementSize) {
+            currentElementSize = result.elementSize;
+            console.log(
+              "Synced element size with storage: \n",
+              result.elementSize
             );
           } else console.log("Failed to get layouts from storage!");
 
@@ -155,6 +168,14 @@ export var Storage = (function () {
     //Return grid layout for current dir
     getCurrentLayout: function () {
       return currentLayouts[currentParent];
+    },
+
+    getCurrentElementSize: function () {
+      return currentElementSize;
+    },
+    setElementSize: function (sizeFactor) {
+      currentElementSize = sizeFactor;
+      commit();
     },
   };
 })();
