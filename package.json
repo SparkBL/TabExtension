@@ -2,7 +2,6 @@
   "requires": true,
   "lockfileVersion": 1,
   "dependencies": {
-    "@tarekraafat/autocomplete.js": "^8.2.0",
     "muuri": "^0.9.3",
     "web-animations-js": "^2.3.2"
   }

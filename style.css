@@ -595,6 +595,8 @@ form label {
   border: none;
   overflow: hidden;
   border-radius: 2rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /*when hovering an item:*/
