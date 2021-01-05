@@ -11,11 +11,11 @@
     "tabs",
     "chrome://favicon/",
     "<all_urls>",
-    "webRequest", "webRequestBlocking"
-  
+    "webRequest", "webRequestBlocking",
+    "unlimitedStorage"
   ],
   "background": {
-    "scripts": ["frame_opt_bypass.js"],
+    "scripts":["thumbcacher.js"],
     "persistent": true
   },
   "options_page": "options.html",

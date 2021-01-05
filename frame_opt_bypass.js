@@ -1,20 +1,4 @@
-chrome.webRequest.onHeadersReceived.addListener(
-  function(info) {
-    var headers = info.responseHeaders;
-    console.log(headers);
-    var index = headers.findIndex(x=>x.name.toLowerCase() == "x-frame-options");
-    if (index !=-1) {
-      headers.splice(index, 1);
-    }
-    
-    return {responseHeaders: headers};
-  },
-  {
-      urls: ['<all_urls>'],
-      types: ['sub_frame']
-  },
-  ['blocking', 'responseHeaders']
-);
+
 /*
 (function() {
   var cors_api_host = 'cors-anywhere.herokuapp.com';

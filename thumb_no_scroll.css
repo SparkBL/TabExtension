@@ -1,6 +1,6 @@
 html {
   overflow: hidden !important;
-  zoom: 1 !important;
+  zoom: 0.9 !important;
 }
 html::-webkit-scrollbar {
   display: none !important;

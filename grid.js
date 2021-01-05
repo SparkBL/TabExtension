@@ -54,11 +54,13 @@ export var Grid = (function () {
     itemClass: "item",
   });
 
-  function getIcon(url) {
-    var i = document.createElement("img");
+  function setIcon(viewDiv,url) {
+   
     if (iconMode) {
+      var i = document.createElement("img");
       i.src = "chrome://favicon/" + url;
       i.setAttribute("class", "favicon");
+      viewDiv.appendChild(i);
     } else {
       chrome.windows.create({type:"popup",url:url,focused:false,state:"normal"}, function(window){
   console.log("Window created",window.tabs);
@@ -67,8 +69,8 @@ export var Grid = (function () {
     if (tabId ==window.tabs[0].id && changeInfo.status === 'complete')
   {
     chrome.tabs.captureVisibleTab(window.id, {format:"png"}, function(dataString){
-      i.src = dataString;
-      i.setAttribute("class", "thumbnail");
+      viewDiv.style.backgroundImage = "url(" + dataString + ")";
+
        chrome.windows.remove(window.id,function(){
          console.log("Window closed");
        })
@@ -109,19 +111,20 @@ export var Grid = (function () {
   }
 
   function buildShortcut(id, url, name, parent) {
-    var img = getIcon(url);
+   // var img = getIcon(url);
     var span = document.createElement("div");
     if (!name) span.innerHTML = url;
     else span.innerHTML = name;
     span.setAttribute("class","shortcut-title");
     var viewDiv = document.createElement("div");
-    viewDiv.appendChild(img);
+   // viewDiv.appendChild(img);
     viewDiv.appendChild(span);
     viewDiv.setAttribute("class", "item-content");
     var wrapper = document.createElement("div");
     wrapper.onclick = function (e) {
       window.open(url, tabOpenMode, "noopener noreferrer");
     };
+    setIcon(viewDiv,url);
     wrapper.setAttribute("class", "item");
     wrapper.appendChild(viewDiv);
     wrapper.setAttribute("data-id", id);
@@ -217,7 +220,7 @@ export var Grid = (function () {
           else el.querySelector("div").lastChild.innerHTML = url;
           el.setAttribute("data-url", url);
           el.setAttribute("data-name", name);
-          el.querySelector("img").replaceWith( getIcon(url));
+          setIcon(el.querySelector("div"));
           el.onclick = function (e) {
             window.open(url, tabOpenMode, "noopener noreferrer");
           };
@@ -229,7 +232,7 @@ export var Grid = (function () {
       grid.getItems().forEach(function (item) {
         var el = item.getElement();
         if (el.getAttribute("data-id") == id) {
-          el.querySelector("span").innerHTML = name;
+          el.querySelector("div").lastChild.innerHTML = name;
           el.setAttribute("data-name", name);
           return;
         }

@@ -156,6 +156,8 @@ export var Storage = (function () {
         name: name,
         url: url,
         type: "shortcut",
+        thumbnail: null,
+        thumbnailUpdateTime: null
       };
     },
 

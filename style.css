@@ -106,14 +106,23 @@ iframe {
   border: none;
   max-width: 140%;
   max-height: 140%;
-  margin-bottom: -3rem;
+  width: 105%;
+  height: 105%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
 }
 
 .shortcut-title {
   position: absolute;
-  bottom: 0;
+  bottom: -1px;
   width: 100%;
   background-color: rgba(241, 241, 241, 0.75);
+}
+.item[data-type="folder"] div.shortcut-title {
+  background-color: unset;
+  position: relative;
 }
 
 .section-title {
