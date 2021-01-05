@@ -2,6 +2,38 @@ import {Pubsub} from './pubsub.js'
 export var ThumbFetcher = (function () {
 
 var openedWindows=[];
+var shortcutThumbnails = {};
+
+function commit() {
+  chrome.storage.local.set(
+    {
+      shortcutThumbnails: shortcutThumbnails,
+    },
+    function () {
+      console.log("Saved thumbnails locally : ", shortcutThumbnails);
+    }
+  );
+}
+function  sync (callback) {
+  chrome.storage.local.get(
+    ["shortcutThumbnails"],
+    function (result) {
+      if (result.shortcutThumbnails) {
+        shortcutThumbnails = result.shortcutThumbnails;
+        console.log(
+          "Synced local thumbnails: \n",
+          result.shortcutThumbnails
+        );
+      } else console.log("Failed to get thumbnails from storage!");
+      if (callback && typeof callback == "function") callback();
+    }
+  );
+}
+
+
+
+
+
     function fetchImage(url,callback){
         chrome.windows.create({type:"popup",url:url,focused:false,state:"normal"}, function(window){
             openedWindows.push(window.id);
@@ -36,26 +68,22 @@ var openedWindows=[];
 
   Pubsub.subscribe("GenerateThumbnail",function(data){
     if (data.url)
+    if (!shortcutThumbnails[data.id] || shortcutThumbnails[data.id]["date"] + (2*1000*60*60*24)<Date.now() || shortcutThumbnails[data.id]["url"] != data.url )
     fetchImage(data.url,function(generatedThumbnail){
+      shortcutThumbnails[data.id] = {thumbnail:generatedThumbnail,url:data.url, date: Date.now()};
       Pubsub.publish("GeneratedThumbnail",{id: data.id,dataString:generatedThumbnail});
+      commit();
     })
+    else{
+      Pubsub.publish("GeneratedThumbnail",{id: data.id,dataString:shortcutThumbnails[data.id]["thumbnail"]});
+    }
     else Pubsub.publish("GeneratedThumbnail",undefined);  
   })
 
     return {
-        storeImage: function(id,url){
-            var img = fetchImage(url);
-            img.setAttribute("id",id);
-            document.body.appendChild(img);
-        },
-        getImage: function(id){
-            return document.getElementById(id);
-        },
-        updateImage(id,url){
-            var img = fetchImage(url);
-            document.getElementById(id).src = img.src;
-        },
-        
+        init: function(callback){
+          sync(callback);
+        }
     }
 
 })();

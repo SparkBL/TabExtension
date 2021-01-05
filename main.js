@@ -165,8 +165,11 @@ export var Main = (function () {
   return {
     init: function () {
       Storage.sync(function () {
-        Pubsub.publish("needGridLoad");
-        sizeSelector.value = Storage.getCurrentElementSize();
+        ThumbFetcher.init(function(){
+          Pubsub.publish("needGridLoad");
+          sizeSelector.value = Storage.getCurrentElementSize();
+        })
+        
       });
     },
   };
