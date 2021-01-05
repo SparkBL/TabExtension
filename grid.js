@@ -1,3 +1,5 @@
+import { Pubsub } from "./pubsub.js";
+
 //const puppeteer = require("node_modules/puppeteer-core");
 export var Grid = (function () {
   const dragContainer = document.querySelector(".drag-container");
@@ -8,6 +10,7 @@ export var Grid = (function () {
   var currentSize = 1;
   var tabOpenMode = "_blank";
   var iconMode = false;
+  var thumbnailQueue = [];
   const grid = new Muuri(gridElement, {
     showDuration: 400,
     showEasing: "ease",
@@ -54,7 +57,15 @@ export var Grid = (function () {
     itemClass: "item",
   });
 
-  function setIcon(viewDiv,url) {
+  Pubsub.subscribe("GeneratedThumbnail",function(data){
+    var id = data["id"];
+    var dataString = data["dataString"];
+    var viewObj = thumbnailQueue.find(x => x.id === id);
+    viewObj.viewDiv.style.backgroundImage = "url(" + dataString + ")";
+    thumbnailQueue.splice(thumbnailQueue.findIndex(x => x.id === viewObj.id),1);
+  })
+
+  function setIcon(id,viewDiv,url) {
    
     if (iconMode) {
       var i = document.createElement("img");
@@ -62,26 +73,14 @@ export var Grid = (function () {
       i.setAttribute("class", "favicon");
       viewDiv.appendChild(i);
     } else {
-      chrome.windows.create({type:"popup",url:url,focused:false,state:"normal"}, function(window){
-  console.log("Window created",window.tabs);
-  chrome.tabs.insertCSS(window.tabs[0].id, {allFrames:true,file:"thumb_no_scroll.css"}, function(){
-  chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
-    if (tabId ==window.tabs[0].id && changeInfo.status === 'complete')
-  {
-    chrome.tabs.captureVisibleTab(window.id, {format:"png"}, function(dataString){
-      viewDiv.style.backgroundImage = "url(" + dataString + ")";
-
-       chrome.windows.remove(window.id,function(){
-         console.log("Window closed");
-       })
-     })
+      if (url){
+      thumbnailQueue.push({id:id,viewDiv:viewDiv});
+      Pubsub.publish("GenerateThumbnail",{id:id,url:url});     
     }
-  })
-})
-});
-    }
-    return i;
   }
+
+  
+}
 
   function serializeLayout() {
     var itemIds = grid.getItems().map(function (item) {
@@ -111,15 +110,16 @@ export var Grid = (function () {
   }
 
   function buildShortcut(id, url, name, parent) {
-   // var img = getIcon(url);
     var span = document.createElement("div");
     if (!name) span.innerHTML = url;
     else span.innerHTML = name;
     span.setAttribute("class","shortcut-title");
     var viewDiv = document.createElement("div");
-   // viewDiv.appendChild(img);
+    setIcon(id,viewDiv,url);
     viewDiv.appendChild(span);
     viewDiv.setAttribute("class", "item-content");
+
+  
     var wrapper = document.createElement("div");
     wrapper.onclick = function (e) {
       window.open(url, tabOpenMode, "noopener noreferrer");
@@ -220,7 +220,7 @@ export var Grid = (function () {
           else el.querySelector("div").lastChild.innerHTML = url;
           el.setAttribute("data-url", url);
           el.setAttribute("data-name", name);
-          setIcon(el.querySelector("div"),url);
+          setIcon(id,el.querySelector("div"),url);
           el.onclick = function (e) {
             window.open(url, tabOpenMode, "noopener noreferrer");
           };

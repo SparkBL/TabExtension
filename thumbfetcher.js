@@ -1,8 +1,8 @@
+import {Pubsub} from './pubsub.js'
 export var ThumbFetcher = (function () {
 
 var openedWindows=[];
-    function fetchImage(url){
-        var i = document.createElement("img");
+    function fetchImage(url,callback){
         chrome.windows.create({type:"popup",url:url,focused:false,state:"normal"}, function(window){
             openedWindows.push(window.id);
             console.log("Window created",window.tabs);
@@ -11,7 +11,7 @@ var openedWindows=[];
               if (tabId ==window.tabs[0].id && changeInfo.status === 'complete')
             {
               chrome.tabs.captureVisibleTab(window.id, {format:"png"}, function(dataString){
-                i.src = dataString;
+                if (callback) callback(dataString)
                  chrome.windows.remove(window.id,function(){
                    console.log("Window closed");
                  })
@@ -20,8 +20,27 @@ var openedWindows=[];
             })
           })
           });
-          return i;
+          return ;
     }
+    function closeOpenedWindows (){
+      openedWindows.forEach(function(window){
+          chrome.windows.remove(window.id,function(){
+              console.log("Closed window",window.id);
+          })
+      }) 
+  }
+
+  Pubsub.subscribe("NeedGridLoad",function(){
+    closeOpenedWindows();
+  })
+
+  Pubsub.subscribe("GenerateThumbnail",function(data){
+    if (data.url)
+    fetchImage(data.url,function(generatedThumbnail){
+      Pubsub.publish("GeneratedThumbnail",{id: data.id,dataString:generatedThumbnail});
+    })
+    else Pubsub.publish("GeneratedThumbnail",undefined);  
+  })
 
     return {
         storeImage: function(id,url){
@@ -36,13 +55,7 @@ var openedWindows=[];
             var img = fetchImage(url);
             document.getElementById(id).src = img.src;
         },
-        closeOpenedWindows:function(){
-            openedWindows.forEach(function(window){
-                chrome.windows.remove(window.id,function(){
-                    console.log("Closed window",window.id);
-                })
-            }) 
-        }
+        
     }
 
 })();

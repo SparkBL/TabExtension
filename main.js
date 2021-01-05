@@ -3,6 +3,7 @@ import { Grid } from "./grid.js";
 import { Modal } from "./modal.js";
 import { Menu } from "./menu.js";
 import { Pubsub } from "./pubsub.js";
+import {ThumbFetcher} from "./thumbfetcher.js"
 export var Main = (function () {
   const path = document.querySelector(".path-title");
   const addButton = document.querySelector(".grid-button.add-more-items");
