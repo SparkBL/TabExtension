@@ -116,9 +116,10 @@ iframe {
 
 .shortcut-title {
   position: absolute;
-  bottom: -1px;
+  bottom: 0;
   width: 100%;
   background-color: rgba(241, 241, 241, 0.75);
+  box-shadow: 1px 1px 10px lightgrey;
 }
 .item[data-type="folder"] div.shortcut-title {
   background-color: unset;
@@ -164,7 +165,7 @@ iframe {
   width: 20%;
 }
 
-.grid-control.show-type {
+.grid-control.view-type {
   width: 20%;
 }
 
@@ -337,6 +338,10 @@ iframe {
   -o-transition: all 0.25s ease-out;
   transition: all 0.25s ease-out;
   cursor: pointer;
+}
+
+.item[data-type="shortcut"] .item-content {
+  background-size: cover !important;
 }
 
 .item.muuri-item-shown .item-content:hover {

@@ -8,7 +8,8 @@ export var Main = (function () {
   const path = document.querySelector(".path-title");
   const addButton = document.querySelector(".grid-button.add-more-items");
   const backButton = document.getElementById("backButton");
-  const sizeSelector = document.querySelector("select");
+  const sizeSelector = document.querySelector("#sizeSelector");
+  const viewSelector = document.querySelector("#viewSelector");
   Menu.addOption("delete", "Delete Item", function (target) {
     Pubsub.publish("delete", target);
   });
@@ -43,9 +44,12 @@ export var Main = (function () {
   Menu.addListenedItems(addButton, ["createShortcut", "createFolder"]);
 
   sizeSelector.addEventListener("change", function (ev) {
-    sizeSelector.value;
     Storage.setElementSize(sizeSelector.value);
-    Grid.setItemSize(sizeSelector.value);
+    Pubsub.publish("needGridLoad", true);
+  });
+
+  viewSelector.addEventListener("change", function (ev) {
+    Storage.setViewType(viewSelector.value);
     Pubsub.publish("needGridLoad", true);
   });
 
@@ -53,6 +57,7 @@ export var Main = (function () {
     var targetId = Grid.remove(target);
     Storage.saveGridLayout(Grid.getLayout());
     Storage.removeElement(targetId);
+    ThumbFetcher.removeThumbnail(targetId);
   });
 
   Pubsub.subscribe("menuMove", function (target) {});
@@ -140,6 +145,7 @@ export var Main = (function () {
     Grid.clear(instantRemove);
     var dirContent = Storage.getCurrentChildren();
     Grid.setItemSize(Storage.getCurrentElementSize());
+    Grid.setViewType(Storage.getCurrentViewType());
     dirContent.forEach(function (item) {
       if (item.type === "folder") {
         Pubsub.publish(
@@ -168,6 +174,7 @@ export var Main = (function () {
         ThumbFetcher.init(function(){
           Pubsub.publish("needGridLoad");
           sizeSelector.value = Storage.getCurrentElementSize();
+          viewSelector.value = Storage.getCurrentViewType();
         })
         
       });

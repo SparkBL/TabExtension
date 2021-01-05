@@ -9,7 +9,7 @@ export var Grid = (function () {
   const types = ["shortcut", "folder"];
   var currentSize = 1;
   var tabOpenMode = "_blank";
-  var iconMode = false;
+  var viewType = "icon";
   var thumbnailQueue = [];
   const grid = new Muuri(gridElement, {
     showDuration: 400,
@@ -66,14 +66,14 @@ export var Grid = (function () {
   })
 
   function setIcon(id,viewDiv,url) {
-   
-    if (iconMode) {
+    if (url){
+    if (viewType === "icon") {
       var i = document.createElement("img");
       i.src = "chrome://favicon/" + url;
       i.setAttribute("class", "favicon");
       viewDiv.appendChild(i);
-    } else {
-      if (url){
+    } else if (viewType === "thumbnail"){
+      
       thumbnailQueue.push({id:id,viewDiv:viewDiv});
       Pubsub.publish("GenerateThumbnail",{id:id,url:url});     
     }
@@ -246,8 +246,9 @@ export var Grid = (function () {
       });*/
     },
 
-    setViewMode: function (mode) {
-      iconMode = mode;
+    setViewType: function (type) {
+      if (type === "icon" || type === "thumbnail")
+      viewType = type;
     },
   };
 })();

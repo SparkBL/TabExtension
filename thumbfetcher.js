@@ -83,7 +83,10 @@ function  sync (callback) {
     return {
         init: function(callback){
           sync(callback);
-        }
+        },
+        removeThumbnail: function(id){
+delete shortcutThumbnails[id];
+        },
     }
 
 })();
