@@ -7,7 +7,7 @@ export var Storage = (function () {
 
   //Commit change into chrome storage
   function commit() {
-    chrome.storage.sync.set(
+    chrome.storage.local.set(
       {
         storageElements: currentElements,
         storageLayouts: currentLayouts,
@@ -37,7 +37,7 @@ export var Storage = (function () {
 
     //Synchronize all objects from chrome storage to local one. ASYNC - needs callback
     sync: function (callback) {
-      chrome.storage.sync.get(
+      chrome.storage.local.get(
         ["storageElements", "storageLayouts", "elementSize"],
         function (result) {
           if (result.storageElements) {

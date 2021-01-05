@@ -7,7 +7,7 @@ export var Grid = (function () {
   const types = ["shortcut", "folder"];
   var currentSize = 1;
   var tabOpenMode = "_blank";
-  var iconMode = true;
+  var iconMode = false;
   const grid = new Muuri(gridElement, {
     showDuration: 400,
     showEasing: "ease",
@@ -60,13 +60,23 @@ export var Grid = (function () {
       i.src = "chrome://favicon/" + url;
       i.setAttribute("class", "favicon");
     } else {
-      var a = document.getElementById("thumb");
-      a.src = url;
-      var req = a.getScreenshot(100, 100);
-      req.onsuccess = function () {
-        var blob = req.result;
-        i.src = URL.createObjectURL(blob);
-      };
+      chrome.windows.create({type:"popup",url:url,focused:false,state:"normal"}, function(window){
+  console.log("Window created",window.tabs);
+  chrome.tabs.insertCSS(window.tabs[0].id, {allFrames:true,file:"thumb_no_scroll.css"}, function(){
+  chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
+    if (tabId ==window.tabs[0].id && changeInfo.status === 'complete')
+  {
+    chrome.tabs.captureVisibleTab(window.id, {format:"png"}, function(dataString){
+      i.src = dataString;
+      i.setAttribute("class", "thumbnail");
+       chrome.windows.remove(window.id,function(){
+         console.log("Window closed");
+       })
+     })
+    }
+  })
+})
+});
     }
     return i;
   }
@@ -100,9 +110,10 @@ export var Grid = (function () {
 
   function buildShortcut(id, url, name, parent) {
     var img = getIcon(url);
-    var span = document.createElement("span");
+    var span = document.createElement("div");
     if (!name) span.innerHTML = url;
     else span.innerHTML = name;
+    span.setAttribute("class","shortcut-title");
     var viewDiv = document.createElement("div");
     viewDiv.appendChild(img);
     viewDiv.appendChild(span);
@@ -124,8 +135,9 @@ export var Grid = (function () {
 
   function buildFolder(id, name, parent) {
     var img = document.importNode(templateContainer.content.children[0], true);
-    var span = document.createElement("span");
+    var span = document.createElement("div");
     span.innerHTML = name;
+    span.setAttribute("class","shortcut-title");
     var viewDiv = document.createElement("div");
     viewDiv.appendChild(img);
     viewDiv.appendChild(span);
@@ -201,11 +213,11 @@ export var Grid = (function () {
       grid.getItems().forEach(function (item) {
         var el = item.getElement();
         if (el.getAttribute("data-id") == id) {
-          if (name) el.querySelector("span").innerHTML = name;
-          else el.querySelector("span").innerHTML = url;
+          if (name) el.querySelector("div").lastChild.innerHTML = name;
+          else el.querySelector("div").lastChild.innerHTML = url;
           el.setAttribute("data-url", url);
           el.setAttribute("data-name", name);
-          el.querySelector("img").src = getIcon(url).src;
+          el.querySelector("img").replaceWith( getIcon(url));
           el.onclick = function (e) {
             window.open(url, tabOpenMode, "noopener noreferrer");
           };

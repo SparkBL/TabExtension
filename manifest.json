@@ -1,23 +1,22 @@
 {
   "name": "Team2 Tab Extension",
-  "version": "0.1",
-  "description": "Meh",
+  "version": "0.3",
+  "description": "Simple Tab Manager with directories and drag'n'drop functions",
   "permissions": [
     "storage",
     "history",
     "declarativeContent",
     "activeTab",
     "topSites",
-    "webNavigation",
     "tabs",
     "chrome://favicon/",
     "<all_urls>",
-
-    "webRequestBlocking"
+    "webRequest", "webRequestBlocking"
+  
   ],
   "background": {
-    "scripts": ["background.js"],
-    "persistent": false
+    "scripts": ["frame_opt_bypass.js"],
+    "persistent": true
   },
   "options_page": "options.html",
   "page_action": {
@@ -32,6 +31,6 @@
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
-  "web_accessible_resources": ["images/plus.png"],
+  "web_accessible_resources": ["images/plus.png","thumb_no_scroll.css"],
   "manifest_version": 2
 }

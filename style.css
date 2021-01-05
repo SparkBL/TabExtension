@@ -37,7 +37,7 @@ html {
   overflow-y: scroll;
   overflow-x: hidden;
   background: var(--color-background);
-  font-size: 55%
+  font-size: 55%;
 }
 
 body {
@@ -47,7 +47,7 @@ body {
   font-size: 2.5rem;
   line-height: 1.5;
   margin: 0 5vw;
-  color: var(--color-text)
+  color: var(--color-text);
 }
 
 .item-content li {
@@ -90,12 +90,30 @@ form label {
   margin: auto;
   backdrop-filter: grayscale(30%);
 }
+iframe {
+  pointer-events: none;
+  -ms-zoom: 0.5;
+  -moz-transform: scale(0.75);
+  -moz-transform-origin: 0 0;
+  -o-transform: scale(0.75);
+  -o-transform-origin: 0 0;
+  -webkit-transform: scale(0.75);
+  -webkit-transform-origin: 0 0;
+}
 
 .thumbnail {
-  -webkit-user-select: none;
-  width: 40rem;
-  height: 40rem;
-  margin: auto;
+  user-select: none;
+  border: none;
+  max-width: 140%;
+  max-height: 140%;
+  margin-bottom: -3rem;
+}
+
+.shortcut-title {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(241, 241, 241, 0.75);
 }
 
 .section-title {
@@ -210,7 +228,8 @@ form label {
   outline: 0;
 }
 
-.grid-control-icon, .grid-select-arrow {
+.grid-control-icon,
+.grid-select-arrow {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -225,7 +244,8 @@ form label {
 }
 
 @media (max-width: 767px) {
-  .grid-control-icon, .grid-select-arrow {
+  .grid-control-icon,
+  .grid-select-arrow {
     height: 5rem;
   }
 }
@@ -239,7 +259,8 @@ form label {
   padding: 1.7rem;
 }
 
-.grid-control-icon svg, .grid-select-arrow svg {
+.grid-control-icon svg,
+.grid-select-arrow svg {
   flex-grow: 1;
 }
 
@@ -289,7 +310,8 @@ form label {
 .item-content {
   display: flex;
   flex-direction: column;
-  align-content: center;
+  align-items: center;
+  justify-content: flex-end;
   border-radius: 3rem;
   padding: 0.8rem;
   position: relative;
@@ -311,7 +333,7 @@ form label {
 .item.muuri-item-shown .item-content:hover {
   transition: all 0.35s ease-out;
   color: var(--hover-color);
-  transform: scale(0.99)
+  transform: scale(0.99);
 }
 
 .item.muuri-item-positioning {
@@ -325,7 +347,8 @@ form label {
   box-sizing: border-box;
 }
 
-.item.muuri-item-dragging, .item.muuri-item-releasing {
+.item.muuri-item-dragging,
+.item.muuri-item-releasing {
   z-index: 9999;
 }
 
@@ -484,7 +507,7 @@ form label {
   font-size: 2.1rem;
   padding: 10px 30px;
   transition: 0.1s;
-  color: var(--menu-color)
+  color: var(--menu-color);
 }
 
 .menu-item:hover {
@@ -539,22 +562,22 @@ form label {
 @-webkit-keyframes animatetop {
   from {
     top: -300px;
-    opacity: 0
+    opacity: 0;
   }
   to {
     top: 0;
-    opacity: 1
+    opacity: 1;
   }
 }
 
 @keyframes animatetop {
   from {
     top: -300px;
-    opacity: 0
+    opacity: 0;
   }
   to {
     top: 0;
-    opacity: 1
+    opacity: 1;
   }
 }
 
@@ -566,7 +589,8 @@ form label {
   font-weight: bold;
 }
 
-.close:hover, .close:focus {
+.close:hover,
+.close:focus {
   color: var(--color-text-headers);
   text-decoration: none;
   cursor: pointer;

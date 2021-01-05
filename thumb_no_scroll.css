@@ -1,0 +1,13 @@
+html {
+  overflow: hidden !important;
+  zoom: 1 !important;
+}
+html::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+html {
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
+}

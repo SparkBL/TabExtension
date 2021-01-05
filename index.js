@@ -12,28 +12,36 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
     );
   }
 });
-/*chrome.webRequest.onHeadersReceived.addListener(
-  function (info) {
-    var headers = info.responseHeaders;
-    var index = headers.findIndex(
-      (x) => x.name.toLowerCase() == "x-frame-options"
-    );
-    if (index != -1) {
-      headers.splice(index, 1);
-    }
-    return { responseHeaders: headers };
-  },
+
+
+
+
+
+
+
+/*chrome.windows.create({type:"popup",url:"https://youtube.com",focused:false,state:"normal"}, function(window){
+  console.log("Window created",window.tabs);
+  chrome.tabs.insertCSS(window.tabs[0].id, {allFrames:true,file:"thumb_no_scroll.css"}, function(){
+  chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
+    if (tabId ==window.tabs[0].id && changeInfo.status === 'complete')
   {
-    urls: ["*"], //
-    types: ["sub_frame"],
-  },
-  ["blocking", "responseHeaders"]
-);*/
+    chrome.tabs.captureVisibleTab(window.id, {format:"png"}, function(dataString){
+      document.getElementById("testimg").src = dataString;
+       chrome.windows.remove(window.id,function(){
+         console.log("Window closed");
+       })
+     })
+    }
+  })
+})
+});
+
+*/
+
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
   Main.init();
 });
-chrome.history.search({ text: "", maxResults: 10 }, function (data) {
-  data.forEach(function (page) {
-    console.log(page.url);
-  });
-});
+
