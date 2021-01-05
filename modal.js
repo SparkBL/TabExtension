@@ -4,7 +4,7 @@ export var Modal = (function () {
   var body = document.querySelector(".modal-body");
   var close = document.querySelector(".close");
   var autocompletionUrls;
-  chrome.history.search({ text: "", maxResults: 50 }, function (data) {
+  chrome.history.search({ text: "", maxResults: 100 }, function (data) {
     var urls = [];
     data.forEach(function (page) {
       urls.push(page.url);
@@ -124,7 +124,7 @@ export var Modal = (function () {
     inurl.setAttribute("type", "text");
     inurl.setAttribute("name", "url");
     inurl.setAttribute("class", "input-modal");
-    inurl.defaultValue = "https://";
+    //inurl.defaultValue = "https://";
     inurl.oninput = function (e) {};
     if (url) inurl.value = url;
     var urllabel = document.createElement("label");
@@ -195,6 +195,39 @@ export var Modal = (function () {
     return f;
   }
 
+  function buildMoveForm(items) {
+    var f = document.createElement("form");
+    var title = document.createElement("h1");
+    title.className = "title-modal";
+    title.textContent = "Move element";
+    var selection = document.createElement("select");
+    selection.name = "dists";
+    selection.size = items.length;
+    items.forEach(function (item) {
+      var opt = document.createElement("option");
+      opt.value = item.id;
+      opt.text = item.name;
+      opt.className = "move-options";
+      selection.appendChild(opt);
+    });
+    var label = document.createElement("label");
+    label.innerHTML = "Select destination folder:";
+    label.setAttribute("for", selection.name);
+
+    var s = document.createElement("button");
+    s.setAttribute("type", "submit");
+    s.setAttribute("class", "button-modal");
+
+    s.innerHTML = "Move";
+
+    f.appendChild(title);
+    f.appendChild(label);
+    f.appendChild(selection);
+    f.appendChild(document.createElement("br"));
+    f.appendChild(s);
+    return f;
+  }
+
   return {
     ShowShortcutModal: function (callback, name, url, edit) {
       var form = buildShortcutForm(name, url, edit);
@@ -215,6 +248,22 @@ export var Modal = (function () {
     },
 
     ShowFolderModal: function (callback, name, edit) {
+      var form = buildFolderForm(name, edit);
+      body.appendChild(form);
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (callback && typeof callback == "function") {
+          var enteredData = {
+            name: form.elements.namedItem("name").value,
+          };
+          console.log("calling callback");
+          callback(enteredData);
+          hideModal();
+        }
+      });
+      showModal();
+    },
+    ShowMoveModal: function (callback) {
       var form = buildFolderForm(name, edit);
       body.appendChild(form);
       form.addEventListener("submit", function (e) {

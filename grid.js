@@ -1,3 +1,4 @@
+//const puppeteer = require("node_modules/puppeteer-core");
 export var Grid = (function () {
   const dragContainer = document.querySelector(".drag-container");
   const gridElement = document.querySelector(".grid");
@@ -6,6 +7,7 @@ export var Grid = (function () {
   const types = ["shortcut", "folder"];
   var currentSize = 1;
   var tabOpenMode = "_blank";
+  var iconMode = true;
   const grid = new Muuri(gridElement, {
     showDuration: 400,
     showEasing: "ease",
@@ -52,6 +54,23 @@ export var Grid = (function () {
     itemClass: "item",
   });
 
+  function getIcon(url) {
+    var i = document.createElement("img");
+    if (iconMode) {
+      i.src = "chrome://favicon/" + url;
+      i.setAttribute("class", "favicon");
+    } else {
+      var a = document.getElementById("thumb");
+      a.src = url;
+      var req = a.getScreenshot(100, 100);
+      req.onsuccess = function () {
+        var blob = req.result;
+        i.src = URL.createObjectURL(blob);
+      };
+    }
+    return i;
+  }
+
   function serializeLayout() {
     var itemIds = grid.getItems().map(function (item) {
       return item.getElement().getAttribute("data-id");
@@ -80,9 +99,7 @@ export var Grid = (function () {
   }
 
   function buildShortcut(id, url, name, parent) {
-    var img = document.createElement("img");
-    img.src = "chrome://favicon/" + url;
-    img.setAttribute("class", "favicon");
+    var img = getIcon(url);
     var span = document.createElement("span");
     if (!name) span.innerHTML = url;
     else span.innerHTML = name;
@@ -188,7 +205,7 @@ export var Grid = (function () {
           else el.querySelector("span").innerHTML = url;
           el.setAttribute("data-url", url);
           el.setAttribute("data-name", name);
-          el.querySelector("img").src = "chrome://favicon/" + url;
+          el.querySelector("img").src = getIcon(url).src;
           el.onclick = function (e) {
             window.open(url, tabOpenMode, "noopener noreferrer");
           };
@@ -212,6 +229,10 @@ export var Grid = (function () {
         var el = item.getElement();
         el.setAttribute("data-size", sizeFactor);
       });*/
+    },
+
+    setViewMode: function (mode) {
+      iconMode = mode;
     },
   };
 })();

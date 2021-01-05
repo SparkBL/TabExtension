@@ -12,6 +12,23 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
     );
   }
 });
+/*chrome.webRequest.onHeadersReceived.addListener(
+  function (info) {
+    var headers = info.responseHeaders;
+    var index = headers.findIndex(
+      (x) => x.name.toLowerCase() == "x-frame-options"
+    );
+    if (index != -1) {
+      headers.splice(index, 1);
+    }
+    return { responseHeaders: headers };
+  },
+  {
+    urls: ["*"], //
+    types: ["sub_frame"],
+  },
+  ["blocking", "responseHeaders"]
+);*/
 document.addEventListener("DOMContentLoaded", function () {
   Main.init();
 });

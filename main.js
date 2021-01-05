@@ -54,6 +54,8 @@ export var Main = (function () {
     Storage.removeElement(targetId);
   });
 
+  Pubsub.subscribe("menuMove", function (target) {});
+
   Pubsub.subscribe("editShortcut", function (target) {
     Modal.ShowShortcutModal(
       function (enteredData) {

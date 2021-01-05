@@ -91,12 +91,24 @@ form label {
   backdrop-filter: grayscale(30%);
 }
 
+.thumbnail {
+  -webkit-user-select: none;
+  width: 40rem;
+  height: 40rem;
+  margin: auto;
+}
+
 .section-title {
   padding: 3rem;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.move-option {
+  padding: 2rem;
+  border-radius: 2rem;
 }
 
 /*-------------- GRID HEADER -----------------*/
@@ -117,12 +129,16 @@ form label {
 .grid-control {
   display: flex;
   position: relative;
-  width: 70%;
+  width: 80%;
   flex-wrap: nowrap;
 }
 
 .grid-control.size {
-  width: 30%;
+  width: 20%;
+}
+
+.grid-control.show-type {
+  width: 20%;
 }
 
 .grid-control:before {

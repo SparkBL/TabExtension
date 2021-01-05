@@ -10,7 +10,10 @@
     "topSites",
     "webNavigation",
     "tabs",
-    "chrome://favicon/"
+    "chrome://favicon/",
+    "<all_urls>",
+
+    "webRequestBlocking"
   ],
   "background": {
     "scripts": ["background.js"],
