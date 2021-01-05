@@ -1,4 +1,4 @@
-export var ThumbCacher = (function () {
+export var ThumbFetcher = (function () {
 
 var openedWindows=[];
     function fetchImage(url){

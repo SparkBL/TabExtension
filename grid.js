@@ -220,7 +220,7 @@ export var Grid = (function () {
           else el.querySelector("div").lastChild.innerHTML = url;
           el.setAttribute("data-url", url);
           el.setAttribute("data-name", name);
-          setIcon(el.querySelector("div"));
+          setIcon(el.querySelector("div"),url);
           el.onclick = function (e) {
             window.open(url, tabOpenMode, "noopener noreferrer");
           };
