@@ -54,6 +54,7 @@ export var Storage = (function () {
     addElements: function (elements) {
       var elements = [].concat(elements || []);
       currentElements = currentElements.concat(elements);
+      currentLayouts[currentParent].push(elements);
       commit();
       return elements;
     },
@@ -137,13 +138,19 @@ export var Storage = (function () {
     //Replaces editing element with one, which was returned from callback function. Commit immediately.
     editElement: function (id, callback) {
       var toEdit = currentElements.find((x) => x.id === id);
-      console.log(typeof callback(toEdit));
       if (callback) {
         currentElements.splice(
           currentElements.findIndex((x) => x.id === id),
           1
         );
-        currentElements.push(callback(toEdit));
+        var par = toEdit.parentId;
+        var edited = callback(toEdit);
+
+        currentElements.push(edited);
+        if (par != edited.parentId){
+          currentLayouts[edited.parentId] = [].concat(currentLayouts[edited.parentId] || [],edited.id);
+          currentLayouts[par] = currentLayouts[par].filter(x => x!== edited.id);
+        }
         commit();
       }
     },

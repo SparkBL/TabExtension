@@ -38,7 +38,7 @@ export var Main = (function () {
   backButton.addEventListener("click", function (e) {
     if (!Storage.isInRoot()) {
       Storage.setPreviousParent();
-      Pubsub.publish("needGridLoad",false);
+      Pubsub.publish("needGridLoad",true);
     }
   });
   Menu.addListenedItems(addButton, ["createShortcut", "createFolder"]);
@@ -55,7 +55,7 @@ export var Main = (function () {
 
   Pubsub.subscribe("delete", function (target) {
     var targetId = Grid.remove(target);
-    Storage.saveGridLayout(Grid.getLayout());
+  //  Storage.saveGridLayout(Grid.getLayout());
     Storage.removeElement(targetId);
     ThumbFetcher.removeThumbnail(targetId);
   });
@@ -64,7 +64,6 @@ export var Main = (function () {
     Modal.ShowMoveModal(function(data){
       console.log("Move modal opened")
       var targetId = Grid.remove(target);
-      Storage.saveGridLayout(Grid.getLayout());
       Storage.editElement(targetId,function(elem){
         elem.parentId = data.newParentId;
         return elem;
@@ -117,7 +116,7 @@ export var Main = (function () {
     target.onclick = function (e) {
       if (!Grid.isDragging(target) && e.button != 2) {
         Storage.setCurrentParentId(target.getAttribute("data-id"));
-        Pubsub.publish("needGridLoad", false);
+        Pubsub.publish("needGridLoad", true);
       }
     };
   });
