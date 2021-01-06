@@ -108,6 +108,10 @@ export var Main = (function () {
 
   Pubsub.subscribe("addedShortcutToGrid", function (target) {
     Menu.addListenedItems(target, ["delete", "editShortcut", "move"]);
+   /* target.onmousedown = function (e){
+    
+    }*/
+    
   });
 
   Pubsub.subscribe("addedFolderToGrid", function (target) {

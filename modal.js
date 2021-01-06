@@ -150,11 +150,11 @@ export var Modal = (function () {
     urlwrapper.appendChild(inurl);
     f.appendChild(title);
     f.appendChild(namewrapper);
-
     f.appendChild(document.createElement("br"));
     f.appendChild(urlwrapper);
     f.appendChild(document.createElement("br"));
     f.appendChild(s);
+    inname.autofocus = true;
     return f;
   }
 
@@ -189,9 +189,9 @@ export var Modal = (function () {
     namewrapper.appendChild(inname);
     f.appendChild(title);
     f.appendChild(namewrapper);
-
     f.appendChild(document.createElement("br"));
     f.appendChild(s);
+    inname.autofocus = true;
     return f;
   }
 

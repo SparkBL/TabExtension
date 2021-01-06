@@ -5,7 +5,9 @@ export var Grid = (function () {
   const dragContainer = document.querySelector(".drag-container");
   const gridElement = document.querySelector(".grid");
   const templateContainer = document.getElementById("template");
-
+  var time,posX,posY;
+  const collideCoeff = 0.3;
+  var collidedFolder;
   const types = ["shortcut", "folder"];
   var currentSize = 1;
   var tabOpenMode = "_blank";
@@ -30,7 +32,9 @@ export var Grid = (function () {
       fillGaps: true,
     },
     dragEnabled: true,
-    dragHandle: null,
+   /* dragSortHeuristics: {
+      sortInterval: 3600000, // 1 hour
+    },*/
     dragContainer: dragContainer,
     dragRelease: {
       duration: 400,
@@ -40,6 +44,12 @@ export var Grid = (function () {
     dragStartPredicate: {
       distance: 3,
       delay: 3,
+    },
+    dragSortPredicate: function (item, e) {
+      return Muuri.ItemDrag.defaultSortPredicate(item, {
+        action: 'swap',
+        threshold: 83,
+      });
     },
     dragPlaceholder: {
       enabled: true,
@@ -109,6 +119,45 @@ export var Grid = (function () {
     grid.sort(newItems, { layout: "instant" });
   }
 
+   function collide (el1, el2) {
+    var rect1 = el1.getBoundingClientRect();
+    var rect2 = el2.getBoundingClientRect();
+
+    return !(
+      rect1.top > rect2.bottom - rect2.bottom*collideCoeff ||
+      rect1.right - rect1.right *collideCoeff < rect2.left ||
+      rect1.bottom  - rect1.bottom*collideCoeff< rect2.top ||
+      rect1.left > rect2.right - rect2.right *collideCoeff
+    );
+   }
+
+
+  grid.on('dragMove', function (item, e) {
+   // console.log(e.deltaTime);
+      if(Math.abs(e.clientX-posX)<20 && Math.abs(e.clientY-posY)<20){
+      if (e.deltaTime-time>1000){
+        console.log("Waiting....");
+        collidedFolder = grid.getItems().find(x =>x.getElement().getAttribute("data-type")==="folder" && collide(item.getElement(),x.getElement()));
+        if (collidedFolder){
+          collidedFolder = collidedFolder.getElement();
+        console.log(collidedFolder);
+        collidedFolder.firstChild.style.backgroundColor = "orange";
+        }
+      }
+    } else {
+      if (collidedFolder)
+      collidedFolder.firstChild.style.backgroundColor = "blue";
+      time = e.deltaTime;
+      posX = e.clientX;
+      posY = e.clientY;
+      
+    }
+      
+      
+  });
+
+ 
+
   function buildShortcut(id, url, name, parent) {
     var span = document.createElement("div");
     if (!name) span.innerHTML = url;
@@ -119,7 +168,6 @@ export var Grid = (function () {
     viewDiv.appendChild(span);
     viewDiv.setAttribute("class", "item-content");
 
-  
     var wrapper = document.createElement("div");
     wrapper.onclick = function (e) {
       window.open(url, tabOpenMode, "noopener noreferrer");
