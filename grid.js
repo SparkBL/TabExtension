@@ -126,8 +126,8 @@ export var Grid = (function () {
     return !(
       rect1.top > rect2.bottom - rect2.bottom*collideCoeff ||
       rect1.right - rect1.right *collideCoeff < rect2.left ||
-      rect1.bottom  - rect1.bottom*collideCoeff< rect2.top ||
-      rect1.left > rect2.right - rect2.right *collideCoeff
+     rect1.bottom  - rect1.bottom*collideCoeff< rect2.top ||
+     rect1.left > rect2.right - rect2.right *collideCoeff
     );
    }
 
@@ -137,7 +137,7 @@ export var Grid = (function () {
       if(Math.abs(e.clientX-posX)<20 && Math.abs(e.clientY-posY)<20){
       if (e.deltaTime-time>1000){
         console.log("Waiting....");
-        collidedFolder = grid.getItems().find(x =>x.getElement().getAttribute("data-type")==="folder" && collide(item.getElement(),x.getElement()));
+        collidedFolder = grid.getItems().find(x =>x.getElement().getAttribute("data-type")==="folder" && item.getElement().getAttribute("data-id")!== x.getElement().getAttribute("data-id") && collide(item.getElement(),x.getElement()));
         if (collidedFolder){
           collidedFolder = collidedFolder.getElement();
         console.log(collidedFolder);
