@@ -117,9 +117,12 @@ iframe {
 .shortcut-title {
   position: absolute;
   bottom: 0;
-  width: 100%;
+  border-bottom-left-radius: 3rem;
+  border-bottom-right-radius: 3rem;
+  width: 110%;
+  max-width: 110%;
   background-color: rgba(241, 241, 241, 0.75);
-  box-shadow: 1px 1px 10px lightgrey;
+  box-shadow: 3px 3px 10px lightgrey;
 }
 .item[data-type="folder"] div.shortcut-title {
   background-color: unset;
@@ -695,6 +698,9 @@ iframe {
   transform: scale(1, 1);
   transition: transform 0.3s ease-in;
 }
+.button-modal:disabled {
+  background-color: rgb(144, 144, 144);
+}
 
 .title-modal {
   padding-bottom: 3rem;
@@ -725,4 +731,64 @@ iframe {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+/*      TREE VIEW     */
+
+ul {
+  list-style-type: none;
+  /* margin: 1rem;
+  padding: 0;*/
+  margin-top: 1rem;
+  user-select: none;
+  margin-bottom: 1rem;
+}
+
+.hierarchy div {
+  border-radius: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 2.1rem;
+  padding: 10px 30px;
+  background-color: rgb(208, 208, 208);
+}
+
+.hierarchy div.active {
+  background-color: cadetblue;
+}
+
+.hierarchy div.active:hover {
+  background-color: cadetblue;
+}
+
+.hierarchy div:hover {
+  background-color: #bababa;
+}
+
+.caret {
+  user-select: none;
+  transition: transform 10ms;
+  cursor: pointer;
+}
+
+.caret::before {
+  content: "\25B6";
+  color: #4d4d4d;
+  display: inline-block;
+  margin-right: 6px;
+}
+.caret::before:hover {
+  color: cornflowerblue;
+}
+
+.caret-down::before {
+  transform: rotate(90deg);
+}
+
+.nested {
+  display: none;
+}
+
+.active {
+  display: block;
 }

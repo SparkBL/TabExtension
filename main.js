@@ -38,7 +38,7 @@ export var Main = (function () {
   backButton.addEventListener("click", function (e) {
     if (!Storage.isInRoot()) {
       Storage.setPreviousParent();
-      Pubsub.publish("needGridLoad");
+      Pubsub.publish("needGridLoad",false);
     }
   });
   Menu.addListenedItems(addButton, ["createShortcut", "createFolder"]);
@@ -60,7 +60,18 @@ export var Main = (function () {
     ThumbFetcher.removeThumbnail(targetId);
   });
 
-  Pubsub.subscribe("menuMove", function (target) {});
+  Pubsub.subscribe("menuMove", function (target) {
+    Modal.ShowMoveModal(function(data){
+      console.log("Move modal opened")
+      var targetId = Grid.remove(target);
+      Storage.saveGridLayout(Grid.getLayout());
+      Storage.editElement(targetId,function(elem){
+        elem.parentId = data.newParentId;
+        return elem;
+      })
+       ////?
+    },Storage.buildHierarchy(target.getAttribute("data-id")),target.getAttribute("data-parent"));
+  });
 
   Pubsub.subscribe("editShortcut", function (target) {
     Modal.ShowShortcutModal(
@@ -106,7 +117,7 @@ export var Main = (function () {
     target.onclick = function (e) {
       if (!Grid.isDragging(target) && e.button != 2) {
         Storage.setCurrentParentId(target.getAttribute("data-id"));
-        Pubsub.publish("needGridLoad", null);
+        Pubsub.publish("needGridLoad", false);
       }
     };
   });
@@ -175,6 +186,7 @@ export var Main = (function () {
           Pubsub.publish("needGridLoad");
           sizeSelector.value = Storage.getCurrentElementSize();
           viewSelector.value = Storage.getCurrentViewType();
+          var a = Storage.buildHierarchy();
         })
         
       });

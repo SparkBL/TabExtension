@@ -46,6 +46,7 @@ function  sync (callback) {
                 if (callback) callback(dataString)
                  chrome.windows.remove(window.id,function(){
                    console.log("Window closed");
+                   openedWindows = openedWindows.filter(x => x!= window.id);
                  })
                })
               }
@@ -62,7 +63,7 @@ function  sync (callback) {
       }) 
   }
 
-  Pubsub.subscribe("NeedGridLoad",function(){
+  Pubsub.subscribe("needGridLoad",function(){
     closeOpenedWindows();
   })
 

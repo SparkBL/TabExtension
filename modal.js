@@ -195,21 +195,40 @@ export var Modal = (function () {
     return f;
   }
 
-  function buildMoveForm(items) {
+  function buildMoveForm(items,parent) {
     var f = document.createElement("form");
     var title = document.createElement("h1");
     title.className = "title-modal";
     title.textContent = "Move element";
-    var selection = document.createElement("select");
+    var selection = document.createElement("ul");
+    selection.className = "hierarchy";
     selection.name = "dists";
-    selection.size = items.length;
-    items.forEach(function (item) {
-      var opt = document.createElement("option");
-      opt.value = item.id;
-      opt.text = item.name;
-      opt.className = "move-options";
-      selection.appendChild(opt);
-    });
+    function iterateOverChildren(itemsCh,nest){
+      itemsCh.forEach(function (item) {
+        var li = document.createElement("li");
+        var d = document.createElement("div");
+        d.innerHTML = item.name;
+        d.setAttribute("data-id" ,item.id);
+        li.appendChild(d);
+        nest.appendChild(li);
+        if (item.children.length != 0){
+          var spanCaret = document.createElement("span");
+          spanCaret.className = "caret";
+          spanCaret.addEventListener("click", function() {
+            this.parentElement.parentElement.querySelector(".nested").classList.toggle("active");
+            this.classList.toggle("caret-down");
+          });
+          d.prepend(spanCaret);
+          var ul = document.createElement("ul");
+          ul.data
+          ul.className = "nested";
+          li.appendChild(ul);
+          iterateOverChildren(item.children,ul);
+        }
+      });
+    }
+    iterateOverChildren(items,selection);
+    
     var label = document.createElement("label");
     label.innerHTML = "Select destination folder:";
     label.setAttribute("for", selection.name);
@@ -219,6 +238,19 @@ export var Modal = (function () {
     s.setAttribute("class", "button-modal");
 
     s.innerHTML = "Move";
+    s.disabled = true;
+    selection.addEventListener("click",function(e){
+      var divs = selection.querySelectorAll("div");
+      divs.forEach(function(item){
+        item.classList.remove("active");
+      })
+      if (e.target.closest("div").getAttribute("data-id") && e.target.closest("div").getAttribute("data-id")!=parent){
+      f.setAttribute("data-active",e.target.closest("div").getAttribute("data-id"));
+      e.target.closest("div").classList.add("active");
+      s.disabled = false;
+      }
+      else s.disabled = true;
+  });
 
     f.appendChild(title);
     f.appendChild(label);
@@ -263,14 +295,14 @@ export var Modal = (function () {
       });
       showModal();
     },
-    ShowMoveModal: function (callback) {
-      var form = buildFolderForm(name, edit);
+    ShowMoveModal: function (callback,items,parentId) {
+      var form = buildMoveForm(items,parentId);
       body.appendChild(form);
       form.addEventListener("submit", function (e) {
         e.preventDefault();
         if (callback && typeof callback == "function") {
           var enteredData = {
-            name: form.elements.namedItem("name").value,
+           newParentId: form.getAttribute("data-active")
           };
           console.log("calling callback");
           callback(enteredData);

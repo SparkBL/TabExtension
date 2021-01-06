@@ -24,11 +24,31 @@ export var Storage = (function () {
     );
   }
 
+  function list_to_tree(list) {
+    var map = {}, node, roots = [], i;
+    for (i = 0; i < list.length; i += 1) {
+      map[list[i].id] = i; // initialize the map
+      list[i].children = []; // initialize the children
+    }
+    for (i = 0; i < list.length; i += 1) {
+      node = list[i];
+      if (node.parentId !== "root") {
+        list[map[node.parentId]].children.push(node);
+      } else {
+        roots.push(node);
+      }
+    }
+    return roots;
+  }
+
   //Random string generator
   function generateId() {
     return "id" + Math.random().toString(16).slice(2);
   }
 
+  function getChildren(parentId){
+    return currentElements.filter((x) => x.parentId === parentId);
+  }
   return {
     //Add builded tabelement into currentStorage and commit immediately
     addElements: function (elements) {
@@ -71,7 +91,6 @@ export var Storage = (function () {
               result.viewType
             );
           } else console.log("Failed to get view type from storage!");
-
           if (callback && typeof callback == "function") callback();
         }
       );
@@ -105,14 +124,14 @@ export var Storage = (function () {
 
     //Returns contents of current dir
     getCurrentChildren: function () {
-      return currentElements.filter((x) => x.parentId === currentParent);
+      return getChildren(currentParent);
     },
 
     //Get current parent tab element
     getCurrentParent: function () {
       var elem = currentElements.find((x) => x.id === currentParent);
       if (elem) return elem;
-      else return { name: "Home page" };
+      else return { id:"root" ,name: "Home page" };
     },
 
     //Replaces editing element with one, which was returned from callback function. Commit immediately.
@@ -166,8 +185,6 @@ export var Storage = (function () {
         name: name,
         url: url,
         type: "shortcut",
-        thumbnail: null,
-        thumbnailUpdateTime: null
       };
     },
 
@@ -199,5 +216,25 @@ export var Storage = (function () {
       commit();
     }
     },
+    buildHierarchy: function(exceptions){
+      var except = currentElements.filter(x=> [].concat(exceptions || []).includes(x.id));
+      var store = [];
+      function iterate(es){
+        es.forEach(element => {
+          store.push(element.id);
+          iterate(getChildren(element.id));
+        });
+      }
+      iterate(except);
+      var folders = currentElements.filter(x => x.type === "folder" && !store.includes(x.id)) ;
+      var tree = list_to_tree(folders);
+      tree = [{name:"Home page",id:"root",children:tree}];
+      return tree;
+      
+    }
   };
 })();
+
+
+
+
