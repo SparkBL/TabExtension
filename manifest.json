@@ -1,0 +1,33 @@
+{
+  "name": "Cringe Tab Extension",
+  "version": "0.1",
+  "description": "Meh",
+  "permissions": [
+    "storage",
+    "declarativeContent",
+    "activeTab",
+    "topSites",
+    "webNavigation",
+    "tabs",
+    "chrome://favicon/"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "options_page": "options.html",
+  "page_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "128": "icons/main.png"
+    }
+  },
+  "icons": {
+    "128": "icons/main.png"
+  },
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "web_accessible_resources": ["images/plus.png"],
+  "manifest_version": 2
+}

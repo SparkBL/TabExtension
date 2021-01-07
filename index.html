@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Express panel</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" href="node_modules/tingle.js/dist/tingle.min.css" />
+    <script src="node_modules/muuri/dist/muuri.min.js"></script>
+    <meta
+      name="viewport"
+      content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1"
+    />
+  </head>
+  <body>
+    <div class="drag-container"></div>
+    <h1 class="section-title"><span>Cringe Tabs by TeAm2</span></h1>
+    <div>
+      <div class="grid-controls">
+        <div class="grid-control">
+          <button class="grid-button" id="backButton">
+            <svg
+              version="1.1"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              x="0px"
+              y="0px"
+              viewBox="0 0 560 650"
+              xml:space="preserve"
+            >
+              <path
+                d="M198.608,246.104L382.664,62.04c5.068-5.056,7.856-11.816,7.856-19.024c0-7.212-2.788-13.968-7.856-19.032l-16.128-16.12
+			C361.476,2.792,354.712,0,347.504,0s-13.964,2.792-19.028,7.864L109.328,227.008c-5.084,5.08-7.868,11.868-7.848,19.084
+			c-0.02,7.248,2.76,14.028,7.848,19.112l218.944,218.932c5.064,5.072,11.82,7.864,19.032,7.864c7.208,0,13.964-2.792,19.032-7.864
+			l16.124-16.12c10.492-10.492,10.492-27.572,0-38.06L198.608,246.104z"
+              />
+            </svg>
+          </button>
+          <div class="path-title"></div>
+        </div>
+
+        <div class="grid-control search">
+          <input
+            class="grid-control-field search-field form-control"
+            type="text"
+            name="search"
+            placeholder="Search..."
+          />
+          <div class="grid-control-icon">
+            <svg
+              aria-hidden="true"
+              focusable="false"
+              role="img"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+            >
+              <path
+                fill="currentColor"
+                d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
+              ></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="grid" style="height: 1200px"></div>
+
+      <!-- The Modal -->
+      <div class="blur">
+        <!-- Modal content -->
+        <div class="modal">
+          <span class="close">&times;</span>
+          <div class="modal-body"></div>
+        </div>
+      </div>
+
+      <div class="grid-footer">
+        <button class="grid-button add-more-items" data-id="addButton">
+          <svg
+            aria-hidden="true"
+            focusable="false"
+            role="img"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"
+          >
+            <path
+              fill="currentColor"
+              d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <script type="module" src="index.js"></script>
+    <template id="template">
+      <svg
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        x="0px"
+        y="0px"
+        viewBox="0 0 512 512"
+        style="enable-background: new 0 0 512 512"
+        xml:space="preserve"
+      >
+        <polygon
+          fill="currentColor"
+          points="499.2,115.2 259.874,115.2 183.074,64 12.8,64 12.8,448 499.2,448 "
+        />
+        <path
+          fill="currentColor"
+          d="M486.4,102.4H263.748l-70.349-46.899c-4.207-2.807-9.148-4.301-14.199-4.301H25.6
+	C11.46,51.2,0,62.66,0,76.8v358.4c0,14.14,11.46,25.6,25.6,25.6h460.8c14.14,0,25.6-11.46,25.6-25.6V128
+	C512,113.86,500.54,102.4,486.4,102.4z M486.4,435.2H25.6V76.8h153.6L256,128h230.4V435.2z"
+        />
+      </svg>
+    </template>
+  </body>
+</html>
