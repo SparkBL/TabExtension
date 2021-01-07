@@ -210,7 +210,7 @@ iframe {
   position: relative;
   width: 100%;
   padding: 1rem 1.5rem 1rem 5rem;
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   line-height: 4rem;
   color: var(--grid-control-field-color);

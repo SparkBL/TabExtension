@@ -154,6 +154,7 @@ export var Grid = (function () {
       if (collidedFolder){
         collidedFolder.firstChild.classList.remove("active-drop");
         item.getElement().firstChild.classList.remove("active-dropping");
+        collidedFolder = null;
       }
       
       time = e.deltaTime;
