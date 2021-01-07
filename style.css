@@ -37,7 +37,7 @@ html {
   overflow-y: scroll;
   overflow-x: hidden;
   background: var(--color-background);
-  font-size: 55%
+  font-size: 55%;
 }
 
 body {
@@ -47,7 +47,7 @@ body {
   font-size: 2.5rem;
   line-height: 1.5;
   margin: 0 5vw;
-  color: var(--color-text)
+  color: var(--color-text);
 }
 
 .item-content li {
@@ -85,10 +85,48 @@ form label {
 
 .favicon {
   -webkit-user-select: none;
-  width: 3rem;
-  height: 3rem;
+  width: 4rem;
+  height: 4rem;
   margin: auto;
   backdrop-filter: grayscale(30%);
+}
+iframe {
+  pointer-events: none;
+  -ms-zoom: 0.5;
+  -moz-transform: scale(0.75);
+  -moz-transform-origin: 0 0;
+  -o-transform: scale(0.75);
+  -o-transform-origin: 0 0;
+  -webkit-transform: scale(0.75);
+  -webkit-transform-origin: 0 0;
+}
+
+.thumbnail {
+  user-select: none;
+  border: none;
+  max-width: 140%;
+  max-height: 140%;
+  width: 105%;
+  height: 105%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.shortcut-title {
+  position: absolute;
+  bottom: 0;
+  border-bottom-left-radius: 3rem;
+  border-bottom-right-radius: 3rem;
+  width: 110%;
+  max-width: 110%;
+  background-color: rgba(241, 241, 241, 0.75);
+  box-shadow: 3px 3px 10px lightgrey;
+}
+.item[data-type="folder"] div.shortcut-title {
+  background-color: unset;
+  position: relative;
 }
 
 .section-title {
@@ -97,6 +135,11 @@ form label {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.move-option {
+  padding: 2rem;
+  border-radius: 2rem;
 }
 
 /*-------------- GRID HEADER -----------------*/
@@ -117,12 +160,16 @@ form label {
 .grid-control {
   display: flex;
   position: relative;
-  width: 70%;
+  width: 80%;
   flex-wrap: nowrap;
 }
 
-.grid-control.search {
-  width: 30%;
+.grid-control.size {
+  width: 20%;
+}
+
+.grid-control.view-type {
+  width: 20%;
 }
 
 .grid-control:before {
@@ -131,7 +178,7 @@ form label {
   position: absolute;
   left: 0.5rem;
   right: 0.8rem;
-  bottom: 0;
+  bottom: -0.5rem;
   border-bottom: 0.1rem solid var(--grid-control-border-color);
 }
 
@@ -163,7 +210,7 @@ form label {
   position: relative;
   width: 100%;
   padding: 1rem 1.5rem 1rem 5rem;
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   line-height: 4rem;
   color: var(--grid-control-field-color);
@@ -194,7 +241,8 @@ form label {
   outline: 0;
 }
 
-.grid-control-icon, .grid-select-arrow {
+.grid-control-icon,
+.grid-select-arrow {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -209,7 +257,8 @@ form label {
 }
 
 @media (max-width: 767px) {
-  .grid-control-icon, .grid-select-arrow {
+  .grid-control-icon,
+  .grid-select-arrow {
     height: 5rem;
   }
 }
@@ -223,7 +272,8 @@ form label {
   padding: 1.7rem;
 }
 
-.grid-control-icon svg, .grid-select-arrow svg {
+.grid-control-icon svg,
+.grid-select-arrow svg {
   flex-grow: 1;
 }
 
@@ -273,7 +323,8 @@ form label {
 .item-content {
   display: flex;
   flex-direction: column;
-  align-content: center;
+  align-items: center;
+  justify-content: flex-end;
   border-radius: 3rem;
   padding: 0.8rem;
   position: relative;
@@ -292,10 +343,22 @@ form label {
   cursor: pointer;
 }
 
+.item[data-type="folder"] .item-content.active-drop {
+  transform: scale(1.1) !important;
+}
+
+.item .item-content.active-dropping {
+  transform: scale(0.9) !important;
+}
+
+/*.item[data-type="shortcut"] .item-content {
+   !important;
+}
+*/
 .item.muuri-item-shown .item-content:hover {
   transition: all 0.35s ease-out;
   color: var(--hover-color);
-  transform: scale(0.99)
+  transform: scale(0.99);
 }
 
 .item.muuri-item-positioning {
@@ -309,7 +372,8 @@ form label {
   box-sizing: border-box;
 }
 
-.item.muuri-item-dragging, .item.muuri-item-releasing {
+.item.muuri-item-dragging,
+.item.muuri-item-releasing {
   z-index: 9999;
 }
 
@@ -321,13 +385,34 @@ form label {
   z-index: 0;
 }
 
+.item[data-size="1"] {
+  height: 15rem;
+  width: 15rem;
+}
+
 .item[data-size="2"] {
   height: 22rem;
   width: 22rem;
 }
 
+.item[data-size="3"] {
+  height: 29rem;
+  width: 29rem;
+}
+
+.item[data-size="4"] {
+  height: 36rem;
+  width: 36rem;
+}
+
+.item[data-size="5"] {
+  height: 43rem;
+  width: 43rem;
+}
+
 .item[data-type="shortcut"] .item-content {
   background: var(--grid-shortcut-bg);
+  background-size: cover;
 }
 
 .item[data-type="folder"] .item-content {
@@ -448,7 +533,7 @@ form label {
   font-size: 2.1rem;
   padding: 10px 30px;
   transition: 0.1s;
-  color: var(--menu-color)
+  color: var(--menu-color);
 }
 
 .menu-item:hover {
@@ -503,22 +588,22 @@ form label {
 @-webkit-keyframes animatetop {
   from {
     top: -300px;
-    opacity: 0
+    opacity: 0;
   }
   to {
     top: 0;
-    opacity: 1
+    opacity: 1;
   }
 }
 
 @keyframes animatetop {
   from {
     top: -300px;
-    opacity: 0
+    opacity: 0;
   }
   to {
     top: 0;
-    opacity: 1
+    opacity: 1;
   }
 }
 
@@ -530,7 +615,8 @@ form label {
   font-weight: bold;
 }
 
-.close:hover, .close:focus {
+.close:hover,
+.close:focus {
   color: var(--color-text-headers);
   text-decoration: none;
   cursor: pointer;
@@ -553,6 +639,45 @@ form label {
   color: var(--color-text);
   border-radius: 1rem;
   /*box-shadow: 3px 4px #0F1011;*/
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: none;
+  background-color: #ffffff;
+  /* border-bottom: none;*/
+  border-radius: 2rem;
+  /*border-top: none;*/
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 66%;
+  left: 0;
+  right: 0;
+  height: 60rem;
+  overflow-y: scroll;
+}
+
+.autocomplete-items div {
+  padding: 2rem;
+  cursor: pointer;
+  border: none;
+  overflow: hidden;
+  border-radius: 2rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*when hovering an item:*/
+
+.autocomplete-items div:hover {
+  background-color: #e9e9e9;
+}
+
+/*when navigating through the items using the arrow keys:*/
+
+.autocomplete-active {
+  background-color: DodgerBlue !important;
+  color: #ffffff;
 }
 
 .button-modal {
@@ -582,7 +707,97 @@ form label {
   transform: scale(1, 1);
   transition: transform 0.3s ease-in;
 }
+.button-modal:disabled {
+  background-color: rgb(144, 144, 144);
+}
 
 .title-modal {
   padding-bottom: 3rem;
+}
+
+/* SCROLL BAR */
+
+/* width */
+
+::-webkit-scrollbar {
+  width: 1rem;
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 2rem;
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/*      TREE VIEW     */
+
+ul {
+  list-style-type: none;
+  /* margin: 1rem;
+  padding: 0;*/
+  margin-top: 1rem;
+  user-select: none;
+  margin-bottom: 1rem;
+}
+
+.hierarchy div {
+  border-radius: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 2.1rem;
+  padding: 10px 30px;
+  background-color: rgb(208, 208, 208);
+}
+
+.hierarchy div.active {
+  background-color: cadetblue;
+}
+
+.hierarchy div.active:hover {
+  background-color: cadetblue;
+}
+
+.hierarchy div:hover {
+  background-color: #bababa;
+}
+
+.caret {
+  user-select: none;
+  transition: transform 10ms;
+  cursor: pointer;
+}
+
+.caret::before {
+  content: "\25B6";
+  color: #4d4d4d;
+  display: inline-block;
+  margin-right: 6px;
+}
+.caret::before:hover {
+  color: cornflowerblue;
+}
+
+.caret-down::before {
+  transform: rotate(90deg);
+}
+
+.nested {
+  display: none;
+}
+
+.active {
+  display: block;
 }

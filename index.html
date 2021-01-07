@@ -3,7 +3,6 @@
   <head>
     <title>Express panel</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
-    <link rel="stylesheet" href="node_modules/tingle.js/dist/tingle.min.css" />
     <script src="node_modules/muuri/dist/muuri.min.js"></script>
     <meta
       name="viewport"
@@ -12,7 +11,7 @@
   </head>
   <body>
     <div class="drag-container"></div>
-    <h1 class="section-title"><span>Cringe Tabs by TeAm2</span></h1>
+    <h1 class="section-title"><span>Tabs by Team2</span></h1>
     <div>
       <div class="grid-controls">
         <div class="grid-control">
@@ -38,27 +37,42 @@
           <div class="path-title"></div>
         </div>
 
-        <div class="grid-control search">
-          <input
-            class="grid-control-field search-field form-control"
-            type="text"
-            name="search"
-            placeholder="Search..."
-          />
+        <div class="grid-control size">
+          <select id = "sizeSelector" class="grid-control-field">
+            <option value="1" selected="">Small</option>
+            <option value="2">Medium small</option>
+            <option value="3">Medium</option>
+            <option value="4">Medium Large</option>
+            <option value="5">Large</option>
+          </select>
           <div class="grid-control-icon">
-            <svg
-              aria-hidden="true"
-              focusable="false"
-              role="img"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 512 512"
-            >
-              <path
-                fill="currentColor"
-                d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
-              ></path>
+            <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path fill="currentColor" d="M244 192h184a20 20 0 0 0 20-20V52a20 20 0 0 0-20-20H244a20 20 0 0 0-20 20v120a20 20 0 0 0 20 20zm28-112h128v64H272zm212 176H252a28 28 0 0 0-28 28v168a28 28 0 0 0 28 28h232a28 28 0 0 0 28-28V284a28 28 0 0 0-28-28zm-20 176H272V304h192zm-300-48h-44V48a16 16 0 0 0-16-16H88a16 16 0 0 0-16 16v336H28a12 12 0 0 0-8.73 20.24l68 72a12 12 0 0 0 17.44 0l68-72A12 12 0 0 0 164 384z"></path>
             </svg>
           </div>
+          <div class="grid-select-arrow">
+            <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
+              <path fill="currentColor" d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z"></path>
+            </svg>
+          </div>
+          </div>
+          <div  class="grid-control view-type">
+            <select id = "viewSelector" class="grid-control-field">
+              <option value="icon" >Icon</option>
+              <option value="thumbnail" >Thumbnail</option>
+            </select>
+            <div class="grid-control-icon">
+              <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path fill="currentColor" d="M480 0H32A32 32 0 0 0 0 32v448a32 32 0 0 0 32 32h448a32 32 0 0 0 32-32V32a32 32 0 0 0-32-32zm-16 464H48V48h416zm-48-48V256H256v160zM256 96H96v160h160z"></path>
+              </svg>
+            </div>
+            <div class="grid-select-arrow">
+              <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
+                <path fill="currentColor" d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z"></path>
+              </svg>
+            </div>
+            </div>
+
         </div>
       </div>
       <div class="grid" style="height: 1200px"></div>
@@ -113,6 +127,10 @@
 	C512,113.86,500.54,102.4,486.4,102.4z M486.4,435.2H25.6V76.8h153.6L256,128h230.4V435.2z"
         />
       </svg>
-    </template>
-  </body>
+     
+
+      
+    
+ <!--  <iframe  scrolling="no" id="iframe1" width="500 px" height="500 px" src="https://www.google.com" frameborder="0" sandbox="allow-same-origin" ></iframe>-->
+ </body>
 </html>

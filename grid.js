@@ -1,14 +1,18 @@
+import { Pubsub } from "./pubsub.js";
+
+//const puppeteer = require("node_modules/puppeteer-core");
 export var Grid = (function () {
   const dragContainer = document.querySelector(".drag-container");
   const gridElement = document.querySelector(".grid");
   const templateContainer = document.getElementById("template");
-  const searchField = document.querySelector(
-    ".grid-control-field.search-field"
-  );
+  var time,posX,posY;
+  const collideCoeff = 0.1;
+  var collidedFolder;
   const types = ["shortcut", "folder"];
-  const sizes = [1, 2, 3, 4, 5, 6];
   var currentSize = 1;
   var tabOpenMode = "_blank";
+  var viewType = "icon";
+  var thumbnailQueue = [];
   const grid = new Muuri(gridElement, {
     showDuration: 400,
     showEasing: "ease",
@@ -24,8 +28,13 @@ export var Grid = (function () {
         return element.getAttribute("data-color") || "";
       },
     },
+    layout: {
+      fillGaps: true,
+    },
     dragEnabled: true,
-    dragHandle: null,
+   /* dragSortHeuristics: {
+      sortInterval: 3600000, // 1 hour
+    },*/
     dragContainer: dragContainer,
     dragRelease: {
       duration: 400,
@@ -35,6 +44,12 @@ export var Grid = (function () {
     dragStartPredicate: {
       distance: 3,
       delay: 3,
+    },
+    dragSortPredicate: function (item, e) {
+      return Muuri.ItemDrag.defaultSortPredicate(item, {
+        action: 'swap',
+        threshold: 83,
+      });
     },
     dragPlaceholder: {
       enabled: true,
@@ -51,6 +66,31 @@ export var Grid = (function () {
     },
     itemClass: "item",
   });
+
+  Pubsub.subscribe("generatedThumbnail",function(data){
+    var id = data["id"];
+    var dataString = data["dataString"];
+    var viewObj = thumbnailQueue.find(x => x.id === id);
+    viewObj.viewDiv.style.backgroundImage = "url(" + dataString + ")";
+    thumbnailQueue.splice(thumbnailQueue.findIndex(x => x.id === viewObj.id),1);
+  })
+
+  function setIcon(id,viewDiv,url) {
+    if (url){
+    if (viewType === "icon") {
+      var i = document.createElement("img");
+      i.src = "chrome://favicon/" + url;
+      i.setAttribute("class", "favicon");
+      viewDiv.appendChild(i);
+    } else if (viewType === "thumbnail"){
+      
+      thumbnailQueue.push({id:id,viewDiv:viewDiv});
+      Pubsub.publish("generateThumbnail",{id:id,url:url});     
+    }
+  }
+
+  
+}
 
   function serializeLayout() {
     var itemIds = grid.getItems().map(function (item) {
@@ -78,41 +118,97 @@ export var Grid = (function () {
 
     grid.sort(newItems, { layout: "instant" });
   }
+// COLLIDE MECHANISM BEGIN
+   function collide (el1, el2) {
+    var rect1 = el1.getBoundingClientRect();
+    var rect2 = el2.getBoundingClientRect();
+
+    return !(
+      rect1.top > rect2.bottom - rect2.bottom*collideCoeff ||
+      rect1.right - rect1.right *collideCoeff < rect2.left ||
+     rect1.bottom  - rect1.bottom*collideCoeff< rect2.top ||
+     rect1.left > rect2.right - rect2.right *collideCoeff
+    );
+   }
+
+
+  grid.on('dragMove', function (item, e) {
+      if(Math.abs(e.clientX-posX)<20 && Math.abs(e.clientY-posY)<20){
+      if (e.deltaTime-time>1000){
+        console.log("Waiting....");
+        collidedFolder = grid.getItems().find(function(x){
+          var xElem = x.getElement();
+          var itemElem = item.getElement();
+          return xElem.getAttribute("data-type")==="folder" &&
+          itemElem.getAttribute("data-id")!== xElem.getAttribute("data-id") &&
+          collide(itemElem,xElem);
+        }/*x =>x.getElement().getAttribute("data-type")==="folder" && item.getElement().getAttribute("data-id")!== x.getElement().getAttribute("data-id") && collide(item.getElement(),x.getElement())*/);
+        if (collidedFolder){
+          collidedFolder = collidedFolder.getElement();
+       // console.log(collidedFolder);
+        collidedFolder.firstChild.classList.add("active-drop");
+        item.getElement().firstChild.classList.add("active-dropping");
+        }
+      }
+    } else {
+      if (collidedFolder){
+        collidedFolder.firstChild.classList.remove("active-drop");
+        item.getElement().firstChild.classList.remove("active-dropping");
+        collidedFolder = null;
+      }
+      
+      time = e.deltaTime;
+      posX = e.clientX;
+      posY = e.clientY;
+      
+    }
+    grid.on("dragEnd",function(item,e){
+      if(collidedFolder){
+        collidedFolder.firstChild.classList.remove("active-drop");
+        item.getElement().firstChild.classList.remove("active-dropping");
+        Pubsub.publish("droppedIntoFolder",{target:item.getElement(),folder:collidedFolder});
+        collidedFolder = null;
+      console.log("Dropped into folder");
+      //time = e.deltaTime;
+      }
+      
+    })
+      
+  });
+//    COLLIDE MECHANISM END
+ 
 
   function buildShortcut(id, url, name, parent) {
-    var img = document.createElement("img");
-    img.src = "chrome://favicon/" + url;
-    img.setAttribute("class", "favicon");
-    var span = document.createElement("span");
+    var span = document.createElement("div");
     if (!name) span.innerHTML = url;
     else span.innerHTML = name;
+    span.setAttribute("class","shortcut-title");
     var viewDiv = document.createElement("div");
-    viewDiv.appendChild(img);
+    setIcon(id,viewDiv,url);
     viewDiv.appendChild(span);
     viewDiv.setAttribute("class", "item-content");
+
     var wrapper = document.createElement("div");
     wrapper.onclick = function (e) {
-      // location.href = url;
       window.open(url, tabOpenMode, "noopener noreferrer");
     };
+    setIcon(viewDiv,url);
     wrapper.setAttribute("class", "item");
-    // wrapper.href = url;
-    //  wrapper.setAttribute("target", "_blank");
-    // wrapper.setAttribute("rel", "noopener noreferrer");
     wrapper.appendChild(viewDiv);
     wrapper.setAttribute("data-id", id);
     wrapper.setAttribute("data-name", name);
+    wrapper.setAttribute("data-url", url);
     wrapper.setAttribute("data-parent", parent);
     wrapper.setAttribute("data-type", types[0]);
-    wrapper.setAttribute("data-size", sizes[currentSize]);
+    wrapper.setAttribute("data-size", currentSize);
     return wrapper;
   }
 
   function buildFolder(id, name, parent) {
     var img = document.importNode(templateContainer.content.children[0], true);
-    var span = document.createElement("span");
-    if (!name) span.innerHTML = url;
-    else span.innerHTML = name;
+    var span = document.createElement("div");
+    span.innerHTML = name;
+    span.setAttribute("class","shortcut-title");
     var viewDiv = document.createElement("div");
     viewDiv.appendChild(img);
     viewDiv.appendChild(span);
@@ -124,7 +220,7 @@ export var Grid = (function () {
     wrapper.setAttribute("data-name", name);
     wrapper.setAttribute("data-parent", parent);
     wrapper.setAttribute("data-type", types[1]);
-    wrapper.setAttribute("data-size", sizes[currentSize]);
+    wrapper.setAttribute("data-size", currentSize);
     return wrapper;
   }
 
@@ -133,20 +229,17 @@ export var Grid = (function () {
       layout: true,
       active: true,
     });
-    /* elem.addEventListener("click", function (e) {
-      e.preventDefault();
-    });*/
 
     return elem;
   }
 
-  function removeItem(item) {
-    if (!item) return;
-    grid.hide([item], {
+  function removeItem(item, instantRemove) {
+    var items = [].concat(item || []);
+    grid.hide(items, {
       onFinish: () => {
-        grid.remove([item]);
-        item.getElement().remove();
+        grid.remove(items, { removeElements: true });
       },
+      instant: instantRemove,
     });
   }
 
@@ -158,19 +251,18 @@ export var Grid = (function () {
       return addItem(buildFolder(id, name, parentId));
     },
     remove: function (elem) {
-      removeItem(grid.getItem(elem));
+      removeItem(grid.getItem(elem), false);
       return elem.getAttribute("data-id");
     },
     removeById: function (id) {
       if (!id) return;
       grid.getItems().forEach(function (item) {
-        if (item.getElement().getAttribute("data-id") === id) removeItem(item);
+        if (item.getElement().getAttribute("data-id") === id)
+          removeItem(item, false);
       });
     },
-    clear: function () {
-      grid.getItems().forEach(function (item) {
-        removeItem(item);
-      });
+    clear: function (instantRemove = false) {
+      removeItem(grid.getItems(), instantRemove);
     },
     isDragging: function (element) {
       return grid.getItem(element).isReleasing();
@@ -187,6 +279,44 @@ export var Grid = (function () {
     setTabOpenMode: function (blank) {
       if (blank) tabOpenMode = "_blank";
       else tabOpenMode = "_self";
+    },
+    editShortcut: function (id, url, name) {
+      grid.getItems().forEach(function (item) {
+        var el = item.getElement();
+        if (el.getAttribute("data-id") == id) {
+          if (name) el.querySelector("div").lastChild.innerHTML = name;
+          else el.querySelector("div").lastChild.innerHTML = url;
+          el.setAttribute("data-url", url);
+          el.setAttribute("data-name", name);
+          setIcon(id,el.querySelector("div"),url);
+          el.onclick = function (e) {
+            window.open(url, tabOpenMode, "noopener noreferrer");
+          };
+          return;
+        }
+      });
+    },
+    editFolder: function (id, name) {
+      grid.getItems().forEach(function (item) {
+        var el = item.getElement();
+        if (el.getAttribute("data-id") == id) {
+          el.querySelector("div").lastChild.innerHTML = name;
+          el.setAttribute("data-name", name);
+          return;
+        }
+      });
+    },
+    setItemSize: function (sizeFactor) {
+      currentSize = sizeFactor;
+      /* grid.getItems().forEach(function (item) {
+        var el = item.getElement();
+        el.setAttribute("data-size", sizeFactor);
+      });*/
+    },
+
+    setViewType: function (type) {
+      if (type === "icon" || type === "thumbnail")
+      viewType = type;
     },
   };
 })();
