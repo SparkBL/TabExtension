@@ -67,18 +67,18 @@ function  sync (callback) {
     closeOpenedWindows();
   })
 
-  Pubsub.subscribe("GenerateThumbnail",function(data){
+  Pubsub.subscribe("generateThumbnail",function(data){
     if (data.url)
     if (!shortcutThumbnails[data.id] || shortcutThumbnails[data.id]["date"] + (2*1000*60*60*24)<Date.now() || shortcutThumbnails[data.id]["url"] != data.url )
     fetchImage(data.url,function(generatedThumbnail){
       shortcutThumbnails[data.id] = {thumbnail:generatedThumbnail,url:data.url, date: Date.now()};
-      Pubsub.publish("GeneratedThumbnail",{id: data.id,dataString:generatedThumbnail});
+      Pubsub.publish("generatedThumbnail",{id: data.id,dataString:generatedThumbnail});
       commit();
     })
     else{
-      Pubsub.publish("GeneratedThumbnail",{id: data.id,dataString:shortcutThumbnails[data.id]["thumbnail"]});
+      Pubsub.publish("generatedThumbnail",{id: data.id,dataString:shortcutThumbnails[data.id]["thumbnail"]});
     }
-    else Pubsub.publish("GeneratedThumbnail",undefined);  
+    else Pubsub.publish("generatedThumbnail",undefined);  
   })
 
     return {

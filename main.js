@@ -72,6 +72,16 @@ export var Main = (function () {
     },Storage.buildHierarchy(target.getAttribute("data-id")),target.getAttribute("data-parent"));
   });
 
+  
+
+  Pubsub.subscribe("droppedIntoFolder",function(data){
+    var targetId = Grid.remove(data.target);
+      Storage.editElement(targetId,function(elem){
+        elem.parentId = data.folder.getAttribute("data-id");
+        return elem;
+  });
+});
+
   Pubsub.subscribe("editShortcut", function (target) {
     Modal.ShowShortcutModal(
       function (enteredData) {
@@ -108,10 +118,6 @@ export var Main = (function () {
 
   Pubsub.subscribe("addedShortcutToGrid", function (target) {
     Menu.addListenedItems(target, ["delete", "editShortcut", "move"]);
-   /* target.onmousedown = function (e){
-    
-    }*/
-    
   });
 
   Pubsub.subscribe("addedFolderToGrid", function (target) {

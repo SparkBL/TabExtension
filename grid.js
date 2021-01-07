@@ -67,7 +67,7 @@ export var Grid = (function () {
     itemClass: "item",
   });
 
-  Pubsub.subscribe("GeneratedThumbnail",function(data){
+  Pubsub.subscribe("generatedThumbnail",function(data){
     var id = data["id"];
     var dataString = data["dataString"];
     var viewObj = thumbnailQueue.find(x => x.id === id);
@@ -85,7 +85,7 @@ export var Grid = (function () {
     } else if (viewType === "thumbnail"){
       
       thumbnailQueue.push({id:id,viewDiv:viewDiv});
-      Pubsub.publish("GenerateThumbnail",{id:id,url:url});     
+      Pubsub.publish("generateThumbnail",{id:id,url:url});     
     }
   }
 
@@ -145,7 +145,7 @@ export var Grid = (function () {
         }/*x =>x.getElement().getAttribute("data-type")==="folder" && item.getElement().getAttribute("data-id")!== x.getElement().getAttribute("data-id") && collide(item.getElement(),x.getElement())*/);
         if (collidedFolder){
           collidedFolder = collidedFolder.getElement();
-        console.log(collidedFolder);
+       // console.log(collidedFolder);
         collidedFolder.firstChild.classList.add("active-drop");
         item.getElement().firstChild.classList.add("active-dropping");
         }
@@ -165,6 +165,7 @@ export var Grid = (function () {
       if(collidedFolder){
         collidedFolder.firstChild.classList.remove("active-drop");
         item.getElement().firstChild.classList.remove("active-dropping");
+        Pubsub.publish("droppedIntoFolder",{target:item.getElement(),folder:collidedFolder});
         collidedFolder = null;
       console.log("Dropped into folder");
       //time = e.deltaTime;
