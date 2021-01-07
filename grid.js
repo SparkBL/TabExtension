@@ -6,7 +6,7 @@ export var Grid = (function () {
   const gridElement = document.querySelector(".grid");
   const templateContainer = document.getElementById("template");
   var time,posX,posY;
-  const collideCoeff = 0.3;
+  const collideCoeff = 0.1;
   var collidedFolder;
   const types = ["shortcut", "folder"];
   var currentSize = 1;
@@ -118,7 +118,7 @@ export var Grid = (function () {
 
     grid.sort(newItems, { layout: "instant" });
   }
-
+// COLLIDE MECHANISM BEGIN
    function collide (el1, el2) {
     var rect1 = el1.getBoundingClientRect();
     var rect2 = el2.getBoundingClientRect();
@@ -133,29 +133,47 @@ export var Grid = (function () {
 
 
   grid.on('dragMove', function (item, e) {
-   // console.log(e.deltaTime);
       if(Math.abs(e.clientX-posX)<20 && Math.abs(e.clientY-posY)<20){
       if (e.deltaTime-time>1000){
         console.log("Waiting....");
-        collidedFolder = grid.getItems().find(x =>x.getElement().getAttribute("data-type")==="folder" && item.getElement().getAttribute("data-id")!== x.getElement().getAttribute("data-id") && collide(item.getElement(),x.getElement()));
+        collidedFolder = grid.getItems().find(function(x){
+          var xElem = x.getElement();
+          var itemElem = item.getElement();
+          return xElem.getAttribute("data-type")==="folder" &&
+          itemElem.getAttribute("data-id")!== xElem.getAttribute("data-id") &&
+          collide(itemElem,xElem);
+        }/*x =>x.getElement().getAttribute("data-type")==="folder" && item.getElement().getAttribute("data-id")!== x.getElement().getAttribute("data-id") && collide(item.getElement(),x.getElement())*/);
         if (collidedFolder){
           collidedFolder = collidedFolder.getElement();
         console.log(collidedFolder);
-        collidedFolder.firstChild.style.backgroundColor = "orange";
+        collidedFolder.firstChild.classList.add("active-drop");
+        item.getElement().firstChild.classList.add("active-dropping");
         }
       }
     } else {
-      if (collidedFolder)
-      collidedFolder.firstChild.style.backgroundColor = "blue";
+      if (collidedFolder){
+        collidedFolder.firstChild.classList.remove("active-drop");
+        item.getElement().firstChild.classList.remove("active-dropping");
+      }
+      
       time = e.deltaTime;
       posX = e.clientX;
       posY = e.clientY;
       
     }
+    grid.on("dragEnd",function(item,e){
+      if(collidedFolder){
+        collidedFolder.firstChild.classList.remove("active-drop");
+        item.getElement().firstChild.classList.remove("active-dropping");
+        collidedFolder = null;
+      console.log("Dropped into folder");
+      //time = e.deltaTime;
+      }
       
+    })
       
   });
-
+//    COLLIDE MECHANISM END
  
 
   function buildShortcut(id, url, name, parent) {

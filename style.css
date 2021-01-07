@@ -343,10 +343,18 @@ iframe {
   cursor: pointer;
 }
 
-.item[data-type="shortcut"] .item-content {
-  background-size: cover !important;
+.item[data-type="folder"] .item-content.active-drop {
+  transform: scale(1.1) !important;
 }
 
+.item .item-content.active-dropping {
+  transform: scale(0.9) !important;
+}
+
+/*.item[data-type="shortcut"] .item-content {
+   !important;
+}
+*/
 .item.muuri-item-shown .item-content:hover {
   transition: all 0.35s ease-out;
   color: var(--hover-color);
@@ -404,6 +412,7 @@ iframe {
 
 .item[data-type="shortcut"] .item-content {
   background: var(--grid-shortcut-bg);
+  background-size: cover;
 }
 
 .item[data-type="folder"] .item-content {
