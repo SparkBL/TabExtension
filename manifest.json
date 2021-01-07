@@ -11,7 +11,6 @@
     "tabs",
     "chrome://favicon/",
     "<all_urls>",
-    "webRequest", "webRequestBlocking",
     "unlimitedStorage"
   ],
   "background": {

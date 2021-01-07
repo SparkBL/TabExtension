@@ -86,7 +86,8 @@ function  sync (callback) {
           sync(callback);
         },
         removeThumbnail: function(id){
-delete shortcutThumbnails[id];
+          delete shortcutThumbnails[id];
+          commit();
         },
     }
 
