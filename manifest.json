@@ -14,11 +14,11 @@
     "unlimitedStorage"
   ],
   "background": {
-    "scripts":["thumbfetcher.js","core.js"],
+    "scripts":["thumbfetcher.js","core.js","pubsub.js"],
     "persistent": true
   },
   "options_page": "options.html",
-  "page_action": {
+  "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
       "128": "icons/main.png"

@@ -30,10 +30,6 @@ function  sync (callback) {
   );
 }
 
-
-
-
-
     function fetchImage(url,callback){
         chrome.windows.create({type:"popup",url:url,focused:false,state:"normal"}, function(window){
             openedWindows.push(window.id);

@@ -47,8 +47,8 @@ export var Grid = (function () {
     },
     dragSortPredicate: function (item, e) {
       return Muuri.ItemDrag.defaultSortPredicate(item, {
-        action: 'swap',
-        threshold: 83,
+        action: 'move',
+        threshold: 80,
       });
     },
     dragPlaceholder: {

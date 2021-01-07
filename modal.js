@@ -123,6 +123,9 @@ export var Modal = (function () {
     autocomplete(inurl, autocompletionUrls);
     inurl.setAttribute("type", "text");
     inurl.setAttribute("name", "url");
+    /*inurl.min="1";
+    inurl.setCustomValidity("Please, specify URL for shortcut");
+  */
     inurl.setAttribute("class", "input-modal");
     //inurl.defaultValue = "https://";
     inurl.oninput = function (e) {};
