@@ -130,7 +130,10 @@ form label {
 }
 
 .section-title {
-  padding: 3rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 2rem;
+  padding-left: 2rem;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
