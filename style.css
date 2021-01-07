@@ -675,12 +675,13 @@ form label {
 }
 
 .autocomplete-items div {
-  padding: 2rem;
+  padding: 1.5rem;
   cursor: pointer;
   border: none;
   overflow: hidden;
   border-radius: 2rem;
   text-overflow: ellipsis;
+  font-size: 2rem;
   white-space: nowrap;
 }
 
