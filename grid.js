@@ -180,8 +180,7 @@ export var Grid = (function () {
 
   function buildShortcut(id, url, name, parent) {
     var span = document.createElement("div");
-    if (!name) span.innerHTML = url;
-    else span.innerHTML = name;
+    span.innerHTML = name;
     span.setAttribute("class","shortcut-title");
     var viewDiv = document.createElement("div");
     setIcon(id,viewDiv,url);
@@ -284,8 +283,7 @@ export var Grid = (function () {
       grid.getItems().forEach(function (item) {
         var el = item.getElement();
         if (el.getAttribute("data-id") == id) {
-          if (name) el.querySelector("div").lastChild.innerHTML = name;
-          else el.querySelector("div").lastChild.innerHTML = url;
+           el.querySelector("div").lastChild.innerHTML = name;
           el.setAttribute("data-url", url);
           el.setAttribute("data-name", name);
           setIcon(id,el.querySelector("div"),url);

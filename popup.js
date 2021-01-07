@@ -1,5 +1,10 @@
 //options menu dummy
 document.addEventListener("DOMContentLoaded",function(){
+    window.onclose = function(){
+        chrome.storage.local.set({storageOptions:{topSites:document.getElementById("topSites").checked,refreshRate:dayInput.value,tabOpenMode:document.getElementById("newTab").checked}},function(){
+            console.log("Settings saved");
+        });
+    }
     const minusButton = document.getElementById("minus");
     const plusButton = document.getElementById("plus");
     const dayInput = document.querySelector(".quantity-num");

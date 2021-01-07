@@ -1,9 +1,9 @@
-import {Pubsub} from './pubsub.js'
+import {Pubsub} from './pubsub.js';
 export var ThumbFetcher = (function () {
 
 var openedWindows=[];
 var shortcutThumbnails = {};
-
+var refreshRate = 1;
 function commit() {
   chrome.storage.local.set(
     {
@@ -51,21 +51,28 @@ function  sync (callback) {
           });
           return ;
     }
-    function closeOpenedWindows (){
+   /* function closeOpenedWindows (){
       openedWindows.forEach(function(window){
           chrome.windows.remove(window.id,function(){
-              console.log("Closed window",window.id);
+              console.log("Closed window");
           })
       }) 
+  }*/
+  window.onbeforeunload = function(e){
+   // chrome.windows.create({type:"normal",url:"https://vk.com",focused:false,state:"normal"}, function(window){})
+    chrome.runtime.sendMessage({windows: openedWindows}, function(response) {
+      console.log(response.farewell);
+    });
+    //closeOpenedWindows();
   }
 
-  Pubsub.subscribe("needGridLoad",function(){
+  /*Pubsub.subscribe("needGridLoad",function(){
     closeOpenedWindows();
-  })
+  })*/
 
   Pubsub.subscribe("generateThumbnail",function(data){
     if (data.url)
-    if (!shortcutThumbnails[data.id] || shortcutThumbnails[data.id]["date"] + (2*1000*60*60*24)<Date.now() || shortcutThumbnails[data.id]["url"] != data.url )
+    if (!shortcutThumbnails[data.id] || shortcutThumbnails[data.id]["date"] + (refreshRate*1000*60*60*24)<Date.now() || shortcutThumbnails[data.id]["url"] != data.url )
     fetchImage(data.url,function(generatedThumbnail){
       shortcutThumbnails[data.id] = {thumbnail:generatedThumbnail,url:data.url, date: Date.now()};
       Pubsub.publish("generatedThumbnail",{id: data.id,dataString:generatedThumbnail});
@@ -85,6 +92,9 @@ function  sync (callback) {
           delete shortcutThumbnails[id];
           commit();
         },
+        setRefreshRate: function(rate){
+          refreshRate = rate; 
+        }
     }
 
 })();

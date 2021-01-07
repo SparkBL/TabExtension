@@ -10,6 +10,23 @@
     />
   </head>
   <body>
+    <div class="settings-button"><svg version="1.1"  fill="currentColor" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+      viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+       <path  d="M491.584,192.576l-55.918-6.914c-0.919-2.351-1.884-4.681-2.892-6.991l34.648-44.429
+         c7.227-9.266,6.412-22.464-1.901-30.773l-57.028-56.996c-8.31-8.304-21.501-9.114-30.762-1.891l-44.414,34.633
+         c-2.31-1.01-4.642-1.975-6.994-2.895l-6.915-55.903C317.966,8.755,308.061,0,296.311,0h-80.635
+         c-11.748,0-21.655,8.758-23.097,20.416l-6.912,55.904c-2.351,0.92-4.682,1.884-6.988,2.892l-44.417-34.641
+         c-9.266-7.225-22.46-6.414-30.768,1.893l-57.021,57.009c-8.308,8.307-9.123,21.506-1.896,30.771l34.644,44.417
+         c-1.01,2.312-1.977,4.647-2.898,7.002l-55.906,6.915C8.757,194.02,0,203.925,0,215.675v80.64c0,11.751,8.758,21.658,20.421,23.099
+         l55.9,6.901c0.92,2.354,1.885,4.686,2.894,6.994l-34.639,44.42c-7.224,9.264-6.412,22.46,1.894,30.766l57.021,57.031
+         c8.307,8.308,21.507,9.123,30.771,1.896l44.418-34.648c2.306,1.007,4.636,1.972,6.985,2.889l6.914,55.921
+         C194.02,503.245,203.926,512,215.676,512h80.637c11.748,0,21.654-8.755,23.097-20.415l6.915-55.921
+         c2.352-0.919,4.684-1.884,6.993-2.892l44.424,34.65c9.269,7.227,22.463,6.412,30.773-1.897l57.015-57.031
+         c8.305-8.307,9.117-21.504,1.891-30.767l-34.639-44.409c1.01-2.313,1.977-4.648,2.897-7.004l55.9-6.903
+         C503.242,317.971,512,308.066,512,296.313v-80.64C512,203.925,503.243,194.019,491.584,192.576z M255.997,310.301
+         c-29.941,0-54.3-24.354-54.3-54.294c0-29.946,24.359-54.309,54.3-54.309c29.944,0,54.306,24.363,54.306,54.309
+         C310.303,285.947,285.941,310.301,255.997,310.301z"/>
+   </svg></div>
     <div class="drag-container"></div>
     <h1 class="section-title"><span>Tabs by Team2</span></h1>
     <div>
@@ -127,8 +144,30 @@
 	C512,113.86,500.54,102.4,486.4,102.4z M486.4,435.2H25.6V76.8h153.6L256,128h230.4V435.2z"
         />
       </svg>
-     
-
+      <div class="settings-container">
+        <div class="settings-item">Show Top Sites
+         <input type="checkbox" id="topSites"/>
+   <label for="topSites" class="toggle">
+     <div class="slider"></div>
+   </label>
+        </div>
+        <div class="settings-item">Open in new tab
+         <input type="checkbox" id="newTab"/>
+         <label for="newTab" class="toggle">
+           <div class="slider"></div>
+         </label>
+        </div>
+        <div class="settings-item">Thumbnail refresh rate
+         <div class="quantity-block">
+           <button id = "minus" class="quantity-arrow">-</button>
+           <input id="refreshRate" class="quantity-num" type="number" min="1" max="99" value="1" readonly />
+           <button id="plus" class="quantity-arrow">+</button>
+         </div>
+        </div>
+        <div class="settings-item">Main color</div>
+   
+      </div>
+      </template>
       
     
  <!--  <iframe  scrolling="no" id="iframe1" width="500 px" height="500 px" src="https://www.google.com" frameborder="0" sandbox="allow-same-origin" ></iframe>-->

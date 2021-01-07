@@ -10,6 +10,7 @@ export var Main = (function () {
   const backButton = document.getElementById("backButton");
   const sizeSelector = document.querySelector("#sizeSelector");
   const viewSelector = document.querySelector("#viewSelector");
+  const settingsButton = document.querySelector(".settings-button");
   Menu.addOption("delete", "Delete Item", function (target) {
     Pubsub.publish("delete", target);
   });
@@ -41,6 +42,14 @@ export var Main = (function () {
       Pubsub.publish("needGridLoad",true);
     }
   });
+
+  settingsButton.addEventListener("click",function(e){
+    Modal.ShowSettingsModal(function(data){
+      Storage.setSettings(data);
+      Pubsub.publish("NeedGridLoad",true);
+    },Storage.getSettings());
+  }
+);
   Menu.addListenedItems(addButton, ["createShortcut", "createFolder"]);
 
   sizeSelector.addEventListener("change", function (ev) {
@@ -163,9 +172,12 @@ export var Main = (function () {
 
   Pubsub.subscribe("needGridLoad", function (instantRemove) {
     Grid.clear(instantRemove);
+    var setts = Storage.getSettings();
     var dirContent = Storage.getCurrentChildren();
     Grid.setItemSize(Storage.getCurrentElementSize());
     Grid.setViewType(Storage.getCurrentViewType());
+    ThumbFetcher.setRefreshRate(setts.refreshRate);
+    Grid.setTabOpenMode(setts.tabOpenMode);
     dirContent.forEach(function (item) {
       if (item.type === "folder") {
         Pubsub.publish(
@@ -195,7 +207,6 @@ export var Main = (function () {
           Pubsub.publish("needGridLoad");
           sizeSelector.value = Storage.getCurrentElementSize();
           viewSelector.value = Storage.getCurrentViewType();
-          var a = Storage.buildHierarchy();
         })
         
       });

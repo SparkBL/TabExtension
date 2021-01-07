@@ -14,7 +14,7 @@
     "unlimitedStorage"
   ],
   "background": {
-    "scripts":["thumbfetcher.js","core.js","pubsub.js"],
+    "page":"background.html",
     "persistent": true
   },
   "options_page": "options.html",

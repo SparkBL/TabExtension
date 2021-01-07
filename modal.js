@@ -4,6 +4,7 @@ export var Modal = (function () {
   var body = document.querySelector(".modal-body");
   var close = document.querySelector(".close");
   var autocompletionUrls;
+  const templateContainer = document.getElementById("template");
   chrome.history.search({ text: "", maxResults: 100 }, function (data) {
     var urls = [];
     data.forEach(function (page) {
@@ -263,6 +264,58 @@ export var Modal = (function () {
     return f;
   }
 
+  function buildSettingsForm(settings){
+    var f = document.createElement("form");
+    var title = document.createElement("h1");
+    title.className = "title-modal";
+    title.textContent = "Settings";
+    f.appendChild(title);
+    f.appendChild(document.importNode(templateContainer.content.children[1], true));
+    var minusButton = f.querySelector("#minus");
+    var plusButton = f.querySelector("#plus");
+    var dayInput = f.querySelector("#refreshRate");
+    f.querySelector("#topSites").checked = settings.topSites;
+    f.querySelector("#newTab").checked = settings.tabOpenMode;
+    dayInput.value = settings.refreshRate;
+    
+    var timeout, interval;
+    function clearTimers() {
+        clearTimeout(timeout);
+        clearInterval(interval);
+      }
+    plusButton.addEventListener('mousedown', function() {
+        if(dayInput.value<99)
+        dayInput.value++;
+        timeout = setTimeout(function() {
+          interval = setInterval(function() {
+            if(dayInput.value<99)
+        dayInput.value++;
+          }, 100);    
+        }, 300);
+    });
+    plusButton.addEventListener('mouseup', clearTimers);
+    plusButton.addEventListener('mouseleave', clearTimers); 
+    minusButton.addEventListener('mousedown', function() {
+        if(dayInput.value>1)
+        dayInput.value--;
+        timeout = setTimeout(function() {
+          interval = setInterval(function() {
+            if(dayInput.value>1)
+        dayInput.value--;
+          }, 100);    
+        }, 300);
+    });
+    minusButton.addEventListener('mouseup', clearTimers);
+    minusButton.addEventListener('mouseleave', clearTimers); 
+    var s = document.createElement("button");
+    s.setAttribute("type", "submit");
+    s.setAttribute("class", "button-modal");
+
+    s.innerHTML = "Save";
+    f.appendChild(s);
+    return f;
+  }
+
   return {
     ShowShortcutModal: function (callback, name, url, edit) {
       var form = buildShortcutForm(name, url, edit);
@@ -306,6 +359,24 @@ export var Modal = (function () {
         if (callback && typeof callback == "function") {
           var enteredData = {
            newParentId: form.getAttribute("data-active")
+          };
+          console.log("calling callback");
+          callback(enteredData);
+          hideModal();
+        }
+      });
+      showModal();
+    },
+    ShowSettingsModal: function (callback,settings) {
+      var form = buildSettingsForm(settings);
+      body.appendChild(form);
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (callback && typeof callback == "function") {
+          var enteredData = {
+           topSites: form.querySelector("#topSites").checked,
+           tabOpenMode:form.querySelector("#newTab").checked,
+           refreshRate:form.querySelector("#refreshRate").value,
           };
           console.log("calling callback");
           callback(enteredData);

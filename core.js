@@ -1,3 +1,5 @@
+import { Pubsub } from "./pubsub.js";
+
 export var Storage = (function () {
   //Dir routing
   var currentElements = [];
@@ -5,7 +7,12 @@ export var Storage = (function () {
   var currentParent = "root";
   var currentElementSize = 2;
   var currentViewType = "icon";
-
+  var settings = {
+    tabOpenMode:true ,
+    refreshRate:1,
+    topSites:false
+  }
+  
   //Commit change into chrome storage
   function commit() {
     chrome.storage.local.set(
@@ -14,12 +21,14 @@ export var Storage = (function () {
         storageLayouts: currentLayouts,
         elementSize: currentElementSize,
         viewType: currentViewType,
+        storageSettings: settings,
       },
       function () {
         console.log("Saved elements in storage: ", currentElements);
         console.log("Saved layouts in storage: ", currentLayouts);
         console.log("Saved element size in storage: ", currentElementSize);
         console.log("Saved view type in storage: ", currentViewType);
+        console.log("Saved options in storage: ", settings);
       }
     );
   }
@@ -49,6 +58,12 @@ export var Storage = (function () {
   function getChildren(parentId){
     return currentElements.filter((x) => x.parentId === parentId);
   }
+
+  Pubsub.subscribe("updateOptions",function(opts){
+    options = opts;
+    commit(true);
+    Pubsub.publish("needGridLoad");
+  })
   return {
     //Add builded tabelement into currentStorage and commit immediately
     addElements: function (elements) {
@@ -62,7 +77,7 @@ export var Storage = (function () {
     //Synchronize all objects from chrome storage to local one. ASYNC - needs callback
     sync: function (callback) {
       chrome.storage.local.get(
-        ["storageElements", "storageLayouts", "elementSize","viewType"],
+        ["storageElements", "storageLayouts", "elementSize","viewType","storageSettings"],
         function (result) {
           if (result.storageElements) {
             currentElements = result.storageElements;
@@ -92,6 +107,13 @@ export var Storage = (function () {
               result.viewType
             );
           } else console.log("Failed to get view type from storage!");
+          if (result.storageSettings) {
+            settings = result.storageSettings;
+            console.log(
+              "Synced settings with storage: \n",
+              result.storageSettings
+            );
+          } else console.log("Failed to fet settings from storage!");
           if (callback && typeof callback == "function") callback();
         }
       );
@@ -223,6 +245,14 @@ export var Storage = (function () {
       commit();
     }
     },
+    getSettings: function(){
+      return settings;
+    },
+    setSettings: function(setts){
+      settings = setts;
+      commit();
+    }
+    ,
     buildHierarchy: function(exceptions){
       var except = currentElements.filter(x=> [].concat(exceptions || []).includes(x.id));
       var store = [];

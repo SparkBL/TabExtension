@@ -44,6 +44,5 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
 document.addEventListener("DOMContentLoaded", function () {
   
   import("./main.js").then(module => {module.Main.init()}) 
-  //Main.init();
 });
 
