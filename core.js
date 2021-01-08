@@ -3,16 +3,16 @@ export var Storage = (function () {
   var currentElements = [];
   var topSites = [];
   var topSitesStore = [];
-  var currentLayouts = {};
+  var currentLayouts = { root: ["topSites"] };
   var currentParent = "root";
   var currentElementSize = 2;
   var currentViewType = "icon";
   var settings = {
-    tabOpenMode:true ,
-    refreshRate:1,
-    topSites:false
-  }
-  
+    tabOpenMode: true,
+    refreshRate: 1,
+    topSites: false,
+  };
+
   //Commit change into chrome storage
   function commit() {
     chrome.storage.local.set(
@@ -34,7 +34,10 @@ export var Storage = (function () {
   }
 
   function list_to_tree(list) {
-    var map = {}, node, roots = [], i;
+    var map = {},
+      node,
+      roots = [],
+      i;
     for (i = 0; i < list.length; i += 1) {
       map[list[i].id] = i; // initialize the map
       list[i].children = []; // initialize the children
@@ -55,25 +58,37 @@ export var Storage = (function () {
     return "id" + Math.random().toString(16).slice(2);
   }
 
-  function getChildren(parentId){
-    return [].concat(currentElements,topSites).filter((x) => x.parentId === parentId);
+  function getChildren(parentId) {
+    return []
+      .concat(currentElements, topSites)
+      .filter((x) => x.parentId === parentId);
   }
 
-  
   return {
     //Add builded tabelement into currentStorage and commit immediately
     addElements: function (elements) {
       var elements = [].concat(elements || []);
       currentElements = currentElements.concat(elements);
-    currentLayouts[currentParent] = [].concat((currentLayouts[currentParent] || []),elements.map(function(item){return item.id}));
-    commit();
+      currentLayouts[currentParent] = [].concat(
+        currentLayouts[currentParent] || [],
+        elements.map(function (item) {
+          return item.id;
+        })
+      );
+      commit();
       return elements;
     },
 
     //Synchronize all objects from chrome storage to local one. ASYNC - needs callback
     sync: function (callback) {
       chrome.storage.local.get(
-        ["storageElements", "storageLayouts", "elementSize","viewType","storageSettings"],
+        [
+          "storageElements",
+          "storageLayouts",
+          "elementSize",
+          "viewType",
+          "storageSettings",
+        ],
         function (result) {
           if (result.storageElements) {
             currentElements = result.storageElements;
@@ -98,10 +113,7 @@ export var Storage = (function () {
           } else console.log("Failed to get layouts from storage!");
           if (result.viewType) {
             currentViewType = result.viewType;
-            console.log(
-              "Synced view type with storage: \n",
-              result.viewType
-            );
+            console.log("Synced view type with storage: \n", result.viewType);
           } else console.log("Failed to get view type from storage!");
           if (result.storageSettings) {
             settings = result.storageSettings;
@@ -110,30 +122,44 @@ export var Storage = (function () {
               result.storageSettings
             );
           } else console.log("Failed to fet settings from storage!");
-          chrome.topSites.get(function(sites){
-            topSitesStore.push({id:"topSites",name:"Most Visited",parentId:"root",type:"folder"});
-            sites.forEach(function(site){
-              topSitesStore.push({id:site.title,name:site.title,parentId:"topSites",type:"shortcut",url:site.url});
-            })
-            if(!currentLayouts["root"].includes("topSites"))currentLayouts["root"] = [].concat("topSites",(currentLayouts["root"] || [] ));
-            currentLayouts["topSites"] = topSitesStore.map(function(item){return item.id});
-            console.log("Loaded top sites :",topSites)
-            if(!settings.topSites)topSites = []; else topSites = topSitesStore;
+          chrome.topSites.get(function (sites) {
+            topSitesStore.push({
+              id: "topSites",
+              name: "Most Visited",
+              parentId: "root",
+              type: "folder",
+            });
+            sites.forEach(function (site) {
+              topSitesStore.push({
+                id: site.title,
+                name: site.title,
+                parentId: "topSites",
+                type: "shortcut",
+                url: site.url,
+              });
+            });
+            currentLayouts["topSites"] = topSitesStore.map(function (item) {
+              return item.id;
+            });
+            console.log("Loaded top sites :", topSites);
+            if (!settings.topSites) topSites = [];
+            else topSites = topSitesStore;
             if (callback && typeof callback == "function") callback();
           });
-     
         }
       );
     },
 
     //Return current local storage tab elements
     getElements: function () {
-      return [].concat(currentElements,topSites);
+      return [].concat(currentElements, topSites);
     },
 
     //Return all items with provided parentId
     getElementsByParentId: function (parentId) {
-      return [].concat(currentElements,topSites).filter((x) => x.parentId === parentId);
+      return []
+        .concat(currentElements, topSites)
+        .filter((x) => x.parentId === parentId);
     },
 
     //Change current scope of elements
@@ -143,8 +169,9 @@ export var Storage = (function () {
 
     //Change scope to one, that's higher in hierarchy
     setPreviousParent: function () {
-      currentParent = [].concat(currentElements,topSites).find((x) => x.id === currentParent)
-        .parentId;
+      currentParent = []
+        .concat(currentElements, topSites)
+        .find((x) => x.id === currentParent).parentId;
     },
 
     //Is current dir the root dir?
@@ -159,9 +186,11 @@ export var Storage = (function () {
 
     //Get current parent tab element
     getCurrentParent: function () {
-      var elem = [].concat(currentElements,topSites).find((x) => x.id === currentParent);
+      var elem = []
+        .concat(currentElements, topSites)
+        .find((x) => x.id === currentParent);
       if (elem) return elem;
-      else return { id:"root" ,name: "Home page" };
+      else return { id: "root", name: "Home page" };
     },
 
     //Replaces editing element with one, which was returned from callback function. Commit immediately.
@@ -176,9 +205,14 @@ export var Storage = (function () {
         var edited = callback(toEdit);
 
         currentElements.push(edited);
-        if (par != edited.parentId){
-          currentLayouts[edited.parentId] = [].concat(currentLayouts[edited.parentId] || [],edited.id);
-          currentLayouts[par] = currentLayouts[par].filter(x => x!== edited.id);
+        if (par != edited.parentId) {
+          currentLayouts[edited.parentId] = [].concat(
+            currentLayouts[edited.parentId] || [],
+            edited.id
+          );
+          currentLayouts[par] = currentLayouts[par].filter(
+            (x) => x !== edited.id
+          );
         }
         commit();
       }
@@ -226,9 +260,14 @@ export var Storage = (function () {
 
     //Store provided grid layout for current dir. Commit immediately.
     saveGridLayout: function (data) {
-      if(currentParent!=="topSites"){
-      currentLayouts[currentParent] = data;
-      commit();
+      if (currentParent !== "topSites") {
+        currentLayouts[currentParent] = data;
+        if (!currentLayouts["root"].includes("topSites"))
+          currentLayouts["root"] = [].concat(
+            "topSites",
+            currentLayouts["root"] || []
+          );
+        commit();
       }
     },
 
@@ -248,41 +287,44 @@ export var Storage = (function () {
       return currentViewType;
     },
     setViewType: function (type) {
-    if (type === "icon" || type === "thumbnail")
-    {
-      currentViewType = type;
-      commit();
-    }
+      if (type === "icon" || type === "thumbnail") {
+        currentViewType = type;
+        commit();
+      }
     },
-    getSettings: function(){
+    getSettings: function () {
       return settings;
     },
-    setSettings: function(setts){
+    setSettings: function (setts) {
       settings = setts;
-      if (!settings.topSites) topSites = []; else topSites = topSitesStore;
+      if (!settings.topSites) topSites = [];
+      else topSites = topSitesStore;
       commit(true);
-    }
-    ,
-    buildHierarchy: function(exceptions){
-      var except = currentElements.filter(x=> [].concat(exceptions || []).includes(x.id));
+    },
+    buildHierarchy: function (exceptions) {
+      var except = currentElements.filter((x) =>
+        [].concat(exceptions || []).includes(x.id)
+      );
       var store = [];
-      function iterate(es){
-        es.forEach(element => {
+      function iterate(es) {
+        es.forEach((element) => {
           store.push(element.id);
           iterate(getChildren(element.id));
         });
       }
       iterate(except);
-      var folders = currentElements.filter(x => x.type === "folder" && !store.includes(x.id)) ;
+      var folders = currentElements.filter(
+        (x) => x.type === "folder" && !store.includes(x.id)
+      );
       var tree = list_to_tree(folders);
-      tree = [{name:"Home page",id:"root",children:tree}];
+      tree = [{ name: "Home page", id: "root", children: tree }];
       return tree;
     },
-    isInTopSites:  function(){return currentParent === "topSites"},
-    isTopSitesItem: function(id){return currentLayouts["topSites"].includes(id);},
+    isInTopSites: function () {
+      return currentParent === "topSites";
+    },
+    isTopSitesItem: function (id) {
+      return currentLayouts["topSites"].includes(id);
+    },
   };
 })();
-
-
-
-

@@ -1,4 +1,3 @@
-
 chrome.storage.onChanged.addListener(function (changes, namespace) {
   for (var key in changes) {
     var storageChange = changes[key];
@@ -12,12 +11,6 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
     );
   }
 });
-
-
-
-
-
-
 
 /*chrome.windows.create({type:"popup",url:"https://youtube.com",focused:false,state:"normal"}, function(window){
   console.log("Window created",window.tabs);
@@ -38,11 +31,26 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
 
 */
 
-
-
-
 document.addEventListener("DOMContentLoaded", function () {
-  
-  import("./main.js").then(module => {module.Main.init()}) 
-});
+  import("./main.js").then((module) => {
+    module.Main.init();
+  });
+  /*chrome.windows.onFocusChanged.addListener(function (id) {
+    console.log("focus changed to", id);
+  });
+  chrome.windows.create(
+    {
+      // focused: true,
+      state: "minimized",
+      type: "popup",
+      //url: url,
 
+      //  left: -4000,
+      setSelfAsOpener: false,
+    },
+    function (window) {
+      //  window.minimize();
+      console.log(chrome.windows.WINDOW_ID_CURRENT);
+    }
+  );*/
+});
