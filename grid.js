@@ -6,10 +6,10 @@ export var Grid = (function () {
   const gridElement = document.querySelector(".grid");
   const templateContainer = document.getElementById("template");
   var backdrop;
-  var time,posX,posY;
+  var time, posX, posY;
   const collideCoeff = 0.1;
   var collidedFolder;
-  const types = ["shortcut", "folder","backdrop"];
+  const types = ["shortcut", "folder", "backdrop"];
   var currentSize = 1;
   var tabOpenMode = "_blank";
   var viewType = "icon";
@@ -33,7 +33,7 @@ export var Grid = (function () {
       fillGaps: true,
     },
     dragEnabled: true,
-   /* dragSortHeuristics: {
+    /* dragSortHeuristics: {
       sortInterval: 3600000, // 1 hour
     },*/
     dragContainer: dragContainer,
@@ -48,7 +48,7 @@ export var Grid = (function () {
     },
     dragSortPredicate: function (item, e) {
       return Muuri.ItemDrag.defaultSortPredicate(item, {
-        action: 'move',
+        action: "move",
         threshold: 80,
       });
     },
@@ -68,30 +68,30 @@ export var Grid = (function () {
     itemClass: "item",
   });
 
-  Pubsub.subscribe("generatedThumbnail",function(data){
+  Pubsub.subscribe("generatedThumbnail", function (data) {
     var id = data["id"];
     var dataString = data["dataString"];
-    var viewObj = thumbnailQueue.find(x => x.id === id);
+    var viewObj = thumbnailQueue.find((x) => x.id === id);
     viewObj.viewDiv.style.backgroundImage = "url(" + dataString + ")";
-    thumbnailQueue.splice(thumbnailQueue.findIndex(x => x.id === viewObj.id),1);
-  })
+    thumbnailQueue.splice(
+      thumbnailQueue.findIndex((x) => x.id === viewObj.id),
+      1
+    );
+  });
 
-  function setIcon(id,viewDiv,url) {
-    if (url){
-    if (viewType === "icon") {
-      var i = document.createElement("img");
-      i.src = "chrome://favicon/" + url;
-      i.setAttribute("class", "favicon");
-      viewDiv.appendChild(i);
-    } else if (viewType === "thumbnail"){
-      
-      thumbnailQueue.push({id:id,viewDiv:viewDiv});
-      Pubsub.publish("generateThumbnail",{id:id,url:url});     
+  function setIcon(id, viewDiv, url) {
+    if (url) {
+      if (viewType === "icon") {
+        var i = document.createElement("img");
+        i.src = "chrome://favicon/" + url;
+        i.setAttribute("class", "favicon");
+        viewDiv.appendChild(i);
+      } else if (viewType === "thumbnail") {
+        thumbnailQueue.push({ id: id, viewDiv: viewDiv });
+        Pubsub.publish("generateThumbnail", { id: id, url: url });
+      }
     }
   }
-
-  
-}
 
   function serializeLayout() {
     var itemIds = grid.getItems().map(function (item) {
@@ -119,11 +119,11 @@ export var Grid = (function () {
 
     grid.sort(newItems, { layout: "instant" });
   }
-// COLLIDE MECHANISM BEGIN
+  // COLLIDE MECHANISM BEGIN
 
-//add back drop
-function addBackDrop(){
-var img = document.importNode(templateContainer.content.children[2], true);
+  //add back drop
+  function addBackDrop() {
+    var img = document.importNode(templateContainer.content.children[2], true);
     var viewDiv = document.createElement("div");
     viewDiv.appendChild(img);
     viewDiv.setAttribute("class", "item-content");
@@ -139,38 +139,42 @@ var img = document.importNode(templateContainer.content.children[2], true);
     });
   }
 
-   function collide (el1, el2) {
+  function collide(el1, el2) {
     var rect1 = el1.getBoundingClientRect();
     var rect2 = el2.getBoundingClientRect();
 
     return !(
-      rect1.top > rect2.bottom - rect2.bottom*collideCoeff ||
-      rect1.right - rect1.right *collideCoeff < rect2.left ||
-     rect1.bottom  - rect1.bottom*collideCoeff< rect2.top ||
-     rect1.left > rect2.right - rect2.right *collideCoeff
+      rect1.top > rect2.bottom - rect2.bottom * collideCoeff ||
+      rect1.right - rect1.right * collideCoeff < rect2.left ||
+      rect1.bottom - rect1.bottom * collideCoeff < rect2.top ||
+      rect1.left > rect2.right - rect2.right * collideCoeff
     );
-   }
+  }
 
-
-  grid.on('dragMove', function (item, e) {
-      if(Math.abs(e.clientX-posX)<20 && Math.abs(e.clientY-posY)<20){
-      if (e.deltaTime-time>1000){
+  grid.on("dragMove", function (item, e) {
+    if (Math.abs(e.clientX - posX) < 20 && Math.abs(e.clientY - posY) < 20) {
+      if (e.deltaTime - time > 1000) {
         console.log("Waiting....");
         var itemElem = item.getElement();
-        collidedFolder = grid.getItems().find(function(x){
-          var xElem = x.getElement();
-          return xElem.getAttribute("data-type")==="folder" &&
-          itemElem.getAttribute("data-id")!== xElem.getAttribute("data-id") &&
-          collide(itemElem,xElem);
-        }/*x =>x.getElement().getAttribute("data-type")==="folder" && item.getElement().getAttribute("data-id")!== x.getElement().getAttribute("data-id") && collide(item.getElement(),x.getElement())*/);
-        if (collidedFolder){
+        collidedFolder = grid.getItems().find(
+          function (x) {
+            var xElem = x.getElement();
+            return (
+              xElem.getAttribute("data-type") === "folder" &&
+              itemElem.getAttribute("data-id") !==
+                xElem.getAttribute("data-id") &&
+              collide(itemElem, xElem)
+            );
+          } /*x =>x.getElement().getAttribute("data-type")==="folder" && item.getElement().getAttribute("data-id")!== x.getElement().getAttribute("data-id") && collide(item.getElement(),x.getElement())*/
+        );
+        if (collidedFolder) {
           collidedFolder = collidedFolder.getElement();
-        collidedFolder.firstChild.classList.add("active-drop");
-        itemElem.firstChild.classList.add("active-dropping");
+          collidedFolder.firstChild.classList.add("active-drop");
+          itemElem.firstChild.classList.add("active-dropping");
         }
       }
     } else {
-      if (collidedFolder){
+      if (collidedFolder) {
         collidedFolder.firstChild.classList.remove("active-drop");
         collidedFolder = null;
         item.getElement().firstChild.classList.remove("active-dropping");
@@ -178,37 +182,37 @@ var img = document.importNode(templateContainer.content.children[2], true);
       time = e.deltaTime;
       posX = e.clientX;
       posY = e.clientY;
-      
     }
-    grid.on("dragEnd",function(item,e){
-      if(collidedFolder){
+    grid.on("dragEnd", function (item, e) {
+      if (collidedFolder) {
         collidedFolder.firstChild.classList.remove("active-drop");
-        Pubsub.publish("droppedIntoFolder",{target:item.getElement(),folder:collidedFolder});
+        Pubsub.publish("droppedIntoFolder", {
+          target: item.getElement(),
+          folder: collidedFolder,
+        });
         collidedFolder = null;
-      console.log("Dropped into folder");
-      //time = e.deltaTime;
+        console.log("Dropped into folder");
+        //time = e.deltaTime;
       }
       item.getElement().firstChild.classList.remove("active-dropping");
-    })
-      
+    });
   });
-//    COLLIDE MECHANISM END
- 
+  //    COLLIDE MECHANISM END
 
   function buildShortcut(id, url, name, parent) {
     var span = document.createElement("div");
     span.innerHTML = name;
-    span.setAttribute("class","shortcut-title");
+    span.setAttribute("class", "shortcut-title");
     var viewDiv = document.createElement("div");
-    setIcon(id,viewDiv,url);
+    setIcon(id, viewDiv, url);
     viewDiv.appendChild(span);
     viewDiv.setAttribute("class", "item-content");
 
     var wrapper = document.createElement("div");
     wrapper.onclick = function (e) {
-      window.open(url, tabOpenMode, "noopener noreferrer");
+      if (url) window.open(url, tabOpenMode, "noopener noreferrer");
     };
-    setIcon(viewDiv,url);
+    setIcon(viewDiv, url);
     wrapper.setAttribute("class", "item");
     wrapper.appendChild(viewDiv);
     wrapper.setAttribute("data-id", id);
@@ -224,7 +228,7 @@ var img = document.importNode(templateContainer.content.children[2], true);
     var img = document.importNode(templateContainer.content.children[0], true);
     var span = document.createElement("div");
     span.innerHTML = name;
-    span.setAttribute("class","shortcut-title");
+    span.setAttribute("class", "shortcut-title");
     var viewDiv = document.createElement("div");
     viewDiv.appendChild(img);
     viewDiv.appendChild(span);
@@ -300,12 +304,12 @@ var img = document.importNode(templateContainer.content.children[2], true);
       grid.getItems().forEach(function (item) {
         var el = item.getElement();
         if (el.getAttribute("data-id") == id) {
-           el.querySelector("div").lastChild.innerHTML = name;
+          el.querySelector("div").lastChild.innerHTML = name;
           el.setAttribute("data-url", url);
           el.setAttribute("data-name", name);
-          setIcon(id,el.querySelector("div"),url);
+          setIcon(id, el.querySelector("div"), url);
           el.onclick = function (e) {
-            window.open(url, tabOpenMode, "noopener noreferrer");
+            if (url) window.open(url, tabOpenMode, "noopener noreferrer");
           };
           return;
         }
@@ -330,8 +334,7 @@ var img = document.importNode(templateContainer.content.children[2], true);
     },
 
     setViewType: function (type) {
-      if (type === "icon" || type === "thumbnail")
-      viewType = type;
+      if (type === "icon" || type === "thumbnail") viewType = type;
     },
   };
 })();

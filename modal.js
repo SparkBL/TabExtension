@@ -113,6 +113,7 @@ export var Modal = (function () {
     inname.setAttribute("class", "input-modal");
     inname.autocomplete = "off";
     inname.maxLength = 60;
+    // inname.placeholder = "Shortcut Name";
     if (name) inname.value = name;
     var namelabel = document.createElement("label");
 
@@ -171,6 +172,7 @@ export var Modal = (function () {
     inname.setAttribute("name", "name");
     inname.setAttribute("class", "input-modal");
     inname.autocomplete = "off";
+    // inname.placeholder = "Folder Name";
     inname.maxLength = 60;
     if (name) inname.value = name;
     var namelabel = document.createElement("label");
@@ -199,7 +201,7 @@ export var Modal = (function () {
     return f;
   }
 
-  function buildMoveForm(items,parent) {
+  function buildMoveForm(items, parent) {
     var f = document.createElement("form");
     var title = document.createElement("h1");
     title.className = "title-modal";
@@ -207,32 +209,34 @@ export var Modal = (function () {
     var selection = document.createElement("ul");
     selection.className = "hierarchy";
     selection.name = "dists";
-    function iterateOverChildren(itemsCh,nest){
+    function iterateOverChildren(itemsCh, nest) {
       itemsCh.forEach(function (item) {
         var li = document.createElement("li");
         var d = document.createElement("div");
         d.innerHTML = item.name;
-        d.setAttribute("data-id" ,item.id);
+        d.setAttribute("data-id", item.id);
         li.appendChild(d);
         nest.appendChild(li);
-        if (item.children.length != 0){
+        if (item.children.length != 0) {
           var spanCaret = document.createElement("span");
           spanCaret.className = "caret";
-          spanCaret.addEventListener("click", function() {
-            this.parentElement.parentElement.querySelector(".nested").classList.toggle("active");
+          spanCaret.addEventListener("click", function () {
+            this.parentElement.parentElement
+              .querySelector(".nested")
+              .classList.toggle("active");
             this.classList.toggle("caret-down");
           });
           d.prepend(spanCaret);
           var ul = document.createElement("ul");
-          ul.data
+          ul.data;
           ul.className = "nested";
           li.appendChild(ul);
-          iterateOverChildren(item.children,ul);
+          iterateOverChildren(item.children, ul);
         }
       });
     }
-    iterateOverChildren(items,selection);
-    
+    iterateOverChildren(items, selection);
+
     var label = document.createElement("label");
     label.innerHTML = "Select destination folder:";
     label.setAttribute("for", selection.name);
@@ -243,19 +247,26 @@ export var Modal = (function () {
 
     s.innerHTML = "Move";
     s.disabled = true;
-    selection.querySelector('[data-id=' + parent + ']').classList.add("current");
-    selection.addEventListener("click",function(e){
+    selection
+      .querySelector("[data-id=" + parent + "]")
+      .classList.add("current");
+    selection.addEventListener("click", function (e) {
       var divs = selection.querySelectorAll("div");
-      divs.forEach(function(item){
+      divs.forEach(function (item) {
         item.classList.remove("active");
-      })
-      if (e.target.closest("div").getAttribute("data-id") && e.target.closest("div").getAttribute("data-id")!=parent){
-      f.setAttribute("data-active",e.target.closest("div").getAttribute("data-id"));
-      e.target.closest("div").classList.add("active");
-      s.disabled = false;
-      }
-      else s.disabled = true;
-  });
+      });
+      if (
+        e.target.closest("div").getAttribute("data-id") &&
+        e.target.closest("div").getAttribute("data-id") != parent
+      ) {
+        f.setAttribute(
+          "data-active",
+          e.target.closest("div").getAttribute("data-id")
+        );
+        e.target.closest("div").classList.add("active");
+        s.disabled = false;
+      } else s.disabled = true;
+    });
 
     f.appendChild(title);
     f.appendChild(label);
@@ -265,49 +276,47 @@ export var Modal = (function () {
     return f;
   }
 
-  function buildSettingsForm(settings){
+  function buildSettingsForm(settings) {
     var f = document.createElement("form");
     var title = document.createElement("h1");
     title.className = "title-modal";
     title.textContent = "Settings";
     f.appendChild(title);
-    f.appendChild(document.importNode(templateContainer.content.children[1], true));
+    f.appendChild(
+      document.importNode(templateContainer.content.children[1], true)
+    );
     var minusButton = f.querySelector("#minus");
     var plusButton = f.querySelector("#plus");
     var dayInput = f.querySelector("#refreshRate");
     f.querySelector("#topSites").checked = settings.topSites;
     f.querySelector("#newTab").checked = settings.tabOpenMode;
     dayInput.value = settings.refreshRate;
-    
+
     var timeout, interval;
     function clearTimers() {
-        clearTimeout(timeout);
-        clearInterval(interval);
-      }
-    plusButton.addEventListener('mousedown', function() {
-        if(dayInput.value<99)
-        dayInput.value++;
-        timeout = setTimeout(function() {
-          interval = setInterval(function() {
-            if(dayInput.value<99)
-        dayInput.value++;
-          }, 100);    
-        }, 300);
+      clearTimeout(timeout);
+      clearInterval(interval);
+    }
+    plusButton.addEventListener("mousedown", function () {
+      if (dayInput.value < 99) dayInput.value++;
+      timeout = setTimeout(function () {
+        interval = setInterval(function () {
+          if (dayInput.value < 99) dayInput.value++;
+        }, 100);
+      }, 300);
     });
-    plusButton.addEventListener('mouseup', clearTimers);
-    plusButton.addEventListener('mouseleave', clearTimers); 
-    minusButton.addEventListener('mousedown', function() {
-        if(dayInput.value>1)
-        dayInput.value--;
-        timeout = setTimeout(function() {
-          interval = setInterval(function() {
-            if(dayInput.value>1)
-        dayInput.value--;
-          }, 100);    
-        }, 300);
+    plusButton.addEventListener("mouseup", clearTimers);
+    plusButton.addEventListener("mouseleave", clearTimers);
+    minusButton.addEventListener("mousedown", function () {
+      if (dayInput.value > 1) dayInput.value--;
+      timeout = setTimeout(function () {
+        interval = setInterval(function () {
+          if (dayInput.value > 1) dayInput.value--;
+        }, 100);
+      }, 300);
     });
-    minusButton.addEventListener('mouseup', clearTimers);
-    minusButton.addEventListener('mouseleave', clearTimers); 
+    minusButton.addEventListener("mouseup", clearTimers);
+    minusButton.addEventListener("mouseleave", clearTimers);
     var s = document.createElement("button");
     s.setAttribute("type", "submit");
     s.setAttribute("class", "button-modal");
@@ -352,14 +361,14 @@ export var Modal = (function () {
       });
       showModal();
     },
-    ShowMoveModal: function (callback,items,parentId) {
-      var form = buildMoveForm(items,parentId);
+    ShowMoveModal: function (callback, items, parentId) {
+      var form = buildMoveForm(items, parentId);
       body.appendChild(form);
       form.addEventListener("submit", function (e) {
         e.preventDefault();
         if (callback && typeof callback == "function") {
           var enteredData = {
-           newParentId: form.getAttribute("data-active")
+            newParentId: form.getAttribute("data-active"),
           };
           console.log("calling callback");
           callback(enteredData);
@@ -368,16 +377,16 @@ export var Modal = (function () {
       });
       showModal();
     },
-    ShowSettingsModal: function (callback,settings) {
+    ShowSettingsModal: function (callback, settings) {
       var form = buildSettingsForm(settings);
       body.appendChild(form);
       form.addEventListener("submit", function (e) {
         e.preventDefault();
         if (callback && typeof callback == "function") {
           var enteredData = {
-           topSites: form.querySelector("#topSites").checked,
-           tabOpenMode:form.querySelector("#newTab").checked,
-           refreshRate:form.querySelector("#refreshRate").value,
+            topSites: form.querySelector("#topSites").checked,
+            tabOpenMode: form.querySelector("#newTab").checked,
+            refreshRate: form.querySelector("#refreshRate").value,
           };
           console.log("calling callback");
           callback(enteredData);
