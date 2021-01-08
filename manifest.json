@@ -14,15 +14,8 @@
     "unlimitedStorage"
   ],
   "background": {
-    "page":"background.html",
+    "page": "background.html",
     "persistent": true
-  },
-  "options_page": "options.html",
-  "browser_action": {
-    "default_popup": "popup.html",
-    "default_icon": {
-      "128": "icons/main.png"
-    }
   },
   "icons": {
     "128": "icons/main.png"
@@ -30,6 +23,6 @@
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
-  "web_accessible_resources": ["images/plus.png","thumb_no_scroll.css"],
+  "web_accessible_resources": ["images/plus.png", "thumb_no_scroll.css"],
   "manifest_version": 2
 }
