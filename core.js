@@ -1,8 +1,8 @@
-import { Pubsub } from "./pubsub.js";
-
 export var Storage = (function () {
   //Dir routing
   var currentElements = [];
+  var topSites = [];
+  var topSitesStore = [];
   var currentLayouts = {};
   var currentParent = "root";
   var currentElementSize = 2;
@@ -56,14 +56,10 @@ export var Storage = (function () {
   }
 
   function getChildren(parentId){
-    return currentElements.filter((x) => x.parentId === parentId);
+    return [].concat(currentElements,topSites).filter((x) => x.parentId === parentId);
   }
 
-  Pubsub.subscribe("updateOptions",function(opts){
-    options = opts;
-    commit(true);
-    Pubsub.publish("needGridLoad");
-  })
+  
   return {
     //Add builded tabelement into currentStorage and commit immediately
     addElements: function (elements) {
@@ -113,19 +109,30 @@ export var Storage = (function () {
               result.storageSettings
             );
           } else console.log("Failed to fet settings from storage!");
-          if (callback && typeof callback == "function") callback();
+          chrome.topSites.get(function(sites){
+            topSitesStore.push({id:"topSites",name:"Most Visited",parentId:"root",type:"folder"});
+            sites.forEach(function(site){
+              topSitesStore.push({id:site.title,name:site.title,parentId:"topSites",type:"shortcut",url:site.url});
+            })
+            if(!currentLayouts["root"].includes("topSites"))currentLayouts["root"] = [].concat("topSites",(currentLayouts["root"] || [] ));
+            currentLayouts["topSites"] = topSitesStore.map(function(item){return item.id});
+            console.log("Loaded top sites :",topSites)
+            if(!settings.topSites)topSites = []; else topSites = topSitesStore;
+            if (callback && typeof callback == "function") callback();
+          });
+     
         }
       );
     },
 
     //Return current local storage tab elements
     getElements: function () {
-      return currentElements;
+      return [].concat(currentElements,topSites);
     },
 
     //Return all items with provided parentId
     getElementsByParentId: function (parentId) {
-      return currentElements.filter((x) => x.parentId === parentId);
+      return [].concat(currentElements,topSites).filter((x) => x.parentId === parentId);
     },
 
     //Change current scope of elements
@@ -135,7 +142,7 @@ export var Storage = (function () {
 
     //Change scope to one, that's higher in hierarchy
     setPreviousParent: function () {
-      currentParent = currentElements.find((x) => x.id === currentParent)
+      currentParent = [].concat(currentElements,topSites).find((x) => x.id === currentParent)
         .parentId;
     },
 
@@ -151,7 +158,7 @@ export var Storage = (function () {
 
     //Get current parent tab element
     getCurrentParent: function () {
-      var elem = currentElements.find((x) => x.id === currentParent);
+      var elem = [].concat(currentElements,topSites).find((x) => x.id === currentParent);
       if (elem) return elem;
       else return { id:"root" ,name: "Home page" };
     },
@@ -218,8 +225,10 @@ export var Storage = (function () {
 
     //Store provided grid layout for current dir. Commit immediately.
     saveGridLayout: function (data) {
+      if(!currentParent==="topSites"){
       currentLayouts[currentParent] = data;
       commit();
+      }
     },
 
     //Return grid layout for current dir
@@ -249,7 +258,8 @@ export var Storage = (function () {
     },
     setSettings: function(setts){
       settings = setts;
-      commit();
+      if (!settings.topSites) topSites = []; else topSites = topSitesStore;
+      commit(true);
     }
     ,
     buildHierarchy: function(exceptions){
@@ -266,8 +276,9 @@ export var Storage = (function () {
       var tree = list_to_tree(folders);
       tree = [{name:"Home page",id:"root",children:tree}];
       return tree;
-      
-    }
+    },
+    isInTopSites:  function(){return currentParent === "topSites"},
+    isTopSitesItem: function(id){return currentLayouts["topSites"].includes(id);},
   };
 })();
 

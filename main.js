@@ -33,6 +33,7 @@ export var Main = (function () {
   });
 
   addButton.addEventListener("click", function () {
+    if(!Storage.isInTopSites())
     Pubsub.publish("createShortcut", null);
   });
 
@@ -46,7 +47,7 @@ export var Main = (function () {
   settingsButton.addEventListener("click",function(e){
     Modal.ShowSettingsModal(function(data){
       Storage.setSettings(data);
-      Pubsub.publish("NeedGridLoad",true);
+      Pubsub.publish("needGridLoad",true);
     },Storage.getSettings());
   }
 );
@@ -84,11 +85,13 @@ export var Main = (function () {
   
 
   Pubsub.subscribe("droppedIntoFolder",function(data){
+    if(!Storage.isTopSitesItem(data.folder.getAttribute("data-id")) && !Storage.isTopSitesItem(data.target.getAttribute("data-id"))){
     var targetId = Grid.remove(data.target);
       Storage.editElement(targetId,function(elem){
         elem.parentId = data.folder.getAttribute("data-id");
         return elem;
   });
+}
 });
 
   Pubsub.subscribe("editShortcut", function (target) {
@@ -126,10 +129,12 @@ export var Main = (function () {
   });
 
   Pubsub.subscribe("addedShortcutToGrid", function (target) {
+    if(!Storage.isTopSitesItem(target.getAttribute("data-id")))
     Menu.addListenedItems(target, ["delete", "editShortcut", "move"]);
   });
 
   Pubsub.subscribe("addedFolderToGrid", function (target) {
+    if(!Storage.isTopSitesItem(target.getAttribute("data-id")))
     Menu.addListenedItems(target, ["delete", "editFolder", "move"]);
 
     target.onclick = function (e) {
