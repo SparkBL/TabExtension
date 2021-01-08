@@ -434,6 +434,9 @@ form label {
 .item[data-type="folder"] .item-content {
   background: var(--grid-folder-bg);
 }
+.item[data-type="backdrop"] .item-content {
+  background: var(--grid-folder-bg);
+}
 
 .grid-footer {
   display: flex;

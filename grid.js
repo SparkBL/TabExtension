@@ -5,10 +5,11 @@ export var Grid = (function () {
   const dragContainer = document.querySelector(".drag-container");
   const gridElement = document.querySelector(".grid");
   const templateContainer = document.getElementById("template");
+  var backdrop;
   var time,posX,posY;
   const collideCoeff = 0.1;
   var collidedFolder;
-  const types = ["shortcut", "folder"];
+  const types = ["shortcut", "folder","backdrop"];
   var currentSize = 1;
   var tabOpenMode = "_blank";
   var viewType = "icon";
@@ -119,6 +120,25 @@ export var Grid = (function () {
     grid.sort(newItems, { layout: "instant" });
   }
 // COLLIDE MECHANISM BEGIN
+
+//add back drop
+function addBackDrop(){
+var img = document.importNode(templateContainer.content.children[2], true);
+    var viewDiv = document.createElement("div");
+    viewDiv.appendChild(img);
+    viewDiv.setAttribute("class", "item-content");
+    var wrapper = document.createElement("div");
+    wrapper.setAttribute("class", "item");
+    wrapper.appendChild(viewDiv);
+    wrapper.setAttribute("data-type", types[2]);
+    wrapper.setAttribute("data-size", currentSize);
+    return grid.add(wrapper, {
+      layout: true,
+      active: true,
+      index: 0,
+    });
+  }
+
    function collide (el1, el2) {
     var rect1 = el1.getBoundingClientRect();
     var rect2 = el2.getBoundingClientRect();
@@ -136,6 +156,8 @@ export var Grid = (function () {
       if(Math.abs(e.clientX-posX)<20 && Math.abs(e.clientY-posY)<20){
       if (e.deltaTime-time>1000){
         console.log("Waiting....");
+     //   if(!backdrop)
+      //    backdrop = addBackDrop();
         collidedFolder = grid.getItems().find(function(x){
           var xElem = x.getElement();
           var itemElem = item.getElement();
@@ -153,10 +175,9 @@ export var Grid = (function () {
     } else {
       if (collidedFolder){
         collidedFolder.firstChild.classList.remove("active-drop");
-        item.getElement().firstChild.classList.remove("active-dropping");
         collidedFolder = null;
       }
-      
+      item.getElement().firstChild.classList.remove("active-dropping");
       time = e.deltaTime;
       posX = e.clientX;
       posY = e.clientY;
@@ -165,12 +186,19 @@ export var Grid = (function () {
     grid.on("dragEnd",function(item,e){
       if(collidedFolder){
         collidedFolder.firstChild.classList.remove("active-drop");
-        item.getElement().firstChild.classList.remove("active-dropping");
         Pubsub.publish("droppedIntoFolder",{target:item.getElement(),folder:collidedFolder});
         collidedFolder = null;
       console.log("Dropped into folder");
       //time = e.deltaTime;
       }
+      item.getElement().firstChild.classList.remove("active-dropping");
+      if(backdrop){
+        grid.hide(backdrop,{onFinish:function(item){
+          grid.remove(backdrop,{removeElements :true});
+          backdrop = null;
+        }})
+        
+        }
       
     })
       

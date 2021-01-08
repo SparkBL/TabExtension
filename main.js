@@ -176,13 +176,15 @@ export var Main = (function () {
   });
 
   Pubsub.subscribe("needGridLoad", function (instantRemove) {
-    Grid.clear(instantRemove);
     var setts = Storage.getSettings();
     var dirContent = Storage.getCurrentChildren();
     Grid.setItemSize(Storage.getCurrentElementSize());
     Grid.setViewType(Storage.getCurrentViewType());
     ThumbFetcher.setRefreshRate(setts.refreshRate);
     Grid.setTabOpenMode(setts.tabOpenMode);
+    
+    Grid.clear(instantRemove);
+
     dirContent.forEach(function (item) {
       if (item.type === "folder") {
         Pubsub.publish(

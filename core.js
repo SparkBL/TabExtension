@@ -66,6 +66,7 @@ export var Storage = (function () {
       var elements = [].concat(elements || []);
       currentElements = currentElements.concat(elements);
     currentLayouts[currentParent] = [].concat((currentLayouts[currentParent] || []),elements.map(function(item){return item.id}));
+    commit();
       return elements;
     },
 
@@ -225,7 +226,7 @@ export var Storage = (function () {
 
     //Store provided grid layout for current dir. Commit immediately.
     saveGridLayout: function (data) {
-      if(!currentParent==="topSites"){
+      if(currentParent!=="topSites"){
       currentLayouts[currentParent] = data;
       commit();
       }
