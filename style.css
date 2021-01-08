@@ -815,13 +815,13 @@ ul {
 
 .hierarchy {
   overflow: auto;
-  max-height: 35vw;
+  max-height: 35vh;
   padding: 1rem;
   overflow-anchor: auto;
 }
 
 .hierarchy::-webkit-scrollbar-track {
-  background: #f3f3f3;
+  background: #e9e9e9;
 }
 
 .hierarchy div {
