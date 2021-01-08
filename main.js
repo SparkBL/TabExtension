@@ -3,10 +3,11 @@ import { Grid } from "./grid.js";
 import { Modal } from "./modal.js";
 import { Menu } from "./menu.js";
 import { Pubsub } from "./pubsub.js";
-import {ThumbFetcher} from "./thumbfetcher.js"
+import { ThumbFetcher } from "./thumbfetcher.js";
 export var Main = (function () {
   const path = document.querySelector(".path-title");
-  const addButton = document.querySelector(".grid-button.add-more-items");
+  const addShortcutButton = document.querySelector('[data-add="shortcut"]');
+  const addFolderButton = document.querySelector('[data-add="folder"]');
   const backButton = document.getElementById("backButton");
   const sizeSelector = document.querySelector("#sizeSelector");
   const viewSelector = document.querySelector("#viewSelector");
@@ -32,26 +33,27 @@ export var Main = (function () {
     Pubsub.publish("createFolder", target);
   });
 
-  addButton.addEventListener("click", function () {
-    if(!Storage.isInTopSites())
-    Pubsub.publish("createShortcut", null);
+  addShortcutButton.addEventListener("click", function () {
+    if (!Storage.isInTopSites()) Pubsub.publish("createShortcut", null);
+  });
+  addFolderButton.addEventListener("click", function () {
+    if (!Storage.isInTopSites()) Pubsub.publish("createFolder", null);
   });
 
   backButton.addEventListener("click", function (e) {
     if (!Storage.isInRoot()) {
       Storage.setPreviousParent();
-      Pubsub.publish("needGridLoad",true);
+      Pubsub.publish("needGridLoad", true);
     }
   });
 
-  settingsButton.addEventListener("click",function(e){
-    Modal.ShowSettingsModal(function(data){
+  settingsButton.addEventListener("click", function (e) {
+    Modal.ShowSettingsModal(function (data) {
       Storage.setSettings(data);
-      Pubsub.publish("needGridLoad",true);
-    },Storage.getSettings());
-  }
-);
-  Menu.addListenedItems(addButton, ["createShortcut", "createFolder"]);
+      Pubsub.publish("needGridLoad", true);
+    }, Storage.getSettings());
+  });
+  //Menu.addListenedItems(addShortcutButton, ["createShortcut", "createFolder"]);
 
   sizeSelector.addEventListener("change", function (ev) {
     Storage.setElementSize(sizeSelector.value);
@@ -65,34 +67,39 @@ export var Main = (function () {
 
   Pubsub.subscribe("delete", function (target) {
     var targetId = Grid.remove(target);
-  //  Storage.saveGridLayout(Grid.getLayout());
+    //  Storage.saveGridLayout(Grid.getLayout());
     Storage.removeElement(targetId);
     ThumbFetcher.removeThumbnail(targetId);
   });
 
   Pubsub.subscribe("menuMove", function (target) {
-    Modal.ShowMoveModal(function(data){
-      console.log("Move modal opened")
-      var targetId = Grid.remove(target);
-      Storage.editElement(targetId,function(elem){
-        elem.parentId = data.newParentId;
-        return elem;
-      })
-       ////?
-    },Storage.buildHierarchy(target.getAttribute("data-id")),target.getAttribute("data-parent"));
+    Modal.ShowMoveModal(
+      function (data) {
+        console.log("Move modal opened");
+        var targetId = Grid.remove(target);
+        Storage.editElement(targetId, function (elem) {
+          elem.parentId = data.newParentId;
+          return elem;
+        });
+        ////?
+      },
+      Storage.buildHierarchy(target.getAttribute("data-id")),
+      target.getAttribute("data-parent")
+    );
   });
 
-  
-
-  Pubsub.subscribe("droppedIntoFolder",function(data){
-    if(!Storage.isTopSitesItem(data.folder.getAttribute("data-id")) && !Storage.isTopSitesItem(data.target.getAttribute("data-id"))){
-    var targetId = Grid.remove(data.target);
-      Storage.editElement(targetId,function(elem){
+  Pubsub.subscribe("droppedIntoFolder", function (data) {
+    if (
+      !Storage.isTopSitesItem(data.folder.getAttribute("data-id")) &&
+      !Storage.isTopSitesItem(data.target.getAttribute("data-id"))
+    ) {
+      var targetId = Grid.remove(data.target);
+      Storage.editElement(targetId, function (elem) {
         elem.parentId = data.folder.getAttribute("data-id");
         return elem;
+      });
+    }
   });
-}
-});
 
   Pubsub.subscribe("editShortcut", function (target) {
     Modal.ShowShortcutModal(
@@ -129,13 +136,13 @@ export var Main = (function () {
   });
 
   Pubsub.subscribe("addedShortcutToGrid", function (target) {
-    if(!Storage.isTopSitesItem(target.getAttribute("data-id")))
-    Menu.addListenedItems(target, ["delete", "editShortcut", "move"]);
+    if (!Storage.isTopSitesItem(target.getAttribute("data-id")))
+      Menu.addListenedItems(target, ["delete", "editShortcut", "move"]);
   });
 
   Pubsub.subscribe("addedFolderToGrid", function (target) {
-    if(!Storage.isTopSitesItem(target.getAttribute("data-id")))
-    Menu.addListenedItems(target, ["delete", "editFolder", "move"]);
+    if (!Storage.isTopSitesItem(target.getAttribute("data-id")))
+      Menu.addListenedItems(target, ["delete", "editFolder", "move"]);
 
     target.onclick = function (e) {
       if (!Grid.isDragging(target) && e.button != 2) {
@@ -182,7 +189,7 @@ export var Main = (function () {
     Grid.setViewType(Storage.getCurrentViewType());
     ThumbFetcher.setRefreshRate(setts.refreshRate);
     Grid.setTabOpenMode(setts.tabOpenMode);
-    
+
     Grid.clear(instantRemove);
 
     dirContent.forEach(function (item) {
@@ -210,12 +217,11 @@ export var Main = (function () {
   return {
     init: function () {
       Storage.sync(function () {
-        ThumbFetcher.init(function(){
+        ThumbFetcher.init(function () {
           Pubsub.publish("needGridLoad");
           sizeSelector.value = Storage.getCurrentElementSize();
           viewSelector.value = Storage.getCurrentViewType();
-        })
-        
+        });
       });
     },
   };

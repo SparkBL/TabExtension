@@ -422,26 +422,32 @@ form label {
 .item[data-size="1"] {
   height: 15rem;
   width: 15rem;
+  font-size: 75%;
 }
 
 .item[data-size="2"] {
   height: 22rem;
   width: 22rem;
+  font-size: 85%;
 }
 
 .item[data-size="3"] {
   height: 29rem;
   width: 29rem;
+  font-size: 95%;
 }
 
 .item[data-size="4"] {
   height: 36rem;
   width: 36rem;
+  font-size-adjust: 1;
+  font-size: 105%;
 }
 
 .item[data-size="5"] {
   height: 43rem;
   width: 43rem;
+  font-size: 115%;
 }
 
 .item[data-type="shortcut"] .item-content {
@@ -501,6 +507,7 @@ form label {
   align-items: center;
   /*position: relative;*/
   margin: 0;
+  margin-inline: 2rem;
   border: 0;
   padding: 1.2rem;
   font-size: 1.6rem;
@@ -530,13 +537,13 @@ form label {
 .grid-footer .grid-button:hover {
   padding: 1rem;
   color: var(--hover-color);
-  animation-name: gridButton;
+  /*animation-name: gridButton;
   animation-duration: 0.2s;
   animation-iteration-count: 1;
   animation-direction: normal;
   animation-timing-function: linear;
   animation-fill-mode: forwards;
-  animation-delay: 0s;
+  animation-delay: 0s;*/
 }
 
 .grid-button svg {
