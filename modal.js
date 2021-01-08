@@ -243,6 +243,7 @@ export var Modal = (function () {
 
     s.innerHTML = "Move";
     s.disabled = true;
+    selection.querySelector('[data-id=' + parent + ']').classList.add("current");
     selection.addEventListener("click",function(e){
       var divs = selection.querySelectorAll("div");
       divs.forEach(function(item){

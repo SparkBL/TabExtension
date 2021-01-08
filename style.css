@@ -792,6 +792,10 @@ ul {
   background-color: #bababa;
 }
 
+.hierarchy div.current {
+  background-color: #888;
+}
+
 .caret {
   user-select: none;
   transition: transform 10ms;

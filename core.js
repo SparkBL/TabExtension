@@ -69,8 +69,7 @@ export var Storage = (function () {
     addElements: function (elements) {
       var elements = [].concat(elements || []);
       currentElements = currentElements.concat(elements);
-      currentLayouts[currentParent].push(elements);
-      commit();
+    currentLayouts[currentParent] = [].concat((currentLayouts[currentParent] || []),elements.map(function(item){return item.id}));
       return elements;
     },
 
