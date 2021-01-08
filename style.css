@@ -434,8 +434,17 @@ form label {
 .item[data-type="folder"] .item-content {
   background: var(--grid-folder-bg);
 }
-.item[data-type="backdrop"] .item-content {
-  background: var(--grid-folder-bg);
+
+.backdrop {
+  width: 4rem;
+  height: 400px;
+  border-radius: 1rem;
+  border: 1px solid;
+  position: absolute;
+  left: calc(2rem - 4rem);
+  top: 200px;
+  transition: width 0.2s ease-in;
+  display: none;
 }
 
 .grid-footer {

@@ -156,28 +156,25 @@ var img = document.importNode(templateContainer.content.children[2], true);
       if(Math.abs(e.clientX-posX)<20 && Math.abs(e.clientY-posY)<20){
       if (e.deltaTime-time>1000){
         console.log("Waiting....");
-     //   if(!backdrop)
-      //    backdrop = addBackDrop();
+        var itemElem = item.getElement();
         collidedFolder = grid.getItems().find(function(x){
           var xElem = x.getElement();
-          var itemElem = item.getElement();
           return xElem.getAttribute("data-type")==="folder" &&
           itemElem.getAttribute("data-id")!== xElem.getAttribute("data-id") &&
           collide(itemElem,xElem);
         }/*x =>x.getElement().getAttribute("data-type")==="folder" && item.getElement().getAttribute("data-id")!== x.getElement().getAttribute("data-id") && collide(item.getElement(),x.getElement())*/);
         if (collidedFolder){
           collidedFolder = collidedFolder.getElement();
-       // console.log(collidedFolder);
         collidedFolder.firstChild.classList.add("active-drop");
-        item.getElement().firstChild.classList.add("active-dropping");
+        itemElem.firstChild.classList.add("active-dropping");
         }
       }
     } else {
       if (collidedFolder){
         collidedFolder.firstChild.classList.remove("active-drop");
         collidedFolder = null;
+        item.getElement().firstChild.classList.remove("active-dropping");
       }
-      item.getElement().firstChild.classList.remove("active-dropping");
       time = e.deltaTime;
       posX = e.clientX;
       posY = e.clientY;
@@ -192,14 +189,6 @@ var img = document.importNode(templateContainer.content.children[2], true);
       //time = e.deltaTime;
       }
       item.getElement().firstChild.classList.remove("active-dropping");
-      if(backdrop){
-        grid.hide(backdrop,{onFinish:function(item){
-          grid.remove(backdrop,{removeElements :true});
-          backdrop = null;
-        }})
-        
-        }
-      
     })
       
   });
