@@ -2,6 +2,7 @@
 
 :root {
   /*BASE COLORS*/
+  /*--main-color: #5da3ff;*/
   --color-background: #ffffff;
   --color-text: #5da3ff;
   --color-text-headers: #5e5e5e;
@@ -452,6 +453,8 @@ form label {
 
 .item[data-type="shortcut"] .item-content {
   background: var(--grid-shortcut-bg);
+  background-repeat: no-repeat;
+  /* background-blend-mode: luminosity;*/
   background-size: cover;
 }
 
@@ -923,6 +926,8 @@ ul {
   outline: 0;
   user-select: none;
   pointer-events: none;
+  color: var(--color-text);
+  font-weight: 800;
   border: none;
   border-radius: 0.8rem;
 }
@@ -938,8 +943,25 @@ ul {
   border-radius: 1.5rem;
   border: none;
   background: var(--button-modal-cover);
+  color: var(--color-text);
   width: 2.5rem;
   height: 2.5rem;
   text-align: center;
+  font-weight: 900;
   outline: 0;
+}
+
+input[type="color"] {
+  -webkit-appearance: none;
+  border: none;
+  width: 32px;
+  height: 32px;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border: none;
 }
