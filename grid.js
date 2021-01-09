@@ -7,7 +7,7 @@ export var Grid = (function () {
   const templateContainer = document.getElementById("template");
   var backdrop;
   var time, posX, posY;
-  const collideCoeff = 0.1;
+  const collideCoeff = 0.0;
   var collidedFolder;
   const types = ["shortcut", "folder", "backdrop"];
   var currentSize = 1;
@@ -156,7 +156,7 @@ export var Grid = (function () {
 
   grid.on("dragMove", function (item, e) {
     if (Math.abs(e.clientX - posX) < 20 && Math.abs(e.clientY - posY) < 20) {
-      if (e.deltaTime - time > 1000) {
+      if (e.deltaTime - time > 500) {
         console.log("Waiting....");
         var itemElem = item.getElement();
         collidedFolder = grid.getItems().find(
