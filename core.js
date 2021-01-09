@@ -6,7 +6,6 @@ export var Storage = (function () {
   var currentLayouts = { root: ["topSites"] };
   var currentParent = "root";
   var currentElementSize = 2;
-  var currentViewType = "icon";
   var settings = {
     tabOpenMode: true,
     refreshRate: 1,
@@ -20,14 +19,12 @@ export var Storage = (function () {
         storageElements: currentElements,
         storageLayouts: currentLayouts,
         elementSize: currentElementSize,
-        viewType: currentViewType,
         storageSettings: settings,
       },
       function () {
         console.log("Saved elements in storage: ", currentElements);
         console.log("Saved layouts in storage: ", currentLayouts);
         console.log("Saved element size in storage: ", currentElementSize);
-        console.log("Saved view type in storage: ", currentViewType);
         console.log("Saved options in storage: ", settings);
       }
     );
@@ -82,13 +79,7 @@ export var Storage = (function () {
     //Synchronize all objects from chrome storage to local one. ASYNC - needs callback
     sync: function (callback) {
       chrome.storage.local.get(
-        [
-          "storageElements",
-          "storageLayouts",
-          "elementSize",
-          "viewType",
-          "storageSettings",
-        ],
+        ["storageElements", "storageLayouts", "elementSize", "storageSettings"],
         function (result) {
           if (result.storageElements) {
             currentElements = result.storageElements;
@@ -103,18 +94,14 @@ export var Storage = (function () {
               "Synced layouts with storage: \n",
               result.storageLayouts
             );
-          } else console.log("Failed to get layouts from storage!");
+          } else console.log("Failed to get element size from storage!");
           if (result.elementSize) {
             currentElementSize = result.elementSize;
             console.log(
               "Synced element size with storage: \n",
               result.elementSize
             );
-          } else console.log("Failed to get layouts from storage!");
-          if (result.viewType) {
-            currentViewType = result.viewType;
-            console.log("Synced view type with storage: \n", result.viewType);
-          } else console.log("Failed to get view type from storage!");
+          } else console.log("Failed to get element size from storage!");
           if (result.storageSettings) {
             settings = result.storageSettings;
             console.log(
@@ -136,6 +123,7 @@ export var Storage = (function () {
                 parentId: "topSites",
                 type: "shortcut",
                 url: site.url,
+                viewType: "icon",
               });
             });
             currentLayouts["topSites"] = topSitesStore.map(function (item) {
@@ -248,13 +236,14 @@ export var Storage = (function () {
     },
 
     //Build shortcut object from name and url
-    buildShortcut: function (name, url) {
+    buildShortcut: function (name, url, viewType) {
       return {
         id: generateId(),
         parentId: currentParent,
         name: name,
         url: url,
         type: "shortcut",
+        viewType: viewType,
       };
     },
 
@@ -282,15 +271,6 @@ export var Storage = (function () {
     setElementSize: function (sizeFactor) {
       currentElementSize = sizeFactor;
       commit();
-    },
-    getCurrentViewType: function () {
-      return currentViewType;
-    },
-    setViewType: function (type) {
-      if (type === "icon" || type === "thumbnail") {
-        currentViewType = type;
-        commit();
-      }
     },
     getSettings: function () {
       return settings;

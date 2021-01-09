@@ -103,7 +103,7 @@ export var Modal = (function () {
     });
   }
 
-  function buildShortcutForm(name, url, edit) {
+  function buildShortcutForm(name, url, viewType, edit) {
     var f = document.createElement("form");
     var title = document.createElement("h1");
     title.className = "title-modal";
@@ -136,6 +136,26 @@ export var Modal = (function () {
 
     urllabel.htmlFor = "url";
     urllabel.innerHTML = "Shortcut URL";
+
+    var viewTypeSelect = document.createElement("select");
+    viewTypeSelect.size = 2;
+    var a = document.createElement("option");
+    a.text = "Icon";
+    a.value = "icon";
+    var b = document.createElement("option");
+    b.text = "Thumbnail";
+    b.value = "thumbnail";
+    viewTypeSelect.appendChild(a);
+    viewTypeSelect.appendChild(b);
+    if (viewType) viewTypeSelect.value = viewType;
+    else viewTypeSelect.value = "icon";
+    viewTypeSelect.name = "viewType";
+
+    var viewTypeLabel = document.createElement("label");
+
+    viewTypeLabel.htmlFor = "viewType";
+    viewTypeLabel.innerHTML = "Display type";
+
     var s = document.createElement("button");
     s.setAttribute("type", "submit");
     s.setAttribute("class", "button-modal");
@@ -153,10 +173,15 @@ export var Modal = (function () {
     var urlwrapper = document.createElement("div");
     urlwrapper.appendChild(urllabel);
     urlwrapper.appendChild(inurl);
+    var viewTypeWrapper = document.createElement("div");
+    viewTypeWrapper.appendChild(viewTypeLabel);
+    viewTypeWrapper.appendChild(viewTypeSelect);
     f.appendChild(title);
     f.appendChild(namewrapper);
     f.appendChild(document.createElement("br"));
     f.appendChild(urlwrapper);
+    f.appendChild(document.createElement("br"));
+    f.appendChild(viewTypeWrapper);
     f.appendChild(document.createElement("br"));
     f.appendChild(s);
     inname.autofocus = true;
@@ -327,8 +352,8 @@ export var Modal = (function () {
   }
 
   return {
-    ShowShortcutModal: function (callback, name, url, edit) {
-      var form = buildShortcutForm(name, url, edit);
+    ShowShortcutModal: function (callback, name, url, viewType, edit) {
+      var form = buildShortcutForm(name, url, viewType, edit);
       body.appendChild(form);
       form.addEventListener("submit", function (e) {
         e.preventDefault();
@@ -336,6 +361,7 @@ export var Modal = (function () {
           var enteredData = {
             name: form.elements.namedItem("name").value,
             url: form.elements.namedItem("url").value,
+            viewType: form.elements.namedItem("viewType").value,
           };
           console.log("calling callback");
           callback(enteredData);

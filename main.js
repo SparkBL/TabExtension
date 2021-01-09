@@ -10,7 +10,6 @@ export var Main = (function () {
   const addFolderButton = document.querySelector('[data-add="folder"]');
   const backButton = document.getElementById("backButton");
   const sizeSelector = document.querySelector("#sizeSelector");
-  const viewSelector = document.querySelector("#viewSelector");
   const settingsButton = document.querySelector(".settings-button");
   Menu.addOption("delete", "Delete Item", function (target) {
     Pubsub.publish("delete", target);
@@ -60,11 +59,6 @@ export var Main = (function () {
     Pubsub.publish("needGridLoad", true);
   });
 
-  viewSelector.addEventListener("change", function (ev) {
-    Storage.setViewType(viewSelector.value);
-    Pubsub.publish("needGridLoad", true);
-  });
-
   Pubsub.subscribe("delete", function (target) {
     var targetId = Grid.remove(target);
     //  Storage.saveGridLayout(Grid.getLayout());
@@ -108,13 +102,15 @@ export var Main = (function () {
         Storage.editElement(target.getAttribute("data-id"), function (element) {
           element.name = enteredData["name"];
           element.url = enteredData["url"];
+          element.viewType = enteredData["viewType"];
           el = element;
           return element;
         });
-        Grid.editShortcut(el.id, el.url, el.name, el.parentId);
+        Grid.editShortcut(el.id, el.url, el.name, el.viewType);
       },
       target.getAttribute("data-name"),
       target.getAttribute("data-url"),
+      target.getAttribute("data-viewType"),
       true
     );
   });
@@ -156,14 +152,19 @@ export var Main = (function () {
     Modal.ShowShortcutModal(function (data) {
       console.log(enteredData);
       var enteredData = data;
-      var newTab = Storage.buildShortcut(enteredData.name, enteredData.url);
+      var newTab = Storage.buildShortcut(
+        enteredData.name,
+        enteredData.url,
+        enteredData.viewType
+      );
       Storage.addElements(newTab);
 
       var newItem = Grid.addShortcut(
         newTab.id,
         newTab.url,
         newTab.name,
-        newTab.parentId
+        newTab.parentId,
+        newTab.viewType
       );
       Storage.saveGridLayout(Grid.getLayout());
       Pubsub.publish("addedShortcutToGrid", newItem);
@@ -186,7 +187,6 @@ export var Main = (function () {
     var setts = Storage.getSettings();
     var dirContent = Storage.getCurrentChildren();
     Grid.setItemSize(Storage.getCurrentElementSize());
-    Grid.setViewType(Storage.getCurrentViewType());
     ThumbFetcher.setRefreshRate(setts.refreshRate);
     Grid.setTabOpenMode(setts.tabOpenMode);
 
@@ -202,7 +202,13 @@ export var Main = (function () {
       if (item.type === "shortcut") {
         Pubsub.publish(
           "addedShortcutToGrid",
-          Grid.addShortcut(item.id, item.url, item.name, item.parentId)
+          Grid.addShortcut(
+            item.id,
+            item.url,
+            item.name,
+            item.parentId,
+            item.viewType
+          )
         );
       }
     });
@@ -220,7 +226,6 @@ export var Main = (function () {
         ThumbFetcher.init(function () {
           Pubsub.publish("needGridLoad");
           sizeSelector.value = Storage.getCurrentElementSize();
-          viewSelector.value = Storage.getCurrentViewType();
         });
       });
     },

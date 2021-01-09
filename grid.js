@@ -12,7 +12,6 @@ export var Grid = (function () {
   const types = ["shortcut", "folder", "backdrop"];
   var currentSize = 1;
   var tabOpenMode = "_blank";
-  var viewType = "icon";
   var thumbnailQueue = [];
   const grid = new Muuri(gridElement, {
     showDuration: 400,
@@ -79,15 +78,18 @@ export var Grid = (function () {
     );
   });
 
-  function setIcon(id, viewDiv, url) {
+  function setIcon(id, viewDiv, url, viewType) {
     if (url) {
       if (viewType === "icon") {
+        viewDiv.style.backgroundImage = "none";
         var i = document.createElement("img");
         i.src = "chrome://favicon/" + url;
         i.setAttribute("class", "favicon");
         if (!viewDiv.querySelector(".favicon")) viewDiv.appendChild(i);
         else viewDiv.querySelector(".favicon").replaceWith(i);
       } else if (viewType === "thumbnail") {
+        if (viewDiv.querySelector(".favicon"))
+          viewDiv.removeChild(viewDiv.querySelector(".favicon"));
         thumbnailQueue.push({ id: id, viewDiv: viewDiv });
         Pubsub.publish("generateThumbnail", { id: id, url: url });
       }
@@ -200,12 +202,12 @@ export var Grid = (function () {
   });
   //    COLLIDE MECHANISM END
 
-  function buildShortcut(id, url, name, parent) {
+  function buildShortcut(id, url, name, parent, viewType) {
     var span = document.createElement("div");
     span.innerHTML = name;
     span.setAttribute("class", "shortcut-title");
     var viewDiv = document.createElement("div");
-    setIcon(id, viewDiv, url);
+    setIcon(id, viewDiv, url, viewType);
     viewDiv.appendChild(span);
     viewDiv.setAttribute("class", "item-content");
 
@@ -219,6 +221,7 @@ export var Grid = (function () {
     wrapper.setAttribute("data-id", id);
     wrapper.setAttribute("data-name", name);
     wrapper.setAttribute("data-url", url);
+    wrapper.setAttribute("data-viewType", viewType);
     wrapper.setAttribute("data-parent", parent);
     wrapper.setAttribute("data-type", types[0]);
     wrapper.setAttribute("data-size", currentSize);
@@ -265,8 +268,8 @@ export var Grid = (function () {
   }
 
   return {
-    addShortcut: function (id, url, name, parentId) {
-      return addItem(buildShortcut(id, url, name, parentId));
+    addShortcut: function (id, url, name, parentId, viewType) {
+      return addItem(buildShortcut(id, url, name, parentId, viewType));
     },
     addFolder: function (id, name, parentId) {
       return addItem(buildFolder(id, name, parentId));
@@ -301,14 +304,15 @@ export var Grid = (function () {
       if (blank) tabOpenMode = "_blank";
       else tabOpenMode = "_self";
     },
-    editShortcut: function (id, url, name) {
+    editShortcut: function (id, url, name, viewType) {
       grid.getItems().forEach(function (item) {
         var el = item.getElement();
         if (el.getAttribute("data-id") == id) {
           el.querySelector("div").lastChild.innerHTML = name;
           el.setAttribute("data-url", url);
           el.setAttribute("data-name", name);
-          setIcon(id, el.querySelector("div"), url); /////1231234141
+          el.setAttribute("data-viewType", viewType);
+          setIcon(id, el.querySelector("div"), url, viewType); /////1231234141
           el.onclick = function (e) {
             if (url) window.open(url, tabOpenMode, "noopener noreferrer");
           };
@@ -332,10 +336,6 @@ export var Grid = (function () {
         var el = item.getElement();
         el.setAttribute("data-size", sizeFactor);
       });*/
-    },
-
-    setViewType: function (type) {
-      if (type === "icon" || type === "thumbnail") viewType = type;
     },
   };
 })();
