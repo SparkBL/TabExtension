@@ -85,7 +85,8 @@ export var Grid = (function () {
         var i = document.createElement("img");
         i.src = "chrome://favicon/" + url;
         i.setAttribute("class", "favicon");
-        viewDiv.appendChild(i);
+        if (!viewDiv.querySelector(".favicon")) viewDiv.appendChild(i);
+        else viewDiv.querySelector(".favicon").replaceWith(i);
       } else if (viewType === "thumbnail") {
         thumbnailQueue.push({ id: id, viewDiv: viewDiv });
         Pubsub.publish("generateThumbnail", { id: id, url: url });
@@ -307,7 +308,7 @@ export var Grid = (function () {
           el.querySelector("div").lastChild.innerHTML = name;
           el.setAttribute("data-url", url);
           el.setAttribute("data-name", name);
-          setIcon(id, el.querySelector("div"), url);
+          setIcon(id, el.querySelector("div"), url); /////1231234141
           el.onclick = function (e) {
             if (url) window.open(url, tabOpenMode, "noopener noreferrer");
           };

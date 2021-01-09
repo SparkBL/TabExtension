@@ -23,6 +23,6 @@
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
-  "web_accessible_resources": ["images/plus.png", "thumb_no_scroll.css"],
+  "web_accessible_resources": ["thumb_no_scroll.css"],
   "manifest_version": 2
 }

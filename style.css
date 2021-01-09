@@ -137,10 +137,14 @@ form label {
 .shortcut-title {
   position: absolute;
   bottom: 0;
+  left: 0;
+  right: 0;
+  line-height: 100%;
   /* border-bottom-left-radius: 3rem;
   border-bottom-right-radius: 3rem;*/
   width: 100%;
-  max-width: 110%;
+  max-width: 101%;
+  max-height: 25%;
   background-color: var(--shorcut-title-bg);
   /*box-shadow: 3px 3px 10px lightgrey;*/
 }
@@ -162,8 +166,8 @@ form label {
 }
 
 .settings-button {
-  width: 4rem;
-  height: 4rem;
+  width: 6rem;
+  height: 6rem;
   position: fixed;
   bottom: 0.8rem;
   right: 0;
@@ -448,12 +452,13 @@ form label {
 .item[data-size="5"] {
   height: 43rem;
   width: 43rem;
-  font-size: 115%;
+  font-size: 110%;
 }
 
 .item[data-type="shortcut"] .item-content {
   background: var(--grid-shortcut-bg);
   background-repeat: no-repeat;
+  background-clip: padding-box;
   /* background-blend-mode: luminosity;*/
   background-size: cover;
 }
