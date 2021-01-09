@@ -7,7 +7,7 @@ export var Grid = (function () {
   const templateContainer = document.getElementById("template");
   var backdrop;
   var time, posX, posY;
-  const collideCoeff = 0.0;
+  const collideCoeff = 0.15;
   var collidedFolder;
   const types = ["shortcut", "folder", "backdrop"];
   var currentSize = 1;
@@ -145,12 +145,11 @@ export var Grid = (function () {
   function collide(el1, el2) {
     var rect1 = el1.getBoundingClientRect();
     var rect2 = el2.getBoundingClientRect();
-
     return !(
-      rect1.top > rect2.bottom - rect2.bottom * collideCoeff ||
-      rect1.right - rect1.right * collideCoeff < rect2.left ||
-      rect1.bottom - rect1.bottom * collideCoeff < rect2.top ||
-      rect1.left > rect2.right - rect2.right * collideCoeff
+      rect1.top + rect1.height * collideCoeff > rect2.bottom ||
+      rect1.right - rect1.width * collideCoeff < rect2.left ||
+      rect1.bottom - rect1.height * collideCoeff < rect2.top ||
+      rect1.left + rect1.width * collideCoeff > rect2.right
     );
   }
 
