@@ -85,7 +85,7 @@ export var Modal = (function () {
       if (currentFocus >= x.length) currentFocus = 0;
       if (currentFocus < 0) currentFocus = x.length - 1;
       x[currentFocus].classList.add("autocomplete-active");
-      x[currentFocus].scrollIntoView({ block: "center", behavior: "smooth" });
+      x[currentFocus].scrollIntoView({ block: "nearest", behavior: "auto" });
     }
     function removeActive(x) {
       for (var i = 0; i < x.length; i++) {
@@ -114,7 +114,7 @@ export var Modal = (function () {
     inname.setAttribute("name", "name");
     inname.setAttribute("class", "input-modal");
     inname.autocomplete = "off";
-    inname.maxLength = 60;
+    inname.maxLength = 48;
     // inname.placeholder = "Shortcut Name";
     if (name) inname.value = name;
     var namelabel = document.createElement("label");
@@ -202,7 +202,7 @@ export var Modal = (function () {
     inname.setAttribute("class", "input-modal");
     inname.autocomplete = "off";
     // inname.placeholder = "Folder Name";
-    inname.maxLength = 60;
+    inname.maxLength = 48;
     if (name) inname.value = name;
     var namelabel = document.createElement("label");
 

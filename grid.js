@@ -7,7 +7,7 @@ export var Grid = (function () {
   const templateContainer = document.getElementById("template");
   var backdrop;
   var time, posX, posY;
-  const collideCoeff = 0.33;
+  const collideCoeff = 0.3;
   var collidedFolder;
   const types = ["shortcut", "folder", "backdrop"];
   var currentSize = 1;
