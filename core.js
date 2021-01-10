@@ -9,7 +9,7 @@ export var Storage = (function () {
   var settings = {
     tabOpenMode: true,
     refreshRate: 1,
-    topSites: false,
+    topSites: true,
   };
 
   //Commit change into chrome storage

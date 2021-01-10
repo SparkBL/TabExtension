@@ -39,6 +39,7 @@ export var Modal = (function () {
       if (!val) {
         return false;
       }
+      inp.value = inp.value.replace(/\s/g, "");
       currentFocus = -1;
       box = document.createElement("DIV");
       box.setAttribute("id", this.id + "autocomplete-list");
@@ -84,6 +85,7 @@ export var Modal = (function () {
       if (currentFocus >= x.length) currentFocus = 0;
       if (currentFocus < 0) currentFocus = x.length - 1;
       x[currentFocus].classList.add("autocomplete-active");
+      x[currentFocus].scrollIntoView({ block: "center", behavior: "smooth" });
     }
     function removeActive(x) {
       for (var i = 0; i < x.length; i++) {
@@ -129,8 +131,8 @@ export var Modal = (function () {
     inurl.setCustomValidity("Please, specify URL for shortcut");
   */
     inurl.setAttribute("class", "input-modal");
+    inurl.required = true;
     //inurl.defaultValue = "https://";
-    inurl.oninput = function (e) {};
     if (url) inurl.value = url;
     var urllabel = document.createElement("label");
 
@@ -168,12 +170,15 @@ export var Modal = (function () {
       s.innerHTML = "Ok";
     }
     var namewrapper = document.createElement("div");
+    namewrapper.className = "modal-item";
     namewrapper.appendChild(namelabel);
     namewrapper.appendChild(inname);
     var urlwrapper = document.createElement("div");
+    urlwrapper.className = "modal-item";
     urlwrapper.appendChild(urllabel);
     urlwrapper.appendChild(inurl);
     var viewTypeWrapper = document.createElement("div");
+    viewTypeWrapper.className = "modal-item";
     viewTypeWrapper.appendChild(viewTypeLabel);
     viewTypeWrapper.appendChild(viewTypeSelect);
     f.appendChild(title);
@@ -215,6 +220,7 @@ export var Modal = (function () {
     }
 
     var namewrapper = document.createElement("div");
+    namewrapper.className = "modal-item";
     namewrapper.appendChild(namelabel);
     namewrapper.appendChild(inname);
     f.appendChild(title);

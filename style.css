@@ -97,8 +97,8 @@ a {
 }
 
 form label {
-  margin-right: 2rem;
-  margin-top: 3rem;
+  /* margin-right: 2rem;*/
+  /*  margin-top: 3rem;*/
   font-size: 3.1rem;
 }
 
@@ -695,14 +695,17 @@ form label {
   padding: 2px 16px;
 }
 
+.modal-item {
+  display: flex;
+  justify-content: space-between;
+}
+
 .input-modal {
   border: none;
   outline: none;
-  margin-bottom: 2%;
   padding-bottom: 5rem;
   background: var(--input-bg);
   width: 30rem;
-  float: right;
   font-size: 2rem;
   padding: 2rem;
   color: var(--input-text-color);
@@ -715,16 +718,24 @@ form label {
   position: absolute;
   border: none;
   background-color: var(--autocomplete-bg);
-  /* border-bottom: none;*/
+  border-bottom: none;
   border-radius: 2rem;
   /*border-top: none;*/
-  z-index: 99;
+  /* z-index: 99;*/
   /*position the autocomplete items to be the same width as the container:*/
-  top: 66%;
+  /* top: 66%;*/
   left: 0;
+  top: 101%;
   right: 0;
-  height: 60rem;
+  height: 40rem;
+  max-width: 100%;
+  max-height: 35vh;
   overflow-y: scroll;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.autocomplete-items::-webkit-scrollbar-track {
+  display: none;
 }
 
 .autocomplete-items div {
@@ -787,13 +798,14 @@ form label {
 }
 
 .modal-body select {
-  width: 35rem;
+  /* width: 35rem;*/
   border-radius: 1rem;
   color: var(--button-modal-color);
   outline: 0;
   border: none;
   font-size: 2.5rem;
-  float: right;
+  /*float: right;*/
+  height: 5.5rem;
 }
 
 .modal-body option {
