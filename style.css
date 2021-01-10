@@ -746,7 +746,7 @@ form label {
 .button-modal {
   outline: 0;
   margin-bottom: 2%;
-  margin-top: 10%;
+  margin-top: 5%;
   padding-bottom: 10px;
   background: var(--button-modal-cover);
   width: 25rem;

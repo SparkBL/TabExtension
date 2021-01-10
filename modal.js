@@ -182,7 +182,6 @@ export var Modal = (function () {
     f.appendChild(urlwrapper);
     f.appendChild(document.createElement("br"));
     f.appendChild(viewTypeWrapper);
-    f.appendChild(document.createElement("br"));
     f.appendChild(s);
     inname.autofocus = true;
     return f;
