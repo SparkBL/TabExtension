@@ -51,9 +51,10 @@ export var Menu = (function () {
         elem.addEventListener("contextmenu", function (e) {
           hideAll();
           e.preventDefault();
+          console.log(e);
           nowSelected = e.currentTarget;
-          menu.style.top = `${e.clientY}px`;
-          menu.style.left = `${e.clientX}px`;
+          menu.style.top = `${e.pageY}px`;
+          menu.style.left = `${e.pageX}px`;
           menu.classList.add("show");
           var storedOpts = allowedOptions[elemId];
           options.forEach(function (elem) {
