@@ -779,7 +779,7 @@ form label {
 }
 
 .modal-body select {
-  width: 20rem;
+  width: 35rem;
   border-radius: 1rem;
   color: var(--button-modal-color);
   outline: 0;
@@ -792,6 +792,7 @@ form label {
   border-radius: 1rem;
   padding: 1rem;
   float: right;
+  margin-left: 2rem;
 }
 
 /* SCROLL BAR */
