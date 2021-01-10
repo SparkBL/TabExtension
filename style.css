@@ -142,6 +142,7 @@ form label {
   line-height: 109%;
   /* border-bottom-left-radius: 3rem;
   border-bottom-right-radius: 3rem;*/
+  font-stretch: condensed;
   width: 100%;
   max-width: 101%;
   max-height: 25%;
@@ -151,6 +152,7 @@ form label {
 
 .item[data-type="folder"] div.shortcut-title {
   background-color: unset;
+  font-stretch: normal;
   position: relative;
 }
 
@@ -245,6 +247,9 @@ form label {
   .grid-control:after {
     display: none;
   }
+  .grid-control.size {
+    width: 100%;
+  }
 }
 
 .grid-control-field {
@@ -320,6 +325,9 @@ form label {
   font-size: 3rem;
   text-align: center;
   padding-inline-start: 3.3rem;
+  max-width: 80%;
+  text-overflow: ellipsis;
+  overflow: hidden;
   color: var(--path-title-color);
   -webkit-user-select: none;
   -moz-user-select: none;
