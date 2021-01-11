@@ -32,39 +32,36 @@ export var ThumbFetcher = (function () {
         setSelfAsOpener: false,
       },
       function (window) {
-        window.focused = false;
+        chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+          if (tabId == window.tabs[0].id)
+            chrome.tabs.insertCSS(
+              window.tabs[0].id,
+              {
+                file: "thumb_no_scroll.css",
+                runAt: "document_start",
+              },
+              function () {
+                if (changeInfo.status === "complete") {
+                  chrome.tabs.captureVisibleTab(
+                    window.id,
+                    { format: "png" },
+                    function (dataString) {
+                      if (callback) callback(dataString);
+                      chrome.windows.remove(window.id, function () {
+                        console.log("Window closed");
+                        openedWindows = openedWindows.filter(
+                          (x) => x != window.id
+                        );
+                      });
+                    }
+                  );
+                }
+              }
+            );
+        });
+
         openedWindows.push(window.id);
         console.log("Window created", window.tabs);
-        chrome.tabs.insertCSS(
-          window.tabs[0].id,
-          { allFrames: true, file: "thumb_no_scroll.css" },
-          function () {
-            chrome.tabs.onUpdated.addListener(function (
-              tabId,
-              changeInfo,
-              tab
-            ) {
-              if (
-                tabId == window.tabs[0].id &&
-                changeInfo.status === "complete"
-              ) {
-                chrome.tabs.captureVisibleTab(
-                  window.id,
-                  { format: "png" },
-                  function (dataString) {
-                    if (callback) callback(dataString);
-                    chrome.windows.remove(window.id, function () {
-                      console.log("Window closed");
-                      openedWindows = openedWindows.filter(
-                        (x) => x != window.id
-                      );
-                    });
-                  }
-                );
-              }
-            });
-          }
-        );
       }
     );
     return;
